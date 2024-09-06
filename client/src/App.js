@@ -1,5 +1,7 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
+import Login from "./pages/Login";
+import Main from "./pages/Main";
 
 function App() {
   return (
@@ -8,6 +10,9 @@ function App() {
       {/* <Route path="/" element={<Main />}>
         <Route path="/restaurant" element={<></>}></Route>
       </Route> */}
+
+      <Route path="/" element={<Main />}></Route>
+      <Route path="/login" element={<Login />}></Route>
     </Routes>
   );
 }
