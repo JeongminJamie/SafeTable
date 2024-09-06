@@ -1,9 +1,12 @@
-import React from 'react';
+import React from "react";
+import MainHeader from "../components/MainHeader";
+import HeroSection from "../components/HeroSection";
 
 const Main = () => {
   return (
-    <div>
-      
+    <div className="relative h-screen">
+      <MainHeader />
+      <HeroSection />
     </div>
   );
 };
