@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import MainHeader from "../components/Main/MainHeader";
 import HeroSection from "../components/Main/HeroSection";
 import RestaurantsSection from "../components/Main/RestaurantsSection";
+import VideoSection from "../components/Main/VideoSection";
 
 const Main = () => {
   return (
@@ -10,6 +11,7 @@ const Main = () => {
       <MainHeader />
       <HeroSection />
       <RestaurantsSection />
+      <VideoSection />
     </div>
   );
 };
