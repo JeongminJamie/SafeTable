@@ -111,7 +111,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
       </form>
 
       <div className="mt-4 text-center">
-        <span className="text-gray-500">이미 계정이 있으신가요? </span>
+        <span className="text-gray-500">이미 계정이 있으신가요?? </span>
         <button
           onClick={onSwitchToLogin}
           className="text-blue-500 hover:underline"
