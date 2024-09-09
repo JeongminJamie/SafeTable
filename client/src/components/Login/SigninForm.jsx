@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const SignupForm = ({ onClose, onSwitchToLogin }) => {
+export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -100,10 +100,10 @@ export const SignupForm = ({ onClose, onSwitchToLogin }) => {
             required
           />
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-20 py-4 border border-blue-500 bg-white text-blue-500 rounded hover:bg-blue-500 hover:text-white"
           >
             회원가입
           </button>
@@ -111,7 +111,7 @@ export const SignupForm = ({ onClose, onSwitchToLogin }) => {
       </form>
 
       <div className="mt-4 text-center">
-        <span className="text-gray-500">이미 계정이 있으신가요? </span>
+        <span className="text-gray-500">이미 계정이 있으신가요?? </span>
         <button
           onClick={onSwitchToLogin}
           className="text-blue-500 hover:underline"
