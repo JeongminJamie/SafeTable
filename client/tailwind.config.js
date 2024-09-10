@@ -3,7 +3,9 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      "main-background": "rgb(129, 122, 59)",
+      colors: {
+        "header-signup-background": "rgb(251,246,226)",
+      },
     },
   },
   plugins: [],
