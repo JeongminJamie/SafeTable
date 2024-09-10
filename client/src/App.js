@@ -5,12 +5,14 @@ import SafeTable from "./pages/SafeTable";
 import Reservation from "./pages/Reservation";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ScrollTop from "./components/ScrollTop";
 
 function App() {
   const location = useLocation();
 
   return (
     <>
+      <ScrollTop />
       {location.pathname !== "/" && <Header />}
       <Routes>
         <Route path="/" element={<Main />}></Route>
