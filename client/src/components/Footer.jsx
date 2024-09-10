@@ -8,7 +8,7 @@ const Footer = () => {
         <Link to="/" className="hover:font-semibold">
           Home
         </Link>
-        <Link to="" className="hover:font-semibold">
+        <Link to="/safetable" className="hover:font-semibold">
           Reserve
         </Link>
         <Link to="/about" className="hover:font-semibold">
