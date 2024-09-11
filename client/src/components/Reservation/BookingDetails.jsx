@@ -11,7 +11,7 @@ const BookingDetails = () => {
     <div className="flex flex-row w-full items-center justify-around px-10 mb-5 gap-5">
       <div className="flex flex-col w-4/12 gap-2">
         <p className="text-start font-medium">인원</p>
-        <select className="h-8 text-sm border border-gray-300 px-2">
+        <select className="h-8 border border-gray-300 px-2 hover:cursor-pointer">
           {PARTY_SIZE.map((party) => (
             <option key={party}>{party}</option>
           ))}
@@ -21,14 +21,15 @@ const BookingDetails = () => {
         <p className="text-start font-medium">날짜</p>
         <DatePicker
           locale={ko}
+          minDate={new Date()}
           selected={date}
           onChange={(date) => setDate(date)}
-          className="w-full h-8 text-sm border border-gray-300 px-2"
+          className="w-full h-8 border border-gray-300 px-2 hover:cursor-pointer"
         />
       </div>
       <div className="flex flex-col w-4/12 gap-2">
         <p className="text-start font-medium">시간</p>
-        <select className="h-8 text-sm border border-gray-300 px-2">
+        <select className="h-8 border border-gray-300 px-2 hover:cursor-pointer">
           {TIME.map((time) => (
             <option key={time}>{time}</option>
           ))}

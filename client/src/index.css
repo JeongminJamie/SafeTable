@@ -25,3 +25,23 @@ img {
 .react-datepicker__header {
   background-color: white !important;
 }
+
+.react-datepicker__day--selected {
+  background-color: #d97706 !important;
+}
+
+.react-datepicker__header {
+  font-size: 1.02rem;
+}
+
+.react-datepicker__day,
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__month-text,
+.react-datepicker__year-text {
+  font-size: 1.01rem;
+}
+
+.react-datepicker__day--outside-month {
+  color: gray !important;
+}
