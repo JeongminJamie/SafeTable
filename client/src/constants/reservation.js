@@ -31,5 +31,7 @@ export const TIME = [
   "6:00 PM",
   "7:00 PM",
   "8:00 PM",
-  "9:00 PM"
+  "9:00 PM",
 ];
+
+export const TIME_SLOT = ["12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM"];
