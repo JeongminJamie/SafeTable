@@ -21,3 +21,7 @@ img {
   max-width: none;
   height: auto;
 }
+
+.react-datepicker__header {
+  background-color: white !important;
+}

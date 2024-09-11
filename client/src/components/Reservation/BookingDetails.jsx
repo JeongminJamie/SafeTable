@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
+import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import { PARTY_SIZE, TIME } from "../../constants/reservation";
 
@@ -19,6 +20,7 @@ const BookingDetails = () => {
       <div className="flex flex-col w-4/12 gap-2">
         <p className="text-start font-medium">날짜</p>
         <DatePicker
+          locale={ko}
           selected={date}
           onChange={(date) => setDate(date)}
           className="w-full h-8 text-sm border border-gray-300 px-2"
