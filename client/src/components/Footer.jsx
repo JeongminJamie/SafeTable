@@ -24,7 +24,7 @@ const Footer = () => {
           <img
             src="/assets/github.png"
             alt="github"
-            className="w-12 max-h-12 cursor-pointer"
+            className="max-w-10 max-h-10 cursor-pointer"
           />
         </a>
         <a
@@ -35,21 +35,21 @@ const Footer = () => {
           <img
             src="/assets/linkedin1.png"
             alt="linkedin1"
-            className="w-12 max-h-12 cursor-pointer"
+            className="max-w-10 max-h-10 cursor-pointer"
           />
         </a>
         <a>
           <img
             src="/assets/linkedin2.png"
             alt="linkedin2"
-            className="w-12 max-h-12 cursor-pointer"
+            className="max-w-10 max-h-10 cursor-pointer"
           />
         </a>
         <a>
           <img
             src="/assets/notion.png"
             alt="notion"
-            className="w-12 max-h-12 cursor-pointer"
+            className="max-w-10 max-h-10 cursor-pointer"
           />
         </a>
       </div>

@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom";
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="relative h-screen">
       <img
@@ -11,8 +14,11 @@ const HeroSection = () => {
         <div className="text-2xl font-semibold mb-10">
           안전한 식사, 안심테이블에서 예약하고 편안한 시간을 즐기세요!
         </div>
-        <button className="px-10 py-3 bg-white text-black text-lg font-semibold hover:bg-amber-100 rounded-full">
-          안심식당 찾기
+        <button
+          className="px-10 py-3 bg-white text-black text-lg font-semibold hover:bg-amber-100 rounded-full"
+          onClick={() => navigate("/safetable")}
+        >
+          안심식당 보기
         </button>
       </div>
     </div>
