@@ -6,6 +6,7 @@ import Reservation from "./pages/Reservation";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollTop from "./components/ScrollTop";
+import Payment from "./pages/Payment";
 
 function App() {
   const location = useLocation();
@@ -17,8 +18,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />}></Route>
         <Route path="/about"></Route>
-        <Route path="/reservation" element={<Reservation />}></Route>
         <Route path="/safetable" element={<SafeTable />}></Route>
+        <Route path="/reservation" element={<Reservation />}></Route>
+        <Route path="/payment" element={<Payment />}></Route>
       </Routes>
       {location.pathname !== "/" && <Footer />}
     </div>
