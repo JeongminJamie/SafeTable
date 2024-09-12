@@ -19,7 +19,7 @@ const Header = () => {
             isActive ? "text-amber-500 font-bold" : "text-black"
           }
         >
-          식당 찾기
+          식당찾기
         </NavLink>
         <NavLink
           to="/about"
