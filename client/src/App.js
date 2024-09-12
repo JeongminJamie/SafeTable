@@ -5,6 +5,7 @@ import SafeTable from "./pages/SafeTable";
 import Reservation from "./pages/Reservation";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import SafeTableDetail from "./pages/SafeTableDetail";
 
 function App() {
   const location = useLocation();
@@ -17,6 +18,7 @@ function App() {
         <Route path="/about"></Route>
         <Route path="/reservation" element={<Reservation />}></Route>
         <Route path="/safetable" element={<SafeTable />}></Route>
+        <Route path="/safetabledetail" element={<SafeTableDetail />}></Route>
       </Routes>
       {location.pathname !== "/" && <Footer />}
     </>
