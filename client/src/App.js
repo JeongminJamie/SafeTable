@@ -11,7 +11,7 @@ function App() {
   const location = useLocation();
 
   return (
-    <>
+    <div className="min-h-screen">
       <ScrollTop />
       {location.pathname !== "/" && <Header />}
       <Routes>
@@ -21,7 +21,7 @@ function App() {
         <Route path="/safetable" element={<SafeTable />}></Route>
       </Routes>
       {location.pathname !== "/" && <Footer />}
-    </>
+    </div>
   );
 }
 
