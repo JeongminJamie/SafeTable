@@ -2,12 +2,12 @@ import React from "react";
 import useReservationStore from "../store/useReservationStore";
 import BookingDetails from "../components/Reservation/BookingDetails";
 import TimeSlot from "../components/Reservation/TimeSlot";
+import { toast } from "react-toastify";
 
 const Reservation = () => {
   const { timeSlot } = useReservationStore();
   const clickPayDepositButtonHandler = () => {
     if (!timeSlot) {
-      
     }
   };
   return (
