@@ -1,27 +1,66 @@
 import React from "react";
 
 export const TableCard = () => {
+  const reservedTables = 5;
+  const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경
+
+  const handleSaveRestaurant = () => {
+    console.log("click");
+  };
+
+  const handleRedirect = () => {
+    window.location.href = restaurantUrl; // URL로 이동
+  };
+
   return (
-    <div className="w-64 p-3 border border-gray-300 rounded-lg bg-white transition-transform transform hover:scale-103 hover:cursor-pointer">
-      <div className="w-full h-32 bg-gray-200 rounded-lg overflow-hidden mb-4">
-        <img src="" alt="식당 이미지" className="w-full h-full object-cover" />
+    <div className="w-80 border border-gray-300 rounded-lg bg-white transition-transform transform hover:scale-105 hover:cursor-pointer shadow-md">
+      <div className="relative w-full h-40 bg-gray-200  overflow-hidden mb-4">
+        <img
+          src="사진링크"
+          alt="식당 이미지"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* 식당 저장 버튼 */}
+        <button
+          onClick={handleSaveRestaurant}
+          className="absolute top-2 right-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-lg transition-colors shadow-lg flex items-center"
+        >
+          <img
+            src="./assets/save-icon.svg"
+            className="w-6 h-6 mr-1"
+            alt="저장 아이콘"
+          />
+          저장
+        </button>
       </div>
-      <h1 className="text-base font-semibold mb-2 text-gray-800">식당 이름</h1>
-      <p className="text-sm text-gray-600 mb-3">서울시 땡땡동 123-45</p>
-      <div className="flex justify-between space-x-2 mb-4">
-        <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300">
-          9:00 AM
-        </button>
-        <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300">
-          12:00 PM
-        </button>
-        <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300">
-          7:00 PM
+      <div className="m-3">
+        <h1 className="text-lg font-semibold mb-1 text-gray-800">
+          안심갈비식당
+        </h1>
+        <p className="text-sm text-gray-600 mb-2">
+          서울특별시 강남구 역삼동 123-45
+        </p>
+        <p className="text-sm text-gray-600 mb-3">02-123-4567</p>
+        <div className="flex justify-between mb-3">
+          <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 mr-1">
+            한식
+          </button>
+          <button
+            onClick={handleRedirect} // 버튼 클릭 시 URL로 이동
+            className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 ml-1"
+          >
+            사이트 바로가기
+          </button>
+        </div>
+        <p className="text-sm text-gray-500 mb-2">
+          Booked{" "}
+          <span className="font-bold text-blue-600">{reservedTables}</span>{" "}
+          times today
+        </p>
+        <button className="w-full bg-white text-blue-500 border border-blue-500 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
+          예약하러 가기
         </button>
       </div>
-      <button className="w-full bg-blue-500 text-white py-1 rounded hover:bg-blue-600">
-        자세히 보기
-      </button>
     </div>
   );
 };

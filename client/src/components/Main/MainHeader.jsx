@@ -9,9 +9,6 @@ const MainHeader = () => {
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
-  const handleClick = () => {
-    navigate("/safetable");
-  };
   return (
     <>
       <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-10 w-10/12 px-3 py-3 bg-white flex flex-row justify-between items-center rounded-full text-center font-medium opacity-85 text-lg">
