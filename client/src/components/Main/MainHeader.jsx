@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const MainHeader = () => {
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [currentForm, setCurrentForm] = useState("login");
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -28,11 +29,22 @@ const MainHeader = () => {
           </div>
           {/* 로그인 했을 때 */}
           {/* <div className="hover:cursor-pointer hover:text-xl">내정보</div> */}
-          <div className="hover:cursor-pointer hover:text-xl">회원가입</div>
+          <div
+            className="hover:cursor-pointer hover:text-xl"
+            onClick={() => {
+              setCurrentForm("signup");
+              openModal();
+            }}
+          >
+            회원가입
+          </div>
         </div>
         <div
           className="w-28 bg-amber-200 rounded-full py-3 font-bold hover:cursor-pointer"
-          onClick={openModal}
+          onClick={() => {
+            setCurrentForm("login");
+            openModal();
+          }}
         >
           로그인
         </div>
@@ -42,7 +54,12 @@ const MainHeader = () => {
       </div> */}
       </header>
       <main>
-        <AuthModal isModalOpen={isModalOpen} onClose={closeModal} />
+        <AuthModal
+          isModalOpen={isModalOpen}
+          onClose={closeModal}
+          currentForm={currentForm}
+          setCurrentForm={setCurrentForm}
+        />
       </main>
     </>
   );
