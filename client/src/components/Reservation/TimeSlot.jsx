@@ -10,8 +10,6 @@ const TimeSlot = () => {
     return TIME_SLOT_MAP[time] || [];
   }, [time]);
 
-  console.log(timeSlot, "타임슬롯 체인지 콘솔 확인");
-
   return (
     <div className="w-full px-10">
       <p className="text-start mt-5 mb-5 font-medium">
