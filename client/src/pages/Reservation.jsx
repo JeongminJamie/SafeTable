@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import useReservationStore from "../store/useReservationStore";
 import BookingDetails from "../components/Reservation/BookingDetails";
@@ -9,7 +9,7 @@ import ReservationAlertToast from "../components/Reservation/ReservationAlertToa
 const Reservation = () => {
   const navigate = useNavigate();
 
-  const { timeSlot, resetReservation } = useReservationStore();
+  const { timeSlot, deposit, resetReservation } = useReservationStore();
 
   //when deposit payment button clicked
   const clickPayDepositButtonHandler = () => {
@@ -39,7 +39,13 @@ const Reservation = () => {
       <div className="w-full h-px bg-gray-300"></div>
       <TimeSlot />
       <div className="flex flex-col gap-7">
-        노쇼 방지를 위해, 예약금 2만원 선결제가 필요합니다.
+        <p>
+          당일 취소 및 노쇼 방지를 위해{" "}
+          <span className="font-semibold">
+            1인당 5천원, 총 {deposit.toLocaleString()}원이 결제됩니다.
+          </span>
+          <p>(예약금은 방문 시 환불되거나, 차감됩니다!)</p>
+        </p>
         <button
           className="w-2/4 h-10 bg-amber-200 m-auto px-2 py-1"
           onClick={clickPayDepositButtonHandler}
