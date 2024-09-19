@@ -1,24 +1,29 @@
-import React, { useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
 import useReservationStore from "../store/useReservationStore";
 import BookingDetails from "../components/Reservation/BookingDetails";
 import TimeSlot from "../components/Reservation/TimeSlot";
 import { toast } from "react-toastify";
 import ReservationAlertToast from "../components/Reservation/ReservationAlertToast";
+import PaymentModal from "../components/Payment/PaymentModal";
 
 const Reservation = () => {
-  const navigate = useNavigate();
-
-  const { time, timeSlot, deposit, resetReservation } = useReservationStore();
+  const {
+    timeSlot,
+    isPaymentModalOpen,
+    setIsPaymentModalOpen,
+    resetReservation,
+  } = useReservationStore();
 
   //when deposit payment button clicked
   const clickPayDepositButtonHandler = () => {
     if (!timeSlot) {
       toast.warning("시간대를 꼭 선택해주세요 :)");
     } else {
-      navigate("/payment");
+      setIsPaymentModalOpen(true);
     }
   };
+
+  console.log(isPaymentModalOpen, "결제 모달 상태 확인 콘솔");
 
   //reset past reservation state
   useEffect(() => {
@@ -53,6 +58,7 @@ const Reservation = () => {
           예약 보장금 결제
         </button>
         <ReservationAlertToast />
+        <PaymentModal />
       </div>
     </div>
   );

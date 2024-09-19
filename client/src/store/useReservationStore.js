@@ -6,6 +6,7 @@ const useReservationStore = create((set) => ({
   time: "12:00 PM",
   timeSlot: null,
   deposit: 5000,
+  isPaymentModalOpen: false,
 
   setPartySize: (partySize) => {
     const numberdPartySize = Number(partySize.split("명")[0]);
@@ -14,6 +15,7 @@ const useReservationStore = create((set) => ({
   setDate: (date) => set({ date }),
   setTime: (time) => set({ time }),
   setTimeSlot: (timeSlot) => set({ timeSlot }),
+  setIsPaymentModalOpen: (status) => set({ isPaymentModalOpen: status }),
 
   resetTime: () =>
     set({
@@ -26,6 +28,7 @@ const useReservationStore = create((set) => ({
       time: "12:00 PM",
       timeSlot: null,
       deposit: 5000,
+      isPaymentModalOpen: false,
     }),
 }));
 
