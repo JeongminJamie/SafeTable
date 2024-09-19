@@ -15,6 +15,10 @@ const useReservationStore = create((set) => ({
   setTime: (time) => set({ time }),
   setTimeSlot: (timeSlot) => set({ timeSlot }),
 
+  resetTime: () =>
+    set({
+      time: "12:00 PM",
+    }),
   resetReservation: () =>
     set({
       partySize: "1명",

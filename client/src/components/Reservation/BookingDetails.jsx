@@ -8,13 +8,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import { PARTY_SIZE, TIME } from "../../constants/reservation";
 
 const BookingDetails = () => {
-  const { partySize, date, time, setPartySize, setDate, setTime } =
+  const { partySize, date, time, setPartySize, setDate, setTime, resetTime } =
     useReservationStore();
 
   // select의 onChange 핸들러
   const selectChangeHandler = (event, setState) => {
     const selectedValue = event.target.value;
     setState(selectedValue);
+  };
+
+  // datepicker onChange 핸들러
+  const datePickerChangeHandler = (date) => {
+    setDate(date);
+    resetTime();
   };
 
   // 당일 현재 시간 이후의 시간 배열 값
@@ -40,6 +46,7 @@ const BookingDetails = () => {
         }
       }
 
+      setTime(hoursWithoutCurrentTime[0]);
       return hoursWithoutCurrentTime;
     }
 
@@ -70,7 +77,7 @@ const BookingDetails = () => {
           minDate={new Date()}
           dateFormat="yyyy년 MM월 dd일"
           selected={date}
-          onChange={(date) => setDate(date)}
+          onChange={(date) => datePickerChangeHandler(date)}
           className="w-full h-8 border border-gray-300 px-2 hover:cursor-pointer"
         />
       </div>

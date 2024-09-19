@@ -9,7 +9,7 @@ import ReservationAlertToast from "../components/Reservation/ReservationAlertToa
 const Reservation = () => {
   const navigate = useNavigate();
 
-  const { timeSlot, deposit, resetReservation } = useReservationStore();
+  const { time, timeSlot, deposit, resetReservation } = useReservationStore();
 
   //when deposit payment button clicked
   const clickPayDepositButtonHandler = () => {
@@ -42,15 +42,15 @@ const Reservation = () => {
         <p>
           당일 취소 및 노쇼 방지를 위해{" "}
           <span className="font-semibold">
-            1인당 5천원, 총 {deposit.toLocaleString()}원이 결제됩니다.
+            인원에 따른 예약 보장금이 발생합니다.
           </span>
-          <p>(예약금은 방문 시 환불되거나, 차감됩니다!)</p>
+          <p>(보장금은 방문 시 환불되거나, 차감됩니다!)</p>
         </p>
         <button
           className="w-2/4 h-10 bg-amber-200 m-auto px-2 py-1"
           onClick={clickPayDepositButtonHandler}
         >
-          예약금 결제
+          예약 보장금 결제
         </button>
         <ReservationAlertToast />
       </div>
