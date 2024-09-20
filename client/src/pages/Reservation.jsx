@@ -55,7 +55,7 @@ const Reservation = () => {
           className="w-2/4 h-10 bg-amber-200 m-auto px-2 py-1"
           onClick={clickPayDepositButtonHandler}
         >
-          예약 보장금 결제
+          확인
         </button>
         <ReservationAlertToast />
         <PaymentModal />
