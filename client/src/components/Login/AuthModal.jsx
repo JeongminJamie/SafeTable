@@ -4,8 +4,12 @@ import { LoginModal } from "./loginModal";
 import { SigninForm } from "./SigninForm";
 import { TermsAgreement } from "./TermsAgreement";
 
-export const AuthModal = ({ isModalOpen, onClose }) => {
-  const [currentForm, setCurrentForm] = useState("login");
+export const AuthModal = ({
+  isModalOpen,
+  onClose,
+  currentForm,
+  setCurrentForm,
+}) => {
   const [isAgreed, setIsAgreed] = useState(false);
 
   const switchToSignup = () => setCurrentForm("signup");
