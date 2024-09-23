@@ -1,8 +1,11 @@
 import React from "react";
 import useReservationStore from "../../store/useReservationStore";
+import { useNavigate } from "react-router-dom";
 
 const DepositCheck = () => {
-  const { setIsReservationChecked } = useReservationStore();
+  const navigate = useNavigate();
+  const { partySize, deposit, setIsReservationChecked } = useReservationStore();
+  const localedDeposit = deposit.toLocaleString();
 
   return (
     <div className="flex flex-col mt-5 gap-5">
@@ -14,19 +17,20 @@ const DepositCheck = () => {
           </div>
           <div className="flex flex-row justify-between">
             <p>총 예약 인원</p>
-            <p className="font-medium">{}3명</p>
+            <p className="font-medium">{partySize}</p>
           </div>
         </div>
         <div className="bg-gray-300 h-px -mx-7 mt-5 mb-5 p-0"></div>
         <div className="flex flex-row justify-between font-medium">
           <p>합계</p>
-          <p>{}원</p>
+          <p>{localedDeposit}원</p>
         </div>
       </section>
       <p className="text-lg font-semibold">
-        총 예약 보장금 <span>{}</span>원
+        총 예약 보장금 <span>{localedDeposit}</span>원
       </p>
-      <p>회원님의 카드 2039로 결제 됩니다.</p>
+      {/* 저장된 카드 맨 뒤 4자리 가져오기 */}
+      <p>{}2039로 끝나는 회원님의 카드로 결제됩니다.</p>
       <div className="w-full flex flex-row justify-center gap-2">
         <button
           className="border border-gray-300 rounded font-medium w-5/12 h-12"
@@ -34,7 +38,11 @@ const DepositCheck = () => {
         >
           취소
         </button>
-        <button className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white">
+        {/* 실제 결제가 되는 기능 구현 필요, 현재는 그냥 결제 누르면 예약 완료가 되는 상태 */}
+        <button
+          className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white"
+          onClick={() => navigate("/reservation-completed")}
+        >
           결제
         </button>
       </div>
