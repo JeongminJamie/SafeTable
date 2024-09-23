@@ -8,7 +8,7 @@ import PaymentModal from "../components/Payment/PaymentModal";
 import OverTime from "../components/Reservation/OverTime";
 
 const Reservation = () => {
-  const { timeSlot, setIsPaymentModalOpen, resetReservation } =
+  const { date, timeSlot, setIsPaymentModalOpen, resetReservation } =
     useReservationStore();
 
   // when deposit payment button clicked
@@ -25,7 +25,11 @@ const Reservation = () => {
     const today = new Date();
     const currentTime = today.getHours();
 
-    return currentTime >= 20 ? false : true;
+    if (date.toDateString() === today.toDateString()) {
+      return currentTime >= 20 ? false : true;
+    } else {
+      return true;
+    }
   };
 
   // reset past reservation state

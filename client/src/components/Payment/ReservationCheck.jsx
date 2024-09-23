@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import useReservationStore from "../../store/useReservationStore";
 import {
   formatDateToKorean,
@@ -14,8 +14,8 @@ const ReservationCheck = () => {
     setIsReservationChecked,
   } = useReservationStore();
 
-  const formattedDate = formatDateToKorean(date);
-  const formattedTime = formatTimeToKoean(timeSlot);
+  const formattedDate = useMemo(() => formatDateToKorean(date), [date]);
+  const formattedTime = useMemo(() => formatTimeToKoean(timeSlot), [timeSlot]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -33,10 +33,10 @@ const ReservationCheck = () => {
               <img src="/assets/person.png" className="w-8 h-8" />
             </div>
             <div className="flex items-center">
-              <img src="/assets/calendar.png" className="w-8 h-8" />
+              <img src="/assets/reservation/calendar.png" className="w-8 h-8" />
             </div>
             <div className="flex items-center">
-              <img src="/assets/clock.png" className="w-8 h-8" />
+              <img src="/assets/reservation/clock.png" className="w-8 h-8" />
             </div>
           </div>
           <div className="flex flex-col justify-between h-auto space-y-4">

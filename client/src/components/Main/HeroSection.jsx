@@ -5,7 +5,7 @@ const HeroSection = () => {
   return (
     <div className="relative h-screen">
       <img
-        src="/assets/main-image.jpeg"
+        src="/assets/main/main-image.jpeg"
         className="h-screen w-screen object-cover"
         alt="Main"
       />
