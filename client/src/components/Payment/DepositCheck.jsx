@@ -36,7 +36,7 @@ const DepositCheck = () => {
           className="border border-gray-300 rounded font-medium w-5/12 h-12"
           onClick={() => setIsReservationChecked(false)}
         >
-          취소
+          이전
         </button>
         {/* 실제 결제가 되는 기능 구현 필요, 현재는 그냥 결제 누르면 예약 완료가 되는 상태 */}
         <button

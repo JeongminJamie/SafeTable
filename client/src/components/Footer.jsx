@@ -22,7 +22,7 @@ const Footer = () => {
           rel="noopener noreferrer"
         >
           <img
-            src="/assets/github.png"
+            src="/assets/footer/github.png"
             alt="github"
             className="max-w-10 max-h-10 cursor-pointer"
           />
@@ -33,21 +33,21 @@ const Footer = () => {
           rel="noopener noreferrer"
         >
           <img
-            src="/assets/linkedin1.png"
+            src="/assets/footer/linkedin1.png"
             alt="linkedin1"
             className="max-w-10 max-h-10 cursor-pointer"
           />
         </a>
         <a>
           <img
-            src="/assets/linkedin2.png"
+            src="/assets/footer/linkedin2.png"
             alt="linkedin2"
             className="max-w-10 max-h-10 cursor-pointer"
           />
         </a>
         <a>
           <img
-            src="/assets/notion.png"
+            src="/assets/footer/notion.png"
             alt="notion"
             className="max-w-10 max-h-10 cursor-pointer"
           />
@@ -56,7 +56,7 @@ const Footer = () => {
       <p className="flex flex-row">
         Copyright
         <img
-          src="/assets/copyright.png"
+          src="/assets/footer/copyright.png"
           alt="copyright"
           className="w-5 mr-1 ml-1"
         />
