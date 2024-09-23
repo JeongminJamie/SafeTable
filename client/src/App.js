@@ -17,18 +17,16 @@ function App() {
     <>
       <ScrollTop />
       {location.pathname !== "/" && <Header />}
-      <div>
-        <Routes>
-          <Route path="/" element={<Main />}></Route>
-          <Route path="/about" element={<About />}></Route>
-          <Route path="/safetable" element={<SafeTable />}></Route>
-          <Route path="/reservation" element={<Reservation />}></Route>
-          <Route
-            path="/reservation-completed"
-            element={<ReservationCompleted />}
-          ></Route>
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Main />}></Route>
+        <Route path="/about" element={<About />}></Route>
+        <Route path="/safetable" element={<SafeTable />}></Route>
+        <Route path="/reservation" element={<Reservation />}></Route>
+        <Route
+          path="/reservation-completed"
+          element={<ReservationCompleted />}
+        ></Route>
+      </Routes>
       {location.pathname !== "/" && <Footer />}
     </>
   );

@@ -12,12 +12,14 @@ const CompletedDetails = () => {
   const formattedTime = useMemo(() => formatTimeToKoean(timeSlot), [timeSlot]);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="w-full flex flex-col items-center gap-3 bg-header-signup-background p-6 rounded-2xl shadow-md">
       <div>
-        <h2>식당 이름</h2>
-        <p>식당 업종</p>
+        <h2 className="font-medium text-xl text-center">식당 이름</h2>
+        <p className="font-medium text-lg text-gray-600 text-center">
+          식당 업종
+        </p>
       </div>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center text-lg gap-1">
         <p>{formattedDate}</p>
         <p>{formattedTime}</p>
         <p>{partySize}</p>
