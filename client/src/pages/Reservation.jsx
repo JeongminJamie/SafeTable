@@ -5,16 +5,13 @@ import TimeSlot from "../components/Reservation/TimeSlot";
 import { toast } from "react-toastify";
 import ReservationAlertToast from "../components/Reservation/ReservationAlertToast";
 import PaymentModal from "../components/Payment/PaymentModal";
+import OverTime from "../components/Reservation/OverTime";
 
 const Reservation = () => {
-  const {
-    timeSlot,
-    isPaymentModalOpen,
-    setIsPaymentModalOpen,
-    resetReservation,
-  } = useReservationStore();
+  const { timeSlot, setIsPaymentModalOpen, resetReservation } =
+    useReservationStore();
 
-  //when deposit payment button clicked
+  // when deposit payment button clicked
   const clickPayDepositButtonHandler = () => {
     if (!timeSlot) {
       toast.warning("시간대를 꼭 선택해주세요 :)");
@@ -23,9 +20,15 @@ const Reservation = () => {
     }
   };
 
-  console.log(isPaymentModalOpen, "결제 모달 상태 확인 콘솔");
+  // 당일 시간이 오후 8시가 넘을 때 체크, (오후 8시 이후 당일 예약 불가)
+  const overtimeCheck = () => {
+    const today = new Date();
+    const currentTime = today.getHours();
 
-  //reset past reservation state
+    return currentTime >= 20 ? false : true;
+  };
+
+  // reset past reservation state
   useEffect(() => {
     resetReservation();
   }, []);
@@ -42,7 +45,7 @@ const Reservation = () => {
       </div>
       <BookingDetails />
       <div className="w-full h-px bg-gray-300"></div>
-      <TimeSlot />
+      {overtimeCheck() ? <TimeSlot /> : <OverTime />}
       <div className="flex flex-col gap-10">
         <p>
           당일 취소 및 노쇼 방지를 위해{" "}
