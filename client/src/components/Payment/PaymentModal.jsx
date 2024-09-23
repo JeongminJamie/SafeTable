@@ -1,9 +1,11 @@
 import React from "react";
 import useReservationStore from "../../store/useReservationStore";
 import ReservationCheck from "./ReservationCheck";
+import DepositCheck from "./DepositCheck";
 
 const PaymentModal = () => {
-  const { isPaymentModalOpen, setIsPaymentModalOpen } = useReservationStore();
+  const { isPaymentModalOpen, isReservationChecked, setIsPaymentModalOpen } =
+    useReservationStore();
 
   if (!isPaymentModalOpen) return null;
 
@@ -18,7 +20,7 @@ const PaymentModal = () => {
             onClick={() => setIsPaymentModalOpen(false)}
           />
         </div>
-        <ReservationCheck />
+        {isReservationChecked ? <DepositCheck /> : <ReservationCheck />}
       </div>
     </div>
   );

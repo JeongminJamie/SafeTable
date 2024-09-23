@@ -6,8 +6,13 @@ import {
 } from "../../utils/formatToKorean";
 
 const ReservationCheck = () => {
-  const { partySize, date, timeSlot, setIsPaymentModalOpen } =
-    useReservationStore();
+  const {
+    partySize,
+    date,
+    timeSlot,
+    setIsPaymentModalOpen,
+    setIsReservationChecked,
+  } = useReservationStore();
 
   const formattedDate = formatDateToKorean(date);
   const formattedTime = formatTimeToKoean(timeSlot);
@@ -54,7 +59,10 @@ const ReservationCheck = () => {
         >
           취소
         </button>
-        <button className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white">
+        <button
+          className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white"
+          onClick={() => setIsReservationChecked(true)}
+        >
           확인
         </button>
       </div>

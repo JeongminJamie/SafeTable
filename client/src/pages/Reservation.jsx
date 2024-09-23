@@ -43,7 +43,7 @@ const Reservation = () => {
       <BookingDetails />
       <div className="w-full h-px bg-gray-300"></div>
       <TimeSlot />
-      <div className="flex flex-col gap-7">
+      <div className="flex flex-col gap-10">
         <p>
           당일 취소 및 노쇼 방지를 위해{" "}
           <span className="font-semibold">
