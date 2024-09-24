@@ -59,6 +59,15 @@ const Header = () => {
           >
             로그인
           </button>
+          {/* 로그인되면 유저 아이콘으로 변경?? */}
+          <NavLink
+            to="/mypage"
+            className={({ isActive }) =>
+              isActive ? "text-amber-500 font-bold" : "text-black"
+            }
+          >
+            마이페이지
+          </NavLink>
           {/* 로그인 했을 때 */}
           {/* <img
           src="/assets/user.png"

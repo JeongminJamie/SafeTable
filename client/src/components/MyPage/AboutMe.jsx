@@ -1,4 +1,6 @@
 import React from "react";
+import { TableCard } from "../SafeTable/tableCard";
+import SaveTable from "./SaveTable";
 
 export const AboutMe = ({ formData, handleChange }) => {
   const handleSave = (e) => {
@@ -66,11 +68,18 @@ export const AboutMe = ({ formData, handleChange }) => {
           />
         </div>
         <div className="flex justify-center mt-4">
-          <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+          <button
+            type="submit"
+            className="w-1/5 h-10 bg-amber-200 m-auto px-2 py-1"
+          >
             저장
           </button>
         </div>
       </form>
+      {/* 구분선 */}
+      <div className="border-b border-gray-300 my-10 " />
+      <h2 className="text-xl font-semibold mb-4">찜한 식당</h2>
+      <SaveTable />
     </div>
   );
 };
