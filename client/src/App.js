@@ -9,6 +9,7 @@ import SafeTable from "./pages/SafeTable";
 import About from "./pages/About";
 import Reservation from "./pages/Reservation";
 import ReservationCompleted from "./pages/ReservationCompleted";
+import MyPage from "./pages/MyPage";
 
 function App() {
   const location = useLocation();
@@ -26,6 +27,7 @@ function App() {
           path="/reservation-completed"
           element={<ReservationCompleted />}
         ></Route>
+        <Route path="/mypage" element={<MyPage />}></Route>
       </Routes>
       {location.pathname !== "/" && <Footer />}
     </>
