@@ -45,3 +45,10 @@ img {
 .react-datepicker__day--outside-month {
   color: gray !important;
 }
+
+.MuiAutocomplete-hasPopupIcon.css-ka7ti6-MuiAutocomplete-root
+  .MuiAutocomplete-inputRoot,
+.MuiAutocomplete-hasClearIcon.css-ka7ti6-MuiAutocomplete-root
+  .MuiAutocomplete-inputRoot {
+  padding-right: 0px;
+}

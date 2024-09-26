@@ -1,5 +1,6 @@
 {
   "name": "client",
+  "proxy": "https://apis.vworld.kr",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
