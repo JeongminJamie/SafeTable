@@ -3,29 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { InputAdornment } from "@mui/material";
-import axios from "axios";
+
+import useSearchStore from "../../store/useSearchStore";
+import { fetchRegionsByInput, searchHandler } from "../../utils/searchService";
 
 const SearchBox = () => {
-  const [inputValue, setInputValue] = useState("");
+  const { inputValue, setInputValue } = useSearchStore();
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
-
-  // To-do: 엔터키를 누르거나, 검색 아이콘을 눌렀을 때 입력값에 맞는 지역 안심식당 정보 패치하기!!!
-
-  // 입력값에 따른 시군구 open api로 데이터 패치 요청
-  const fetchRegionsByInput = async (inputValue) => {
-    const encodedInputValue = encodeURIComponent(inputValue);
-
-    const response = await axios.get(
-      `/2ddata/adsigg/data?apiKey=${process.env.REACT_APP_LOCATION_API_KEY}&domain=${process.env.REACT_APP_LOCATION_DOMAIN}&filter=full_nm:like:${encodedInputValue}&output=json&pageIndex=1&pageUnit=10`
-    );
-
-    const featuresOfRegions = response.data.featureCollection?.features || [];
-    const regionNames = featuresOfRegions.map(
-      (feature) => feature.properties.full_nm
-    );
-
-    return regionNames;
-  };
 
   // 검색어가 변할 때마다, 타이핑을 끝낸 후(300ms 예상) debouncedInputValue에 저장해줌
   useEffect(() => {
@@ -38,7 +22,7 @@ const SearchBox = () => {
     };
   }, [inputValue]);
 
-  // useQuery로 데이터를 가져옴
+  // 검색창의 지역명 autocomplete 리액트 쿼리 패치
   const {
     data: options = [],
     isLoading,
@@ -51,6 +35,8 @@ const SearchBox = () => {
     refetchOnWindowFocus: false,
   });
 
+  // 검색된 지역 식당 리액트 쿼리 패치 
+
   return (
     <Autocomplete
       freeSolo
@@ -61,6 +47,9 @@ const SearchBox = () => {
       }}
       onChange={(event, newValue) => {
         setInputValue(newValue || "");
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") searchHandler();
       }}
       renderInput={(params) => (
         <TextField
@@ -75,6 +64,7 @@ const SearchBox = () => {
                 <InputAdornment
                   position="end"
                   sx={{ position: "absolute", marginLeft: "95%" }}
+                  onClick={() => searchHandler()}
                 >
                   <img
                     src="/assets/safeTable/search.png"
