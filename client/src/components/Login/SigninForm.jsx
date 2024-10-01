@@ -13,11 +13,13 @@ const debounce = (func, delay) => {
 
 export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
+  const [emailToken, setEmailtoken] = useState("");
   const [password, setPassword] = useState("");
   const [passCheck, setPassCheck] = useState("");
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isVerified, setIsVerified] = useState(false); // 이메일 인증 성공 상태
 
   const passwordRef = useRef(password);
 
@@ -48,6 +50,30 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
       }
     } catch (e) {
       console.log(e.response.data.msg);
+    }
+  };
+
+  const sendemailapi = async (useremail) => {
+    try {
+      const response = await api.post("/register/send-verification-email", {
+        email: useremail,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const checkemailapi = async (code) => {
+    try {
+      const response = await api.post("/register/verify-email", {
+        email: email,
+        verificationCode: code,
+      });
+      if (response.data.message === "Email verified successfully") {
+        setIsVerified(true); // 인증 성공 시 상태 업데이트
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -85,10 +111,53 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
             className="w-full px-3 py-3 border  border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="이메일을 입력하세요"
             required
+            disabled={isVerified} // 인증 성공 시 이메일 입력 비활성화
           />
-          <button className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200">
-            이메일 인증
-          </button>
+          {!isVerified ? (
+            <button
+              type="button"
+              className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
+              onClick={() => sendemailapi(email)}
+            >
+              이메일 인증
+            </button>
+          ) : (
+            <span className="absolute bottom-2 right-3 text-green-500 text-2xl">
+              ✔
+            </span>
+          )}
+        </div>
+
+        <div className="mb-4 relative">
+          <label
+            className="block text-sm font-medium text-gray-700 mb-1"
+            htmlFor="verify-email"
+          >
+            인증코드
+          </label>
+          <input
+            type="text"
+            id="verifyEmail"
+            value={emailToken}
+            onChange={(e) => setEmailtoken(e.target.value)}
+            className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="인증 코드를 입력하세요"
+            required
+            disabled={isVerified} // 인증 성공 시 인증코드 입력 비활성화
+          />
+          {!isVerified ? (
+            <button
+              type="button"
+              className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
+              onClick={() => checkemailapi(emailToken)}
+            >
+              인증
+            </button>
+          ) : (
+            <span className="absolute bottom-2 right-3 text-green-500 text-2xl">
+              ✔
+            </span>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -104,7 +173,6 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="비밀번호를 입력하세요"
-            required
           />
         </div>
         <div className="mb-4 relative">
@@ -121,7 +189,6 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
             onChange={handlePasswordCheckChange}
             className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="비밀번호를 다시 입력하세요"
-            required
           />
           <p
             className={`text-sm ${
@@ -145,7 +212,6 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
             onChange={(e) => setUsername(e.target.value)}
             className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="이름을 입력하세요"
-            required
           />
         </div>
         <div className="mb-4">
@@ -162,9 +228,9 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
             onChange={(e) => setPhoneNumber(e.target.value)}
             className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="연락처를 입력하세요"
-            required
           />
         </div>
+
         <div className="flex justify-center">
           <button
             type="submit"
