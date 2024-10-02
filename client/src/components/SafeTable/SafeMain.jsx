@@ -1,6 +1,7 @@
 import React from "react";
 import { TableCard } from "./tableCard";
 import { useNavigate } from "react-router-dom";
+import EmptyRestaurant from "./EmptyRestaurant";
 
 const SafeMain = () => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const SafeMain = () => {
         <TableCard />
         <TableCard />
       </div>
+      {/* 입력값에 따른 안심식당 정보가 없을 때 띄울 컴포넌트 */}
+      <EmptyRestaurant />
     </div>
   );
 };
