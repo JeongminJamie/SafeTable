@@ -21,6 +21,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [passwordError, setPasswordError] = useState("");
   const [isVerified, setIsVerified] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [emailCodeError, setEmailCodeError] = useState("");
 
   const passwordRef = useRef(password);
 
@@ -80,7 +81,11 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
     }
   };
 
+  //인증번호 없을때, 인증번호 시간 앖을때
   const checkemailapi = async (code) => {
+    if (!code) {
+      setEmailCodeError("유효한 코드를 입력해주세요.");
+    }
     try {
       const response = await api.post("/register/verify-email", {
         email: email,
