@@ -87,21 +87,25 @@ router.post("/", async (req, res) => {
   }
 });
 
-//이거 이메일 중복 x, 실제 이메일로 발송 안되는 이유 찾기
-//토큰 해결하기
 router.post("/send-verification-email", async (req, res) => {
   const { email } = req.body;
 
-  // 인증 코드 만료 시간 설정 (예: 10분 후)
+  // 중복 이메일 확인
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(400).json({
+      success: false,
+      msg: "Email already exists, please use a different email",
+    });
+  }
+
   const expirationTime = new Date(Date.now() + 10 * 60 * 1000); // 10분 후
-  const verificationToken = Math.floor(100000 + Math.random() * 900000); // Generates a random 6-digit number
+  const verificationToken = Math.floor(100000 + Math.random() * 900000); //6자리
 
   try {
-    // 이메일로 유저 검색
     let user = await Email.findOne({ email });
 
     if (!user) {
-      // 새로운 유저인 경우, 유저 생성 및 인증 코드 저장
       user = new Email({
         email: email,
         verificationCode: verificationToken,
@@ -109,14 +113,12 @@ router.post("/send-verification-email", async (req, res) => {
         isVerified: false,
       });
     } else {
-      // 기존 유저라면 인증 코드와 만료 시간 업데이트
       user.verificationCode = verificationToken;
       user.verificationCodeExpires = expirationTime;
     }
 
-    // DB에 저장
     await user.save();
-    await sendVerificationEmail(email, verificationToken); // Ensure this is awaited
+    await sendVerificationEmail(email, verificationToken);
 
     res.status(200).json({ message: "Verification email sent" });
   } catch (error) {
@@ -129,14 +131,12 @@ router.post("/verify-email", async (req, res) => {
   const { email, verificationCode } = req.body;
 
   try {
-    // 이메일로 유저 검색
     const user = await Email.findOne({ email });
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
 
-    // 인증 코드와 만료 시간 확인
     if (
       user.verificationCode !== verificationCode ||
       user.verificationCodeExpires < new Date()
@@ -146,7 +146,6 @@ router.post("/verify-email", async (req, res) => {
         .json({ message: "Invalid or expired verification code" });
     }
 
-    // 인증 성공 시, isVerified 필드 업데이트
     user.isVerified = true;
     // user.verificationCode = null; // 인증 완료 후 코드 삭제
     // user.verificationCodeExpires = null;

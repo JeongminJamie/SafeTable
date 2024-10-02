@@ -20,6 +20,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [emailError, setEmailError] = useState("");
 
   const passwordRef = useRef(password);
 
@@ -54,12 +55,28 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   };
 
   const sendemailapi = async (useremail) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(useremail)) {
+      setEmailError("유효한 이메일 주소를 입력해주세요.");
+      return;
+    }
+
     try {
       const response = await api.post("/register/send-verification-email", {
         email: useremail,
       });
-    } catch (e) {
-      console.error(e);
+      if (response.data.success) {
+        setEmailError("");
+      }
+    } catch (error) {
+      if (
+        error.response?.data?.msg ===
+        "Email already exists, please use a different email"
+      ) {
+        setEmailError("이미 등록된 이메일입니다. 다른 이메일을 기입해주세요.");
+      } else {
+        setEmailError("다시 시도해주세요.");
+      }
     }
   };
 
@@ -96,35 +113,40 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
     <div>
       <h2 className="text-2xl font-bold mb-4">회원가입</h2>
       <form onSubmit={handleSignup}>
-        <div className="mb-4 relative">
+        <div className="mb-4 ">
           <label
             className="block text-sm font-medium text-gray-700 mb-1"
             htmlFor="email"
           >
             이메일
           </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="이메일을 입력하세요"
-            required
-            disabled={isVerified}
-          />
-          {!isVerified ? (
-            <button
-              type="button"
-              className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
-              onClick={() => sendemailapi(email)}
-            >
-              이메일 인증
-            </button>
-          ) : (
-            <span className="absolute bottom-2 right-3 text-green-500 text-2xl">
-              ✔
-            </span>
+          <div className="flex items-center relative">
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="이메일을 입력하세요"
+              required
+              disabled={isVerified}
+            />
+            {!isVerified ? (
+              <button
+                type="button"
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
+                onClick={() => sendemailapi(email)}
+              >
+                이메일 인증
+              </button>
+            ) : (
+              <span className="absolute top-1/2 right-3 transform -translate-y-1/2 text-green-500 text-2xl">
+                ✔
+              </span>
+            )}
+          </div>
+          {emailError && (
+            <p className="text-red-500 text-sm mt-2">{emailError}</p>
           )}
         </div>
 
