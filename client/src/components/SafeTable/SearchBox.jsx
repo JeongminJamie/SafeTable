@@ -5,10 +5,20 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { InputAdornment } from "@mui/material";
 
 import useSearchStore from "../../store/useSearchStore";
-import { fetchRegionsByInput, searchHandler } from "../../utils/searchService";
+import {
+  fetchRegionsByInput,
+  fetchRestaurantByInput,
+  searchHandler,
+} from "../../utils/searchService";
 
 const SearchBox = () => {
-  const { inputValue, setInputValue } = useSearchStore();
+  const {
+    inputValue,
+    setInputValue,
+    setFetchedRestaurants,
+    setSearchLoading,
+    setSearchError,
+  } = useSearchStore();
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
 
   // 검색어가 변할 때마다, 타이핑을 끝낸 후(300ms 예상) debouncedInputValue에 저장해줌
@@ -35,7 +45,19 @@ const SearchBox = () => {
     refetchOnWindowFocus: false,
   });
 
-  // 검색된 지역 식당 리액트 쿼리 패치 
+  // 검색된 지역 식당 리액트 쿼리 패치
+  const { refetch } = useQuery({
+    queryKey: ["fetchRestaurants", inputValue],
+    queryFn: fetchRestaurantByInput(inputValue),
+    enabled: false,
+    onSettled: (data, error) => {
+      setSearchLoading(false);
+      if (error) setSearchError(true);
+    },
+    onSuccess: (data) => {
+      setFetchedRestaurants(data);
+    },
+  });
 
   return (
     <Autocomplete
@@ -49,7 +71,9 @@ const SearchBox = () => {
         setInputValue(newValue || "");
       }}
       onKeyDown={(event) => {
-        if (event.key === "Enter") searchHandler();
+        if (event.key === "Enter") {
+          searchHandler(inputValue, refetch);
+        }
       }}
       renderInput={(params) => (
         <TextField
@@ -64,12 +88,12 @@ const SearchBox = () => {
                 <InputAdornment
                   position="end"
                   sx={{ position: "absolute", marginLeft: "95%" }}
-                  onClick={() => searchHandler()}
                 >
                   <img
                     src="/assets/safeTable/search.png"
                     alt="search"
                     className="w-7 h-7 hover:cursor-pointer"
+                    onClick={() => searchHandler(inputValue, refetch)}
                   />
                 </InputAdornment>
               ),

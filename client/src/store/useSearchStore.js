@@ -3,7 +3,7 @@ import { create } from "zustand";
 const useSearchStore = create((set) => ({
   inputValue: "",
   fetchedRestaurants: [],
-  searchLoading: false,
+  searchLoading: true,
   searchError: false,
 
   setInputValue: (inputValue) => set({ inputValue }),
