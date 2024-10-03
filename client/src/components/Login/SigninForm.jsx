@@ -14,12 +14,14 @@ const debounce = (func, delay) => {
 export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
   const [emailToken, setEmailtoken] = useState("");
+  const [emailClick, setEmailClick] = useState(false);
   const [password, setPassword] = useState("");
   const [passCheck, setPassCheck] = useState("");
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [emailOk, setEmailOk] = useState("");
   const [emailError, setEmailError] = useState("");
   const [emailCodeError, setEmailCodeError] = useState("");
 
@@ -47,11 +49,12 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
         user_name: username,
         user_contact: phoneNumber,
       });
+
       if (response.data) {
         onSwitchToLogin();
       }
     } catch (e) {
-      console.log(e.response.data.msg);
+      console.log(e.response?.data?.msg);
     }
   };
 
@@ -59,6 +62,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(useremail)) {
       setEmailError("유효한 이메일 주소를 입력해주세요.");
+      setEmailOk("");
       return;
     }
 
@@ -66,8 +70,10 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
       const response = await api.post("/register/send-verification-email", {
         email: useremail,
       });
-      if (response.data.success) {
+      if (response.data.message === "Verification email sent") {
         setEmailError("");
+        setEmailOk("이메일로 인증코드를 발송했습니다.");
+        setEmailClick(true);
       }
     } catch (error) {
       if (
@@ -75,17 +81,16 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
         "Email already exists, please use a different email"
       ) {
         setEmailError("이미 등록된 이메일입니다. 다른 이메일을 기입해주세요.");
+        setEmailOk("");
       } else {
         setEmailError("다시 시도해주세요.");
+        setEmailOk("");
       }
     }
   };
 
   //인증번호 없을때, 인증번호 시간 앖을때
   const checkemailapi = async (code) => {
-    if (!code) {
-      setEmailCodeError("유효한 코드를 입력해주세요.");
-    }
     try {
       const response = await api.post("/register/verify-email", {
         email: email,
@@ -96,6 +101,13 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
       }
     } catch (e) {
       console.error(e);
+      if (
+        e.response?.data?.message === "Invalid or expired verification code"
+      ) {
+        setEmailCodeError("유효한 코드 6자리를 입력해주세요.");
+      } else if (e.response?.data?.message === "User not found") {
+        setEmailCodeError("유효한 코드 6자리를 입력해주세요.");
+      }
     }
   };
 
@@ -150,36 +162,47 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
               </span>
             )}
           </div>
-          {emailError && (
-            <p className="text-red-500 text-sm mt-2">{emailError}</p>
-          )}
+          {!isVerified && (emailError || emailOk) ? (
+            <p
+              className={`text-sm mt-2 ${
+                emailError ? "text-red-500" : "text-gray-500"
+              }`}
+            >
+              {emailError || emailOk}
+            </p>
+          ) : null}
         </div>
 
         {/* 인증이 완료 전 */}
-        {!isVerified && (
-          <div className="mb-4 relative">
+        {!isVerified && emailClick && (
+          <div className="mb-4 ">
             <label
               className="block text-sm font-medium text-gray-700 mb-1"
               htmlFor="verify-email"
             >
               인증코드
             </label>
-            <input
-              type="text"
-              id="verifyEmail"
-              value={emailToken}
-              onChange={(e) => setEmailtoken(e.target.value)}
-              className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="인증 코드를 입력하세요"
-              required
-            />
-            <button
-              type="button"
-              className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
-              onClick={() => checkemailapi(emailToken)}
-            >
-              인증
-            </button>
+            <div className="flex items-center relative">
+              <input
+                type="text"
+                id="verifyEmail"
+                value={emailToken}
+                onChange={(e) => setEmailtoken(e.target.value)}
+                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="인증 코드를 입력하세요"
+                required
+              />
+              <button
+                type="button"
+                className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
+                onClick={() => checkemailapi(emailToken)}
+              >
+                인증
+              </button>
+            </div>
+            {emailCodeError && (
+              <p className="text-red-500 text-sm mt-2">{emailCodeError}</p>
+            )}
           </div>
         )}
 
@@ -200,6 +223,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="비밀번호를 입력하세요"
+                required
               />
             </div>
 
@@ -217,13 +241,22 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 onChange={handlePasswordCheckChange}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="비밀번호를 다시 입력하세요"
+                required
               />
               <p
                 className={`text-sm ${
-                  passwordError ? "text-red-500" : "text-green-500"
+                  passCheck === ""
+                    ? "invisible"
+                    : passwordError
+                    ? "text-red-500"
+                    : "text-green-500"
                 } absolute bottom-3.5 right-3`}
               >
-                {passwordError ? "비밀번호 불일치" : "비밀번호 일치"}
+                {passCheck === ""
+                  ? ""
+                  : passwordError
+                  ? "비밀번호 불일치"
+                  : "비밀번호 일치"}
               </p>
             </div>
 
@@ -241,6 +274,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="이름을 입력하세요"
+                required
               />
             </div>
 
@@ -258,6 +292,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="연락처를 입력하세요"
+                required
               />
             </div>
 
