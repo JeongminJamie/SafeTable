@@ -1,10 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { cardCompanies, initialCardInfo } from "../../constants/card";
 import useCardRegister from "../../hooks/useCardRegister";
+import CVCGuide from "./CVCGuide";
 
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
-  // const nameInputRef = useRef(null);
+  const [isCVCGuideClicked, setIsCVCGuideClicked] = useState(false);
+
   const {
     cardInfo,
     companyChangeHanlder,
@@ -23,6 +25,13 @@ const AddCard = () => {
     setNameLength(lengthOfName);
   };
 
+  const confirmButtonHandler = (e) => {
+    e.preventDefault();
+
+    //신용 카드 유효성 검사 로직 필요!
+
+    //유효한 카드이면 DB에 저장 필요!
+  };
   return (
     <div className="flex flex-col p-5">
       <h1 className="font-semibold text-2xl">카드 추가</h1>
@@ -79,13 +88,12 @@ const AddCard = () => {
                 : ""
             }`}
             placeholder="카드에 표시된 이름과 일치되도록 입력해주세요."
-            // ref={nameInputRef}
             value={cardInfo.name}
             onChange={nameChangeHandler}
             onInput={calculateNameLength}
           />
         </div>
-        <div className="flex flex-col w-full items-start">
+        <div className="flex flex-col w-full items-start relative">
           <div className="flex items-center justify-center gap-1">
             <label className="font-semibold text-slate-600">
               보안 코드(CVC)
@@ -94,7 +102,9 @@ const AddCard = () => {
               src="/assets/reservation/question.png"
               alt="question"
               className="w-5 h-5 hover:cursor-pointer"
+              onClick={() => setIsCVCGuideClicked((prev) => !prev)}
             />
+            {isCVCGuideClicked && <CVCGuide />}
           </div>
           <input
             className="bg-slate-200 rounded-xl p-3"
@@ -114,7 +124,10 @@ const AddCard = () => {
             onChange={(event) => passwordChangeHandler(event)}
           />
         </div>
-        <button className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto mt-2">
+        <button
+          className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto mt-2"
+          onClick={confirmButtonHandler}
+        >
           등록
         </button>
       </form>

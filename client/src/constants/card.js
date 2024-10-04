@@ -24,7 +24,7 @@ export const cardCompanies = [
 ];
 
 export const initialCardInfo = {
-  cardCompany: "",
+  cardCompany: "신한카드",
   cardNumber: "",
   expireDate: "",
   name: "",
