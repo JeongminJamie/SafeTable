@@ -59,7 +59,7 @@ const Reservation = () => {
           <p>(보장금은 방문 시 환불되거나, 차감됩니다!)</p>
         </p>
         <button
-          className="w-2/4 h-10 bg-amber-200 m-auto px-2 py-1"
+          className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto"
           onClick={clickPayDepositButtonHandler}
         >
           확인

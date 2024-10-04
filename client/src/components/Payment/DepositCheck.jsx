@@ -10,7 +10,7 @@ const DepositCheck = () => {
 
   //   return (
   //     <>
-  //       {/* 카드 데이터 조회 후, 없으면 addCard 컴포넌트 렌더링 시키기! */}
+  //       {/* 카드 데이터 조회 후, 없으면 AddCard 컴포넌트 렌더링 시키기! */}
   //       <AddCard />
   //       <div className="flex flex-col mt-5 gap-5">
   //         <section className="border border-gray-300 rounded px-7 py-5">
@@ -54,6 +54,7 @@ const DepositCheck = () => {
   //     </>
   //   );
   // };
+  // export default DepositCheck;
 
   return (
     <>

@@ -1,0 +1,33 @@
+export const cardCompanies = [
+  "신한카드",
+  "삼성카드",
+  "롯데카드",
+  "우리카드",
+  "하나카드",
+  "KB국민카드",
+  "NH농협카드",
+  "씨티카드",
+  "BC카드",
+  "제일기획카드",
+  "신한금융투자카드",
+  "KB증권카드",
+  "하나금융투자카드",
+  "SC제일은행카드",
+  "대구은행카드",
+  "부산은행카드",
+  "전북은행카드",
+  "광주은행카드",
+  "제주은행카드",
+  "T커머스 카드",
+  "카카오뱅크 카드",
+  "토스 카드",
+];
+
+export const initialCardInfo = {
+  cardCompany: "",
+  cardNumber: "",
+  expireDate: "",
+  name: "",
+  cvcNumber: "",
+  cardPassword: "",
+};
