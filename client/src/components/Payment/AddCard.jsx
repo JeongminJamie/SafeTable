@@ -1,27 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { cardCompanies, initialCardInfo } from "../../constants/card";
 import useCardRegister from "../../hooks/useCardRegister";
 
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
+  // const nameInputRef = useRef(null);
   const {
     cardInfo,
     companyChangeHanlder,
-    cardNumberChangeHanlder,
+    cardNumberChangeHandler,
     expireDateChangeHandler,
+    nameChangeHandler,
+    cvcChangeHandler,
+    passwordChangeHandler,
   } = useCardRegister(initialCardInfo);
 
-  // 카드 소유자 이름 input 길이 계산 함수
+  // 카드 소유자 이름 길이 계산 함수
   const calculateNameLength = (event) => {
-    const trimmedInputName = event.target.value?.trim();
-    const lengthOfName = trimmedInputName.length || 0;
+    const name = event.target.value;
+    const lengthOfName = name.trim().length || 0;
 
     setNameLength(lengthOfName);
   };
 
   return (
     <div className="flex flex-col p-5">
-      <img />
       <h1 className="font-semibold text-2xl">카드 추가</h1>
       <form className="flex flex-col gap-5 mt-10">
         <div className="flex w-full items-center gap-7">
@@ -31,7 +34,9 @@ const AddCard = () => {
             onChange={companyChangeHanlder}
           >
             {cardCompanies.map((company) => (
-              <option value={company}>{company}</option>
+              <option key={company} value={company}>
+                {company}
+              </option>
             ))}
           </select>
         </div>
@@ -40,33 +45,48 @@ const AddCard = () => {
           <input
             className="bg-slate-200 rounded-xl p-3 w-full"
             placeholder="0000 0000 0000 0000"
-            onChange={(event) => cardNumberChangeHanlder(event)}
+            onChange={(event) => cardNumberChangeHandler(event)}
             value={cardInfo.cardNumber}
-          ></input>
+          />
         </div>
         <div className="flex flex-col w-full items-start">
           <label className="font-semibold text-slate-600">만료일</label>
           <input
-            className="bg-slate-200 rounded-xl p-3"
+            className="bg-slate-200 rounded-xl p-3 w-3/12"
             placeholder="MM/YY"
             value={cardInfo.expireDate}
             onChange={(event) => expireDateChangeHandler(event)}
-          ></input>
+          />
         </div>
         <div className="flex flex-col w-full items-start">
           <label className="font-semibold flex justify-between w-full text-slate-600">
             <p>카드 소유자 이름</p>
-            <p>{nameLength}/30</p>
+            <div className="flex">
+              <p
+                className={`${
+                  nameLength > 30 ? "font-semibold text-red-400" : ""
+                }`}
+              >
+                {nameLength}
+              </p>
+              <p>/30</p>
+            </div>
           </label>
           <input
-            className="bg-slate-200 rounded-xl p-3 w-full"
+            className={`bg-slate-200 rounded-xl p-3 w-full ${
+              nameLength > 30
+                ? "focus:outline-none border-2 border-red-400"
+                : ""
+            }`}
             placeholder="카드에 표시된 이름과 일치되도록 입력해주세요."
+            // ref={nameInputRef}
             value={cardInfo.name}
-            onChange={(event) => calculateNameLength(event)}
-          ></input>
+            onChange={nameChangeHandler}
+            onInput={calculateNameLength}
+          />
         </div>
         <div className="flex flex-col w-full items-start">
-          <div className="flex items-center jusify-center gap-1">
+          <div className="flex items-center justify-center gap-1">
             <label className="font-semibold text-slate-600">
               보안 코드(CVC)
             </label>
@@ -79,16 +99,20 @@ const AddCard = () => {
           <input
             className="bg-slate-200 rounded-xl p-3"
             type="password"
-          ></input>
+            value={cardInfo.cvcNumber}
+            onChange={(event) => cvcChangeHandler(event)}
+          />
         </div>
         <div className="flex flex-col w-full items-start">
           <label className="font-semibold text-slate-600">
             카드 비밀번호 2자리
           </label>
           <input
-            className="bg-slate-200 rounded-xl p-3"
+            className="bg-slate-200 rounded-xl p-3 w-3/12"
             type="password"
-          ></input>
+            value={cardInfo.cardPassword}
+            onChange={(event) => passwordChangeHandler(event)}
+          />
         </div>
         <button className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto mt-2">
           등록

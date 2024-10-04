@@ -9,7 +9,7 @@ const useCardRegister = (initialCardInfo) => {
   };
 
   // 카드 번호
-  const cardNumberChangeHanlder = (event) => {
+  const cardNumberChangeHandler = (event) => {
     const cardNumberWithSpace = event.target.value
       .replace(/\D/g, "")
       .replace(/(.{4})/g, "$1 ")
@@ -36,11 +36,34 @@ const useCardRegister = (initialCardInfo) => {
     setCardInfo((prev) => ({ ...prev, expireDate: dateWithSlash }));
   };
 
+  // 카드 소유자 이름
+  const nameChangeHandler = (event) => {
+    const name = event.target.value;
+
+    setCardInfo((prev) => ({ ...prev, name }));
+  };
+
+  // CVC
+  const cvcChangeHandler = (event) => {
+    const trimmedCVCValue = event.target.value.replace(/\D/g, "").slice(0, 4);
+
+    setCardInfo((prev) => ({ ...prev, cvcNumber: trimmedCVCValue }));
+  };
+
+  // 카드 비밀번호 2자리
+  const passwordChangeHandler = (event) => {
+    const trimmedPassword = event.target.value.replace(/\D/g, "").slice(0, 2);
+
+    setCardInfo((prev) => ({ ...prev, cardPassword: trimmedPassword }));
+  };
   return {
     cardInfo,
-    cardNumberChangeHanlder,
+    cardNumberChangeHandler,
     companyChangeHanlder,
     expireDateChangeHandler,
+    nameChangeHandler,
+    cvcChangeHandler,
+    passwordChangeHandler,
   };
 };
 

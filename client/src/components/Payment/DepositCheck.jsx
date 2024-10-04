@@ -34,7 +34,7 @@ const DepositCheck = () => {
   //           총 예약 보장금 <span>{localedDeposit}</span>원
   //         </p>
   //         {/* 저장된 카드 맨 뒤 4자리 가져오기 */}
-  //         <p>{}2039로 끝나는 회원님의 카드로 결제됩니다.</p>
+  //         <p>{}2039로 시작하는 회원님의 카드로 결제됩니다.</p>
   //         <div className="w-full flex flex-row justify-center gap-2">
   //           <button
   //             className="border border-gray-300 rounded font-medium w-5/12 h-12"
