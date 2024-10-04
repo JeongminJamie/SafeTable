@@ -4,10 +4,19 @@ import ReservationCheck from "./ReservationCheck";
 import DepositCheck from "./DepositCheck";
 
 const PaymentModal = () => {
-  const { isPaymentModalOpen, isReservationChecked, setIsPaymentModalOpen } =
-    useReservationStore();
+  const {
+    isPaymentModalOpen,
+    isReservationChecked,
+    setIsPaymentModalOpen,
+    setIsReservationChecked,
+  } = useReservationStore();
 
   if (!isPaymentModalOpen) return null;
+
+  const closeModalStates = () => {
+    setIsPaymentModalOpen(false);
+    setIsReservationChecked(false);
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-300 ease-in-out">
@@ -17,7 +26,7 @@ const PaymentModal = () => {
             src="/assets/exit.png"
             alt="exit-icon"
             className="w-7 h-7 hover:cursor-pointer"
-            onClick={() => setIsPaymentModalOpen(false)}
+            onClick={() => closeModalStates()}
           />
         </div>
         {isReservationChecked ? <DepositCheck /> : <ReservationCheck />}
