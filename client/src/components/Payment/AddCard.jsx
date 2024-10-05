@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { cardCompanies, initialCardInfo } from "../../constants/card";
 import useCardRegister from "../../hooks/useCardRegister";
 import CVCGuide from "./CVCGuide";
@@ -6,6 +6,7 @@ import CVCGuide from "./CVCGuide";
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
   const [isCVCGuideClicked, setIsCVCGuideClicked] = useState(false);
+  const cvcGuideRef = useRef(null);
 
   const {
     cardInfo,
@@ -32,6 +33,22 @@ const AddCard = () => {
 
     //유효한 카드이면 DB에 저장 필요!
   };
+
+  // cvc guide가 열렸을 때, 다른 곳을 클릭했을 시 안 보이게 하기
+  const handleClickOutsideCVC = (event) => {
+    if (cvcGuideRef.current && !cvcGuideRef.current.contains(event.target)) {
+      setIsCVCGuideClicked(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutsideCVC);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideCVC);
+    };
+  }, [cvcGuideRef]);
+
   return (
     <div className="flex flex-col p-5">
       <h1 className="font-semibold text-2xl">카드 추가</h1>
@@ -104,7 +121,12 @@ const AddCard = () => {
               className="w-5 h-5 hover:cursor-pointer"
               onClick={() => setIsCVCGuideClicked((prev) => !prev)}
             />
-            {isCVCGuideClicked && <CVCGuide />}
+            {/* cvc guide가 눌렸을 때 보여줌 */}
+            {isCVCGuideClicked && (
+              <div ref={cvcGuideRef}>
+                <CVCGuide />
+              </div>
+            )}
           </div>
           <input
             className="bg-slate-200 rounded-xl p-3"
