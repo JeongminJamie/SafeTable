@@ -4,7 +4,7 @@ import Introduction from "../components/About/Introduction";
 
 const About = () => {
   return (
-    <div className="h-screen">
+    <div>
       <AboutImage />
       <Introduction />
     </div>

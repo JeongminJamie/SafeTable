@@ -21,8 +21,8 @@ const SafeMain = () => {
         <TableCard />
         <TableCard />
       </div>
-      {/* 입력값에 따른 안심식당 정보가 없을 때 띄울 컴포넌트 */}
-      <EmptyRestaurant />
+      {/* To-do: 입력값에 따른 안심식당 정보가 없을 때 아래 컴포넌트 보여주기!! */}
+      {/* <EmptyRestaurant /> */}
     </div>
   );
 };
