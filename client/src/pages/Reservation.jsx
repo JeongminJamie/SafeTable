@@ -38,7 +38,7 @@ const Reservation = () => {
   }, []);
 
   return (
-    <div className="w-4/6 h-screen m-auto flex flex-col items-center text-center gap-10 mt-10 mb-20">
+    <div className="w-4/6 m-auto flex flex-col items-center text-center gap-10 mt-10 mb-20">
       <div>
         <p className="font-medium text-4xl text-amber-600 mb-5">
           MAKE A RESERVATION

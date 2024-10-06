@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { cardCompanies, initialCardInfo } from "../../constants/card";
 import useCardRegister from "../../hooks/useCardRegister";
 import CVCGuide from "./CVCGuide";
@@ -6,6 +6,9 @@ import CVCGuide from "./CVCGuide";
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
   const [isCVCGuideClicked, setIsCVCGuideClicked] = useState(false);
+
+  const nameInputRef = useRef(null);
+  const cvcGuideRef = useRef(null);
 
   const {
     cardInfo,
@@ -25,13 +28,33 @@ const AddCard = () => {
     setNameLength(lengthOfName);
   };
 
+  // 등록 버튼 처리 함수
   const confirmButtonHandler = (e) => {
     e.preventDefault();
 
-    //신용 카드 유효성 검사 로직 필요!
+    if (nameLength > 30) {
+      nameInputRef.current.focus();
+    }
 
-    //유효한 카드이면 DB에 저장 필요!
+    // To-do: 신용 카드 유효성 검사 로직 필요!!
+    // To-do: 유효한 카드이면 DB에 저장 필요!!
   };
+
+  // cvc guide가 열렸을 때, 다른 곳을 클릭했을 시 안 보이게 하기
+  const handleClickOutsideCVC = (event) => {
+    if (cvcGuideRef.current && !cvcGuideRef.current.contains(event.target)) {
+      setIsCVCGuideClicked(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutsideCVC);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideCVC);
+    };
+  }, [cvcGuideRef]);
+
   return (
     <div className="flex flex-col p-5">
       <h1 className="font-semibold text-2xl">카드 추가</h1>
@@ -71,6 +94,7 @@ const AddCard = () => {
           <label className="font-semibold flex justify-between w-full text-slate-600">
             <p>카드 소유자 이름</p>
             <div className="flex">
+              {/* 입력된 이름이 30자 이상이면 빨간색의 글씨체 보여주기 */}
               <p
                 className={`${
                   nameLength > 30 ? "font-semibold text-red-400" : ""
@@ -81,6 +105,7 @@ const AddCard = () => {
               <p>/30</p>
             </div>
           </label>
+          {/* 입력된 이름이 30자 이상이면 빨간색의 보더 보여주기 */}
           <input
             className={`bg-slate-200 rounded-xl p-3 w-full ${
               nameLength > 30
@@ -89,9 +114,16 @@ const AddCard = () => {
             }`}
             placeholder="카드에 표시된 이름과 일치되도록 입력해주세요."
             value={cardInfo.name}
+            ref={nameInputRef}
             onChange={nameChangeHandler}
             onInput={calculateNameLength}
           />
+          {/* 입력된 이름이 30자 이상이면 메세지 보여주기 */}
+          {nameLength > 30 && (
+            <div className="font-medium text-red-700">
+              이름은 최대 30자까지 입력 가능합니다.
+            </div>
+          )}
         </div>
         <div className="flex flex-col w-full items-start relative">
           <div className="flex items-center justify-center gap-1">
@@ -104,7 +136,12 @@ const AddCard = () => {
               className="w-5 h-5 hover:cursor-pointer"
               onClick={() => setIsCVCGuideClicked((prev) => !prev)}
             />
-            {isCVCGuideClicked && <CVCGuide />}
+            {/* cvc guide가 눌렸을 때 보여주기 */}
+            {isCVCGuideClicked && (
+              <div ref={cvcGuideRef}>
+                <CVCGuide />
+              </div>
+            )}
           </div>
           <input
             className="bg-slate-200 rounded-xl p-3"
