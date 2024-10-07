@@ -136,7 +136,7 @@ const MyPage = () => {
           {activeTab === "Reservations" && (
             <Reservations reservations={reservations} />
           )}
-          {activeTab === "Payment Methods" && <NoCard />}
+          {activeTab === "Payment Methods" && <MyCardInfo />}
         </div>
       </div>
     </div>
