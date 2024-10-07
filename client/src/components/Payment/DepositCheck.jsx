@@ -1,7 +1,7 @@
 import React from "react";
 import useReservationStore from "../../store/useReservationStore";
 import { useNavigate } from "react-router-dom";
-import AddCard from "./AddCard";
+import AddCard from "../Card/AddCard";
 
 const DepositCheck = () => {
   const navigate = useNavigate();
