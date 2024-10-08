@@ -38,7 +38,7 @@ const Reservation = () => {
   }, []);
 
   return (
-    <div className="w-4/6 h-screen m-auto flex flex-col items-center text-center gap-10 mt-10 mb-20">
+    <div className="w-4/6 m-auto flex flex-col items-center text-center gap-10 mt-10 mb-20">
       <div>
         <p className="font-medium text-4xl text-amber-600 mb-5">
           MAKE A RESERVATION
@@ -59,7 +59,7 @@ const Reservation = () => {
           <p>(보장금은 방문 시 환불되거나, 차감됩니다!)</p>
         </p>
         <button
-          className="w-2/4 h-10 bg-amber-200 m-auto px-2 py-1"
+          className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto"
           onClick={clickPayDepositButtonHandler}
         >
           확인

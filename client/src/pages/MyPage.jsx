@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { AboutMe } from "../components/MyPage/AboutMe";
 import { Reservations } from "../components/MyPage/Reservations";
+import MyCardInfo from "../components/Card/MyCardInfo";
+import NoCard from "../components/Card/NoCard";
 
 const MyPage = () => {
   const [formData, setFormData] = useState({
@@ -122,7 +124,7 @@ const MyPage = () => {
             } flex items-center relative`}
             onClick={() => setActiveTab("Payment Methods")}
           >
-            Payment Methods
+            Payment Method
           </div>
         </nav>
 
@@ -134,7 +136,7 @@ const MyPage = () => {
           {activeTab === "Reservations" && (
             <Reservations reservations={reservations} />
           )}
-          {activeTab === "Payment Methods" && <div>Payment Methods</div>}
+          {activeTab === "Payment Methods" && <MyCardInfo />}
         </div>
       </div>
     </div>
