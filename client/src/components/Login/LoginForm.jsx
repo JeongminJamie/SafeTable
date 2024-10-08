@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { api } from "../../api/api";
 
-export const LoginForm = ({ onClose, onSwitchToSignup }) => {
+export const LoginForm = ({ onClose, onSwitchToSignup, setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,25 +16,23 @@ export const LoginForm = ({ onClose, onSwitchToSignup }) => {
         { withCredentials: true }
       );
 
-      console.log("로그인 성공:", response.data);
+      console.log("로그인 되었습니다.");
       sessionStorage.setItem("token", response.data.token);
-
-      return true; // 성공적으로 로그인이 이루어진 경우
+      setToken(response.data.token); // 로그인 성공 시 토큰 설정
+      return true;
     } catch (e) {
       console.log("로그인 실패:", e.response?.data?.message || e.message);
-      return false; // 로그인이 실패한 경우
+      return false;
     }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("로그인 시도:", { email, password });
 
-    // 로그인 요청 후 성공 여부 확인
     const success = await connectLogin();
 
     if (success) {
-      onClose(); // 로그인 성공 시 모달 닫기
+      onClose();
     }
   };
 
