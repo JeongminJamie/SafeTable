@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthModal } from "../Login/AuthModal";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +6,20 @@ const MainHeader = () => {
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState("login");
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    setToken(null);
+    console.log("로그아웃 되었습니다.");
+  };
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
@@ -27,31 +41,48 @@ const MainHeader = () => {
           >
             소개
           </div>
-          {/* 로그인 했을 때 */}
-          {/* <div className="hover:cursor-pointer hover:text-xl">내정보</div> */}
+
+          {token ? (
+            /* 로그인 했을 때 */
+            <div
+              className="hover:cursor-pointer hover:text-xl"
+              onClick={() => navigate("/mypage")}
+            >
+              내정보
+            </div>
+          ) : (
+            <div
+              className="hover:cursor-pointer hover:text-xl"
+              onClick={() => {
+                setCurrentForm("signup");
+                openModal();
+              }}
+            >
+              회원가입
+            </div>
+          )}
+        </div>
+        {token ? (
+          /* 로그인 했을 때 */
           <div
-            className="hover:cursor-pointer hover:text-xl"
+            className="w-28 bg-amber-200 rounded-full py-3 font-bold hover:cursor-pointer"
             onClick={() => {
-              setCurrentForm("signup");
+              handleLogout();
+            }}
+          >
+            로그아웃
+          </div>
+        ) : (
+          <div
+            className="w-28 bg-amber-200 rounded-full py-3 font-bold hover:cursor-pointer"
+            onClick={() => {
+              setCurrentForm("login");
               openModal();
             }}
           >
-            회원가입
+            로그인
           </div>
-        </div>
-        <div
-          className="w-28 bg-amber-200 rounded-full py-3 font-bold hover:cursor-pointer"
-          onClick={() => {
-            setCurrentForm("login");
-            openModal();
-          }}
-        >
-          로그인
-        </div>
-        {/* 로그인 했을 때 */}
-        {/* <div className="w-28 bg-amber-200 rounded-full py-3 font-bold hover:cursor-pointer">
-        로그아웃
-      </div> */}
+        )}
       </header>
       <main>
         <AuthModal
@@ -59,6 +90,7 @@ const MainHeader = () => {
           onClose={closeModal}
           currentForm={currentForm}
           setCurrentForm={setCurrentForm}
+          setToken={setToken}
         />
       </main>
     </>

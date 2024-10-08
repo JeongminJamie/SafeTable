@@ -2,6 +2,7 @@ import express from "express";
 import User from "../../models/user.js";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 import Email from "../../models/emailcheck.js";
 
 dotenv.config({ path: ".env.local" });
@@ -66,14 +67,18 @@ router.post("/", async (req, res) => {
       });
     }
 
+    const salt = await bcrypt.genSalt(10); // (암호화 강도 설정)
+    const hashedPassword = await bcrypt.hash(user_password, salt); // 비밀번호 해시화
+
     const newUser = new User({
       name: user_name,
       email: user_email,
-      password: user_password,
+      password: hashedPassword,
       contact: user_contact,
     });
 
     await newUser.save();
+
     res.status(200).json({
       success: true,
       message: "Registration successful",
@@ -99,8 +104,8 @@ router.post("/send-verification-email", async (req, res) => {
     });
   }
 
-  const expirationTime = new Date(Date.now() + 10 * 60 * 1000); // 10분 후
-  const verificationToken = Math.floor(100000 + Math.random() * 900000); //6자리
+  const expirationTime = new Date(Date.now() + 10 * 60 * 1000);
+  const verificationToken = Math.floor(100000 + Math.random() * 900000);
 
   try {
     let user = await Email.findOne({ email });

@@ -9,6 +9,7 @@ export const AuthModal = ({
   onClose,
   currentForm,
   setCurrentForm,
+  setToken,
 }) => {
   const [isAgreed, setIsAgreed] = useState(false);
 
@@ -21,6 +22,7 @@ export const AuthModal = ({
         <LoginForm
           onClose={onClose}
           onSwitchToSignup={() => setCurrentForm("terms")}
+          setToken={setToken}
         />
       ) : currentForm === "signup" ? (
         isAgreed ? (

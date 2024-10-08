@@ -1,13 +1,39 @@
 import React, { useState } from "react";
+import { api } from "../../api/api";
 
-export const LoginForm = ({ onClose, onSwitchToSignup }) => {
+export const LoginForm = ({ onClose, onSwitchToSignup, setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const connectLogin = async () => {
+    try {
+      const response = await api.post(
+        "/login",
+        {
+          user_email: email,
+          user_password: password,
+        },
+        { withCredentials: true }
+      );
+
+      console.log("로그인 되었습니다.");
+      sessionStorage.setItem("token", response.data.token);
+      setToken(response.data.token);
+      return true;
+    } catch (e) {
+      console.log("로그인 실패:", e.response?.data?.message || e.message);
+      return false;
+    }
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("로그인 시도:", { email, password });
-    onClose();
+
+    const success = await connectLogin();
+
+    if (success) {
+      onClose();
+    }
   };
 
   return (
