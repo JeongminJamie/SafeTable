@@ -8,14 +8,13 @@ const MainHeader = () => {
   const [currentForm, setCurrentForm] = useState("login");
   const [token, setToken] = useState(null);
 
-  // 초기 로드 시 세션에 저장된 토큰을 가져옴
   useEffect(() => {
     const storedToken = sessionStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
     }
     console.log("실행중");
-  }, []); // 빈 의존성 배열로 한 번만 실행
+  }, []);
 
   const handleLogout = () => {
     sessionStorage.removeItem("token");
@@ -46,7 +45,12 @@ const MainHeader = () => {
 
           {token ? (
             /* 로그인 했을 때 */
-            <div className="hover:cursor-pointer hover:text-xl">내정보</div>
+            <div
+              className="hover:cursor-pointer hover:text-xl"
+              onClick={() => navigate("/mypage")}
+            >
+              내정보
+            </div>
           ) : (
             <div
               className="hover:cursor-pointer hover:text-xl"
