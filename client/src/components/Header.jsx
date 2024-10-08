@@ -12,7 +12,6 @@ const Header = () => {
     if (storedToken) {
       setToken(storedToken);
     }
-    console.log("실행중");
   }, []);
 
   const handleLogout = () => {

@@ -18,7 +18,7 @@ export const LoginForm = ({ onClose, onSwitchToSignup, setToken }) => {
 
       console.log("로그인 되었습니다.");
       sessionStorage.setItem("token", response.data.token);
-      setToken(response.data.token); // 로그인 성공 시 토큰 설정
+      setToken(response.data.token);
       return true;
     } catch (e) {
       console.log("로그인 실패:", e.response?.data?.message || e.message);
