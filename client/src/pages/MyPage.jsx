@@ -1,18 +1,59 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AboutMe } from "../components/MyPage/AboutMe";
 import { Reservations } from "../components/MyPage/Reservations";
 import MyCardInfo from "../components/Card/MyCardInfo";
 import NoCard from "../components/Card/NoCard";
+import { api } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState({
+    userName: "",
+    userEmail: "",
+  });
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     emailAddress: "",
     location: "",
   });
-
   const [activeTab, setActiveTab] = useState("aboutMe");
+
+  const verifyToken = async () => {
+    const token = sessionStorage.getItem("token");
+
+    if (!token) {
+      console.log("No access token found");
+      return;
+    }
+
+    try {
+      const response = await api.get("http://localhost:8080/login/verify", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUserData({
+        userName: response.data.user.name,
+        userEmail: response.data.user.email,
+      });
+    } catch (error) {
+      if (error.response) {
+        console.log("Failed to verify token:", error.response.data.message);
+      } else {
+        console.error("Error verifying token:", error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("token")) {
+      navigate("/");
+    }
+    verifyToken();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -91,7 +132,8 @@ const MyPage = () => {
           className="w-20 h-20 rounded-full mr-4"
         />
         <div>
-          <h1 className="text-2xl font-bold">Your Name</h1>
+          <h1 className="text-2xl font-bold">{userData.userName}</h1>
+          <p>{userData.userEmail}</p>
           <p>등록한 위치</p>
         </div>
       </div>

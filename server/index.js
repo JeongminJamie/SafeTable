@@ -16,7 +16,7 @@ mongoose
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:3000", // 정확한 도메인만 입력
+    origin: "http://localhost:3000",
     credentials: true, // 쿠키, 세션 허용
   })
 );

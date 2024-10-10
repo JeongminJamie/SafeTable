@@ -1,5 +1,4 @@
 import React from "react";
-import { TableCard } from "../SafeTable/tableCard";
 import SaveTable from "./SaveTable";
 
 export const AboutMe = ({ formData, handleChange }) => {
@@ -12,41 +11,27 @@ export const AboutMe = ({ formData, handleChange }) => {
       <h2 className="text-xl font-semibold mb-4">About Me</h2>
       <form onSubmit={handleSave}>
         <div className="mb-4">
-          <label htmlFor="firstName" className="block mb-1">
-            First Name
+          <label htmlFor="Name" className="block mb-1">
+            Your Name
           </label>
           <input
             type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            className="border p-2 rounded w-4/5"
-            placeholder="Enter your first name"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="lastName" className="block mb-1">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
+            id="Name"
+            name="Name"
             value={formData.lastName}
             onChange={handleChange}
             className="border p-2 rounded w-4/5"
-            placeholder="Enter your last name"
+            placeholder="Enter your name"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="emailAddress" className="block mb-1">
-            Email Address
+          <label htmlFor="password" className="block mb-1">
+            password
           </label>
           <input
-            type="email"
-            id="emailAddress"
-            name="emailAddress"
+            type="password"
+            id="password"
+            name="password"
             value={formData.emailAddress}
             onChange={handleChange}
             className="border p-2 rounded w-4/5"
