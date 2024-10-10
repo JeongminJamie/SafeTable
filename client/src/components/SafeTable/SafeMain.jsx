@@ -17,6 +17,7 @@ const SafeMain = () => {
             address2={restaurant.RELAX_ADD2}
             telephone={restaurant.RELAX_RSTRNT_TEL}
             category={restaurant.RELAX_GUBUN_DETAIL}
+            website={restaurant.RELAX_RSTRNT_ETC}
             seq={restaurant.RELAX_SEQ}
           />
         ))}

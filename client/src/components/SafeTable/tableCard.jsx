@@ -6,6 +6,7 @@ export const TableCard = ({
   address2,
   telephone,
   category,
+  website,
   seq,
 }) => {
   const reservedTables = 5;
@@ -54,7 +55,8 @@ export const TableCard = ({
             onClick={handleRedirect} // 버튼 클릭 시 URL로 이동
             className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 ml-1"
           >
-            사이트 바로가기
+            {/* 이 부분 웹사이트 데이터를 갖고 있는 곳이 거의 없음  */}
+            {website}
           </button>
         </div>
         <p className="text-sm text-gray-500 mb-2">
