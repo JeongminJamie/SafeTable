@@ -47,7 +47,7 @@ const SearchBox = () => {
 
   // 검색된 지역 식당 리액트 쿼리 패치
   const { refetch } = useQuery({
-    queryKey: ["fetchRestaurants", inputValue],
+    queryKey: ["fetchLocationRestaurants", inputValue],
     queryFn: fetchRestaurantByInput(inputValue),
     enabled: false,
     onSettled: (data, error) => {
