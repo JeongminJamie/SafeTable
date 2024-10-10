@@ -1,6 +1,13 @@
 import React from "react";
 
-export const TableCard = () => {
+export const TableCard = ({
+  name,
+  address1,
+  address2,
+  telephone,
+  category,
+  seq,
+}) => {
   const reservedTables = 5;
   const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경
 
@@ -34,16 +41,14 @@ export const TableCard = () => {
         </button>
       </div>
       <div className="m-3">
-        <h1 className="text-lg font-semibold mb-1 text-gray-800">
-          안심갈비식당
-        </h1>
+        <h1 className="text-lg font-semibold mb-1 text-gray-800">{name}</h1>
         <p className="text-sm text-gray-600 mb-2">
-          서울특별시 강남구 역삼동 123-45
+          {address1} {address2}
         </p>
-        <p className="text-sm text-gray-600 mb-3">02-123-4567</p>
+        <p className="text-sm text-gray-600 mb-3">{telephone}</p>
         <div className="flex justify-between mb-3">
           <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 mr-1">
-            한식
+            {category}
           </button>
           <button
             onClick={handleRedirect} // 버튼 클릭 시 URL로 이동

@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { InputAdornment } from "@mui/material";
 
-import useSearchStore from "../../store/useSearchStore";
+import useSearchStore from "../../store/useRestaurantStore";
 import {
   fetchRegionsByInput,
   fetchRestaurantByInput,

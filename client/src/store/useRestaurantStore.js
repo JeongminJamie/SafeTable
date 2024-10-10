@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const useSearchStore = create((set) => ({
+const useRestaurantStore = create((set) => ({
   inputValue: "",
   fetchedRestaurants: [],
   searchLoading: true,
@@ -13,4 +13,4 @@ const useSearchStore = create((set) => ({
   setSearchError: (status) => set({ searchError: status }),
 }));
 
-export default useSearchStore;
+export default useRestaurantStore;
