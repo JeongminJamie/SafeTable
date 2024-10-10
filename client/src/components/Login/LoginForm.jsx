@@ -4,6 +4,7 @@ import { api } from "../../api/api";
 export const LoginForm = ({ onClose, onSwitchToSignup, setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 관리
 
   const connectLogin = async () => {
     try {
@@ -19,9 +20,12 @@ export const LoginForm = ({ onClose, onSwitchToSignup, setToken }) => {
       console.log("로그인 되었습니다.");
       sessionStorage.setItem("token", response.data.token);
       setToken(response.data.token);
+      setErrorMessage(""); // 성공 시 에러 메시지 초기화
       return true;
     } catch (e) {
-      console.log("로그인 실패:", e.response?.data?.message || e.message);
+      const error = e.response?.data?.message || e.message;
+      console.log("로그인 실패:", error);
+      setErrorMessage("아이디 또는 비밀번호를 다시 확인해주세요."); // 에러 메시지 설정
       return false;
     }
   };
@@ -74,6 +78,11 @@ export const LoginForm = ({ onClose, onSwitchToSignup, setToken }) => {
             required
           />
         </div>
+
+        {errorMessage && (
+          <div className="mb-4 text-red-500 text-sm">{errorMessage}</div>
+        )}
+
         <div className="flex justify-end">
           <button
             type="submit"

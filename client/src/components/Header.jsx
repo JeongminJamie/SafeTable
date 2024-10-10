@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthModal } from "./Login/AuthModal";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState("login");
   const [token, setToken] = useState(null);
@@ -18,6 +20,7 @@ const Header = () => {
     sessionStorage.removeItem("token");
     setToken(null);
     console.log("로그아웃 되었습니다.");
+    navigate("/");
   };
 
   const openModal = () => setModalOpen(true);
