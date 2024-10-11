@@ -1,10 +1,12 @@
 import axios from "axios";
 
+const serverURL = process.env.REACT_APP_SERVER_PORT_URL;
+
 // autocomplete을 위한 입력값에 따른 시군구 open api 지역명 요청
 export const fetchRegionsByInput = async (inputValue) => {
   try {
     const response = await axios.get(
-      `/2ddata/adsigg/data?apiKey=${
+      `${serverURL}/api/locations/2ddata/adsigg/data?apiKey=${
         process.env.REACT_APP_LOCATION_API_KEY
       }&domain=${
         process.env.REACT_APP_LOCATION_DOMAIN

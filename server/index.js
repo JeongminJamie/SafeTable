@@ -26,14 +26,29 @@ app.use("/login", login);
 app.use("/register", register);
 
 // open api proxy 해결 구역
+
+// 안심식당 조회
 app.use(
-  "/api",
+  "/api/restaurants",
   createProxyMiddleware({
     target: process.env.RESTARUANT_URL,
     changeOrigin: true,
     pathRewrite: {
-      "^/api": "",
+      "^/api/restaurants": "",
     },
+  })
+);
+
+// 지역명 조회
+app.use(
+  "/api/locations",
+  createProxyMiddleware({
+    target: process.env.LOCATION_URL,
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/locations": "",
+    },
+    secure: true,
   })
 );
 

@@ -37,7 +37,6 @@ const SearchBox = () => {
     data: options = [],
     isLoading,
     isError,
-    error,
   } = useQuery({
     queryKey: ["fetchRegions", debouncedInputValue],
     queryFn: () => fetchRegionsByInput(debouncedInputValue),
@@ -46,18 +45,18 @@ const SearchBox = () => {
   });
 
   // 검색된 지역 식당 리액트 쿼리 패치
-  const { refetch } = useQuery({
-    queryKey: ["fetchLocationRestaurants", inputValue],
-    queryFn: fetchRestaurantByInput(inputValue),
-    enabled: false,
-    onSettled: (data, error) => {
-      setSearchLoading(false);
-      if (error) setSearchError(true);
-    },
-    onSuccess: (data) => {
-      setFetchedRestaurants(data);
-    },
-  });
+  // const { refetch } = useQuery({
+  //   queryKey: ["fetchLocationRestaurants", inputValue],
+  //   queryFn: fetchRestaurantByInput(inputValue),
+  //   enabled: false,
+  //   onSettled: (data, error) => {
+  //     setSearchLoading(false);
+  //     if (error) setSearchError(true);
+  //   },
+  //   onSuccess: (data) => {
+  //     setFetchedRestaurants(data);
+  //   },
+  // });
 
   return (
     <Autocomplete
@@ -70,11 +69,11 @@ const SearchBox = () => {
       onChange={(event, newValue) => {
         setInputValue(newValue || "");
       }}
-      onKeyDown={(event) => {
-        if (event.key === "Enter") {
-          searchHandler(inputValue, refetch);
-        }
-      }}
+      // onKeyDown={(event) => {
+      //   if (event.key === "Enter") {
+      //     searchHandler(inputValue, refetch);
+      //   }
+      // }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -93,7 +92,7 @@ const SearchBox = () => {
                     src="/assets/safeTable/search.png"
                     alt="search"
                     className="w-7 h-7 hover:cursor-pointer"
-                    onClick={() => searchHandler(inputValue, refetch)}
+                    // onClick={() => searchHandler(inputValue, refetch)}
                   />
                 </InputAdornment>
               ),

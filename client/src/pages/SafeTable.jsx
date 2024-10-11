@@ -12,7 +12,7 @@ const SafeTable = () => {
   const fetchEntireRestaurants = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_PORT_URL}/api/openapi/${process.env.REACT_APP_RESTAURANT_API_KEY}/json/Grid_20200713000000000605_1/1/100?RELAX_SI_NM=서울특별시`
+        `${process.env.REACT_APP_SERVER_PORT_URL}/api/restaurants/openapi/${process.env.REACT_APP_RESTAURANT_API_KEY}/json/Grid_20200713000000000605_1/1/100?RELAX_SI_NM=서울특별시`
       );
 
       const data = response.data.Grid_20200713000000000605_1.row;
@@ -39,7 +39,7 @@ const SafeTable = () => {
 
   return (
     <>
-      {/* <SearchBox /> */}
+      <SearchBox />
       <SafeMain />
     </>
   );
