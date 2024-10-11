@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
 const useRestaurantStore = create((set) => ({
-  inputValue: "",
+  searchedValue: "",
   fetchedRestaurants: [],
   searchLoading: true,
   searchError: false,
 
-  setInputValue: (inputValue) => set({ inputValue }),
+  setSearchedValue: (searchedValue) => set({ searchedValue }),
   setFetchedRestaurants: (restaurants) =>
     set({ fetchedRestaurants: restaurants }),
   setSearchLoading: (status) => set({ searchLoading: status }),

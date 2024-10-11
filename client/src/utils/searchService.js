@@ -27,25 +27,31 @@ export const fetchRegionsByInput = async (inputValue) => {
 };
 
 // 검색 핸들러
-export const searchHandler = (inputValue, refetch) => {
-  if (inputValue?.trim().length > 1) {
-    refetch();
+export const searchHandler = (selectedValue, setIsWarned, setSearchedValue) => {
+  if (!selectedValue) {
+    setIsWarned(true);
+  } else {
+    setSearchedValue(selectedValue);
+    setIsWarned(false);
   }
 };
 
 // 검색된 입력값에 따른 식당 정보 조회 요청
-export const fetchRestaurantByInput = async (inputValue) => {
+export const fetchRestaurantByInput = async (searchedValue) => {
+  const splittedValue = searchedValue.split(" ");
+  const encodedSi = encodeURIComponent(splittedValue[0]);
+  const encodedSido = encodeURIComponent(splittedValue[1]);
+
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_RESTAURANT_BASE_URL}/${
-        process.env.REACT_APP_RESTAURANT_API_URL
-      }/1/5?API_KEY=${
-        process.env.REACT_APP_RESTAURANT_API_KEY
-      }&RELAX_SI_NM=${encodeURIComponent(inputValue)}`
+      `${process.env.REACT_APP_SERVER_PORT_URL}/api/restaurants/openapi/${process.env.REACT_APP_RESTAURANT_API_KEY}/json/Grid_20200713000000000605_1/1/100?RELAX_SI_NM=${encodedSi}&RELAX_SIDO_NM=${encodedSido}`
     );
 
-    console.log("지역명 식당 조회", response);
-    return response.data;
+    const restaurantData = response.data.Grid_20200713000000000605_1?.row || [];
+
+    console.log("지역명 식당 조회", restaurantData);
+
+    return restaurantData;
   } catch (error) {
     console.error("지역명에 따른 식당 패치 중 에러 발생", error);
   }
