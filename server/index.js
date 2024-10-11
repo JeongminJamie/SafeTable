@@ -1,11 +1,11 @@
 import express from "express";
-import { createProxyMiddleware } from "http-proxy-middleware";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import login from "./routes/login/login.js";
 import register from "./routes/login/register.js";
 import session from "express-session";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 dotenv.config({ path: ".env.local" });
 
@@ -25,9 +25,17 @@ app.use(express.json());
 app.use("/login", login);
 app.use("/register", register);
 
-// open api proxy 해결
-// app.use()
-
+// open api proxy 해결 구역
+app.use(
+  "/api",
+  createProxyMiddleware({
+    target: process.env.RESTARUANT_URL,
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api": "",
+    },
+  })
+);
 
 const port = 8080;
 app.listen(port, () => {

@@ -10,7 +10,7 @@ export const TableCard = ({
   seq,
 }) => {
   const reservedTables = 5;
-  const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경
+  const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경 => 이 부분 어떻게 대체할까요?
 
   const handleSaveRestaurant = () => {
     console.log("click");
