@@ -69,17 +69,26 @@ const SearchBox = () => {
     }
   }, [locationRestaurants]);
 
-  const inputChangeHandler = (newInputValue) => {
-    setInputValue(newInputValue);
-    setSelectedValue(null);
+  // 검색창에 값 입력 시 호출
+  const inputChangeHandler = (event, newInputValue) => {
+    if (event.type === "change") {
+      setInputValue(newInputValue);
+      setSelectedValue(null);
+      setIsWarned(false);
+    }
   };
 
-  const onChangeHandler = (newValue) => {
-    setInputValue(newValue || "");
-    setSelectedValue(newValue || null);
+  // 드랍다운의 옵션 중 하나를 눌렀을 때 호출
+  const onChangeHandler = (event, newValue) => {
+    if (event.type === "click") {
+      if (newValue) {
+        setInputValue(newValue);
+        setSelectedValue(newValue);
 
-    //선택했을 때도 검색이 되게 하는 부분
-    searchHandler(newValue, setIsWarned, setSearchedValue);
+        // 옵션을 클릭했을 때도 검색 수행
+        searchHandler(newValue, setIsWarned, setSearchedValue);
+      }
+    }
   };
 
   return (
@@ -87,12 +96,12 @@ const SearchBox = () => {
       <Autocomplete
         freeSolo
         options={options}
-        inputValue={inputValue}
-        onInputChange={(_, newInputValue) => {
-          inputChangeHandler(newInputValue);
+        inputValue={inputValue || ""}
+        onInputChange={(event, newInputValue) => {
+          inputChangeHandler(event, newInputValue);
         }}
-        onChange={(_, newValue) => {
-          onChangeHandler(newValue);
+        onChange={(event, newValue) => {
+          onChangeHandler(event, newValue);
         }}
         onKeyDown={(event) => {
           if (event.key === "Enter") {
@@ -131,10 +140,12 @@ const SearchBox = () => {
             }}
           />
         )}
-        className="flex justify-center items-center w-4/12 h-12 border border-gray-500 rounded-full mx-auto my-14 p-4"
+        className="flex justify-center items-center w-4/12 h-12 border border-gray-500 rounded-full mx-auto my-14 p-4 mb-0"
       />
       {isWarned && (
-        <div className="text-red-500">아래 옵션 중 하나를 클릭해주세요.</div>
+        <div className="flex justify-center items-center w-4/12 h-12 text-amber-500 font-medium rounded-full mx-auto">
+          지역 옵션 중 하나를 클릭해주세요.
+        </div>
       )}
     </>
   );
