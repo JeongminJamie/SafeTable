@@ -1,17 +1,23 @@
 import { useEffect, useRef } from "react";
+import { throttle } from "../utils/throttle";
 
-const useObserberWithThrottle = ({
+const useObserverWithThrottle = ({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
+  delay,
 }) => {
   const loadMoreRef = useRef(null);
+
+  const throttledFetchNextPage = throttle(() => {
+    if (hasNextPage && !isFetchingNextPage) fetchNextPage();
+  }, delay);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
+        if (entries[0].isIntersecting) {
+          throttledFetchNextPage();
         }
       },
       {
@@ -35,4 +41,4 @@ const useObserberWithThrottle = ({
   return loadMoreRef;
 };
 
-export default useObserberWithThrottle;
+export default useObserverWithThrottle;

@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import SafeMain from "../components/SafeTable/SafeMain";
 import SearchBox from "../components/SafeTable/SearchBox";
+
 import axios from "axios";
 import fisherYatesShuffle from "../utils/fisherYatesShuffle";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import useRestaurantStore from "../store/useRestaurantStore";
-import useObserberWithThrottle from "../hooks/useObserverWithThrottle";
+import useObserverWithThrottle from "../hooks/useObserverWithThrottle";
 
 const SafeTable = () => {
   const { setFetchedRestaurants } = useRestaurantStore();
@@ -38,10 +39,11 @@ const SafeTable = () => {
     });
 
   // 무한 스크롤링을 위한 observer 커스텀 훅 호출
-  const loadMoreRef = useObserberWithThrottle({
+  const loadMoreRef = useObserverWithThrottle({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    delay: 1000,
   });
 
   useEffect(() => {
