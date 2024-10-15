@@ -11,13 +11,10 @@ const MyPage = () => {
   const [userData, setUserData] = useState({
     userName: "",
     userEmail: "",
+    userContact: "",
+    userLocation: "",
   });
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    emailAddress: "",
-    location: "",
-  });
+  console.log("🚀 ~ MyPage ~ userData:", userData);
   const [activeTab, setActiveTab] = useState("aboutMe");
 
   const verifyToken = async () => {
@@ -38,6 +35,8 @@ const MyPage = () => {
       setUserData({
         userName: response.data.user.name,
         userEmail: response.data.user.email,
+        userContact: response.data.user.contact,
+        userLocation: response.data.user.location,
       });
     } catch (error) {
       if (error.response) {
@@ -54,14 +53,6 @@ const MyPage = () => {
     }
     verifyToken();
   }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
   const reservations = [
     {
@@ -173,7 +164,7 @@ const MyPage = () => {
         {/* Main 부분 */}
         <div className="w-4/5">
           {activeTab === "aboutMe" && (
-            <AboutMe formData={formData} handleChange={handleChange} />
+            <AboutMe formData={userData} setFormData={setUserData} />
           )}
           {activeTab === "Reservations" && (
             <Reservations reservations={reservations} />
