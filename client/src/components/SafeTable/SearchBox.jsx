@@ -4,21 +4,11 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { InputAdornment } from "@mui/material";
 
-import useSearchStore from "../../store/useRestaurantStore";
-import {
-  fetchRegionsByInput,
-  fetchRestaurantByInput,
-  searchHandler,
-} from "../../utils/searchService";
+import useRestaurantStore from "../../store/useRestaurantStore";
+import { fetchRegionsByInput, searchHandler } from "../../utils/searchService";
 
 const SearchBox = () => {
-  const {
-    searchedValue,
-    setSearchedValue,
-    setFetchedRestaurants,
-    setSearchLoading,
-    setSearchError,
-  } = useSearchStore();
+  const { setSearchedValue } = useRestaurantStore();
 
   const [inputValue, setInputValue] = useState("");
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
@@ -37,37 +27,13 @@ const SearchBox = () => {
   }, [inputValue]);
 
   // 검색창의 지역명 autocomplete 리액트 쿼리 패치
-  const {
-    data: options = [],
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: options = [] } = useQuery({
     queryKey: ["fetchRegions", debouncedInputValue],
     queryFn: () => fetchRegionsByInput(debouncedInputValue),
     enabled: !!debouncedInputValue,
     refetchOnWindowFocus: false,
     staleTime: 120 * 1000,
   });
-
-  // 검색된 지역 안심식당 리액트 쿼리 패치
-  const { data: locationRestaurants = null } = useQuery({
-    queryKey: ["fetchLocationRestaurants", searchedValue],
-    queryFn: () => fetchRestaurantByInput(searchedValue),
-    enabled: !!searchedValue,
-    onSettled: (data, error) => {
-      setSearchLoading(false);
-      if (error) setSearchError(true);
-    },
-    staleTime: 120 * 1000,
-    refetchOnWindowFocus: false,
-  });
-
-  // 검색된 입력값에 따른 지역 안심식당 패치 후 레스토랑 데이터 상태 업데이트
-  useEffect(() => {
-    if (locationRestaurants) {
-      setFetchedRestaurants(locationRestaurants);
-    }
-  }, [locationRestaurants]);
 
   // 검색창에 값 입력 시 호출
   const inputChangeHandler = (event, newInputValue) => {

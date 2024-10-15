@@ -36,7 +36,7 @@ const useObserverWithThrottle = ({
         observer.unobserve(loadMoreRef.current);
       }
     };
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, [throttledFetchNextPage]);
 
   return loadMoreRef;
 };
