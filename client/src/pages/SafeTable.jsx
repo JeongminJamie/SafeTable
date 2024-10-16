@@ -4,7 +4,7 @@ import SearchBox from "../components/SafeTable/SearchBox";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import useRestaurantStore from "../store/useRestaurantStore";
-import useObserverWithThrottle from "../hooks/useObserverWithThrottle";
+import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import {
   fetchEntireRestaurants,
   fetchRestaurantByInput,
@@ -32,11 +32,10 @@ const SafeTable = () => {
     });
 
   // 무한 스크롤링을 위한 observer 커스텀 훅 호출
-  const loadMoreRef = useObserverWithThrottle({
+  const loadMoreRef = useIntersectionObserver({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    delay: 1000,
   });
 
   // 쿼리의 데이터 set
