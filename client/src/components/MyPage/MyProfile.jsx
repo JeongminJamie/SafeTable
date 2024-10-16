@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
 
 export const MyProfile = ({ formData, setFormData }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
-    userName: formData.userName,
-    userContact: formData.userContact,
-    userLocation: formData.userLocation,
+    userName: "",
+    userContact: "",
+    userLocation: "",
   });
+
+  useEffect(() => {
+    setUserData({
+      userName: formData.userName,
+      userContact: formData.userContact,
+      userLocation: formData.userLocation,
+    });
+  }, [formData]);
 
   const updateProfile = async () => {
     const token = sessionStorage.getItem("token");
@@ -42,18 +50,46 @@ export const MyProfile = ({ formData, setFormData }) => {
     }
   };
 
+  // 전화번호 포맷팅 함수 3자리-4자리-4자리
+  const formatPhoneNumber = (value) => {
+    const onlyNumbers = value.replace(/\D/g, "");
+
+    if (onlyNumbers.length <= 3) return onlyNumbers;
+    if (onlyNumbers.length <= 8)
+      return `${onlyNumbers.slice(0, 3)}-${onlyNumbers.slice(3)}`;
+    return `${onlyNumbers.slice(0, 3)}-${onlyNumbers.slice(
+      3,
+      7
+    )}-${onlyNumbers.slice(7, 11)}`;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    const formattedValue =
+      name === "userContact" ? formatPhoneNumber(value) : value;
+
     setUserData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: formattedValue,
     }));
   };
 
   const handleSave = (e) => {
     e.preventDefault();
+
+    if (
+      userData.userName === formData.userName &&
+      userData.userContact === formData.userContact &&
+      userData.userLocation === formData.userLocation
+    ) {
+      console.log("바뀐데이터가 없습니다");
+      setIsEditing(false);
+      return;
+    }
+
     updateProfile();
-    setIsEditing(false); // 저장 후에 보기 모드로 전환
+    setIsEditing(false);
   };
 
   return (
