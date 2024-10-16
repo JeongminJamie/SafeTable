@@ -36,7 +36,6 @@ const SafeTable = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    delay: 1000,
   });
 
   // 쿼리의 데이터 set
