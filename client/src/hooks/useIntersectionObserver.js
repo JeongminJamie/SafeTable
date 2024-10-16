@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const useObserverWithThrottle = ({
+const useIntersectionObserver = ({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
@@ -35,4 +35,4 @@ const useObserverWithThrottle = ({
   return loadMoreRef;
 };
 
-export default useObserverWithThrottle;
+export default useIntersectionObserver;
