@@ -17,10 +17,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  refreshToken: {
-    type: String, // 리프레시 토큰을 문자열로 저장
-    default: null, // 기본값을 null로 설정
+  location: {
+    type: String,
   },
+  // refreshToken: {
+  //   type: String,
+  //   default: null,
+  // },
 });
 
 const User = mongoose.model("user", UserSchema);

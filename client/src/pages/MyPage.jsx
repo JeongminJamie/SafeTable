@@ -5,19 +5,12 @@ import MyCardInfo from "../components/Card/MyCardInfo";
 import NoCard from "../components/Card/NoCard";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../store/useUserStore";
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
-    userName: "",
-    userEmail: "",
-  });
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    emailAddress: "",
-    location: "",
-  });
+  const { userData, setUserData } = useUserStore();
+
   const [activeTab, setActiveTab] = useState("aboutMe");
 
   const verifyToken = async () => {
@@ -38,6 +31,8 @@ const MyPage = () => {
       setUserData({
         userName: response.data.user.name,
         userEmail: response.data.user.email,
+        userContact: response.data.user.contact,
+        userLocation: response.data.user.location,
       });
     } catch (error) {
       if (error.response) {
@@ -54,14 +49,6 @@ const MyPage = () => {
     }
     verifyToken();
   }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
   const reservations = [
     {
@@ -172,9 +159,7 @@ const MyPage = () => {
 
         {/* Main 부분 */}
         <div className="w-4/5">
-          {activeTab === "aboutMe" && (
-            <AboutMe formData={formData} handleChange={handleChange} />
-          )}
+          {activeTab === "aboutMe" && <AboutMe />}
           {activeTab === "Reservations" && (
             <Reservations reservations={reservations} />
           )}
