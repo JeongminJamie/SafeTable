@@ -1,8 +1,16 @@
 import React from "react";
 
-export const TableCard = () => {
+export const TableCard = ({
+  name,
+  address1,
+  address2,
+  telephone,
+  category,
+  website,
+  seq,
+}) => {
   const reservedTables = 5;
-  const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경
+  const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경 => 이 부분 어떻게 대체할까요?
 
   const handleSaveRestaurant = () => {
     console.log("click");
@@ -34,22 +42,21 @@ export const TableCard = () => {
         </button>
       </div>
       <div className="m-3">
-        <h1 className="text-lg font-semibold mb-1 text-gray-800">
-          안심갈비식당
-        </h1>
+        <h1 className="text-lg font-semibold mb-1 text-gray-800">{name}</h1>
         <p className="text-sm text-gray-600 mb-2">
-          서울특별시 강남구 역삼동 123-45
+          {address1} {address2}
         </p>
-        <p className="text-sm text-gray-600 mb-3">02-123-4567</p>
+        <p className="text-sm text-gray-600 mb-3">{telephone}</p>
         <div className="flex justify-between mb-3">
           <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 mr-1">
-            한식
+            {category}
           </button>
           <button
             onClick={handleRedirect} // 버튼 클릭 시 URL로 이동
             className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 ml-1"
           >
-            사이트 바로가기
+            {/* 이 부분 웹사이트 데이터를 갖고 있는 곳이 거의 없음  */}
+            {website}
           </button>
         </div>
         <p className="text-sm text-gray-500 mb-2">
