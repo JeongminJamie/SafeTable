@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TableCard } from "./tableCard";
 import EmptyRestaurant from "./EmptyRestaurant";
 import useRestaurantStore from "../../store/useRestaurantStore";
@@ -6,12 +6,25 @@ import RestaurantSkeleton from "./RestaurantSkeleton";
 
 const SafeMain = ({ isLoading }) => {
   const { searchedValue, fetchedRestaurants } = useRestaurantStore();
+  const [showSkeleton, setShowSkeleton] = useState(false);
+
+  // 로딩이 1초 이상일 때부터 스켈레톤 보여주기
+  useEffect(() => {
+    let timer;
+    if (isLoading) {
+      timer = setTimeout(() => setShowSkeleton(true), 1000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isLoading]);
 
   return (
     <div className="px-10 mt-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-5 p-5 gap-y-10">
         {/* 로딩 중일 때 Skeleton 표시 */}
-        {isLoading
+        {showSkeleton
           ? Array(16)
               .fill(0)
               .map((_, index) => <RestaurantSkeleton key={index} />)
