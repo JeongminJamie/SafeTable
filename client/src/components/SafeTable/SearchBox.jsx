@@ -3,29 +3,17 @@ import { useQuery } from "@tanstack/react-query";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { InputAdornment } from "@mui/material";
-import axios from "axios";
+
+import useRestaurantStore from "../../store/useRestaurantStore";
+import { fetchRegionsByInput, searchHandler } from "../../utils/searchService";
 
 const SearchBox = () => {
+  const { setSearchedValue } = useRestaurantStore();
+
   const [inputValue, setInputValue] = useState("");
   const [debouncedInputValue, setDebouncedInputValue] = useState("");
-
-  // To-do: 엔터키를 누르거나, 검색 아이콘을 눌렀을 때 입력값에 맞는 지역 안심식당 정보 패치하기!!!
-
-  // 입력값에 따른 시군구 open api로 데이터 패치 요청
-  const fetchRegionsByInput = async (inputValue) => {
-    const encodedInputValue = encodeURIComponent(inputValue);
-
-    const response = await axios.get(
-      `/2ddata/adsigg/data?apiKey=${process.env.REACT_APP_LOCATION_API_KEY}&domain=${process.env.REACT_APP_LOCATION_DOMAIN}&filter=full_nm:like:${encodedInputValue}&output=json&pageIndex=1&pageUnit=10`
-    );
-
-    const featuresOfRegions = response.data.featureCollection?.features || [];
-    const regionNames = featuresOfRegions.map(
-      (feature) => feature.properties.full_nm
-    );
-
-    return regionNames;
-  };
+  const [selectedValue, setSelectedValue] = useState(null);
+  const [isWarned, setIsWarned] = useState(false);
 
   // 검색어가 변할 때마다, 타이핑을 끝낸 후(300ms 예상) debouncedInputValue에 저장해줌
   useEffect(() => {
@@ -38,57 +26,94 @@ const SearchBox = () => {
     };
   }, [inputValue]);
 
-  // useQuery로 데이터를 가져옴
-  const {
-    data: options = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  // 검색창의 지역명 autocomplete 리액트 쿼리 패치
+  const { data: options = [] } = useQuery({
     queryKey: ["fetchRegions", debouncedInputValue],
     queryFn: () => fetchRegionsByInput(debouncedInputValue),
     enabled: !!debouncedInputValue,
     refetchOnWindowFocus: false,
+    staleTime: 120 * 1000,
   });
 
+  // 검색창에 값 입력 시 호출
+  const inputChangeHandler = (event, newInputValue) => {
+    if (event.type === "change") {
+      setInputValue(newInputValue);
+      setSelectedValue(null);
+      setIsWarned(false);
+    }
+  };
+
+  // 드랍다운의 옵션 중 하나를 눌렀을 때 호출
+  const onChangeHandler = (event, newValue) => {
+    if (event.type === "click") {
+      if (newValue) {
+        setInputValue(newValue);
+        setSelectedValue(newValue);
+
+        // 옵션을 클릭했을 때도 검색 수행
+        searchHandler(newValue, setIsWarned, setSearchedValue);
+      }
+    }
+  };
+
   return (
-    <Autocomplete
-      freeSolo
-      options={options}
-      inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
-      onChange={(event, newValue) => {
-        setInputValue(newValue || "");
-      }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          placeholder="지역 검색"
-          variant="standard"
-          slotProps={{
-            input: {
-              ...params.InputProps,
-              disableUnderline: true,
-              endAdornment: (
-                <InputAdornment
-                  position="end"
-                  sx={{ position: "absolute", marginLeft: "95%" }}
-                >
-                  <img
-                    src="/assets/safeTable/search.png"
-                    alt="search"
-                    className="w-7 h-7 hover:cursor-pointer"
-                  />
-                </InputAdornment>
-              ),
-            },
-          }}
-        />
+    <>
+      <Autocomplete
+        freeSolo
+        options={options}
+        inputValue={inputValue || ""}
+        onInputChange={(event, newInputValue) => {
+          inputChangeHandler(event, newInputValue);
+        }}
+        onChange={(event, newValue) => {
+          onChangeHandler(event, newValue);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            searchHandler(selectedValue, setIsWarned, setSearchedValue);
+          }
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder="지역 검색"
+            variant="standard"
+            slotProps={{
+              input: {
+                ...params.InputProps,
+                disableUnderline: true,
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    sx={{ position: "absolute", marginLeft: "95%" }}
+                  >
+                    <img
+                      src="/assets/safeTable/search.png"
+                      alt="search"
+                      className="w-7 h-7 hover:cursor-pointer"
+                      onClick={() =>
+                        searchHandler(
+                          selectedValue,
+                          setIsWarned,
+                          setSearchedValue
+                        )
+                      }
+                    />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        )}
+        className="flex justify-center items-center w-4/12 h-12 border border-gray-500 rounded-full mx-auto my-14 p-4 mb-0"
+      />
+      {isWarned && (
+        <div className="flex justify-center items-center w-4/12 h-12 text-amber-500 font-medium rounded-full mx-auto">
+          지역 옵션 중 하나를 클릭해주세요.
+        </div>
       )}
-      className="flex justify-center items-center w-4/12 h-12 border border-gray-500 rounded-full mx-auto my-14 p-4"
-    />
+    </>
   );
 };
 
