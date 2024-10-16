@@ -5,16 +5,12 @@ import MyCardInfo from "../components/Card/MyCardInfo";
 import NoCard from "../components/Card/NoCard";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../store/useUserStore";
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
-    userName: "",
-    userEmail: "",
-    userContact: "",
-    userLocation: "",
-  });
-  console.log("🚀 ~ MyPage ~ userData:", userData);
+  const { userData, setUserData } = useUserStore();
+
   const [activeTab, setActiveTab] = useState("aboutMe");
 
   const verifyToken = async () => {
@@ -163,9 +159,7 @@ const MyPage = () => {
 
         {/* Main 부분 */}
         <div className="w-4/5">
-          {activeTab === "aboutMe" && (
-            <AboutMe formData={userData} setFormData={setUserData} />
-          )}
+          {activeTab === "aboutMe" && <AboutMe />}
           {activeTab === "Reservations" && (
             <Reservations reservations={reservations} />
           )}

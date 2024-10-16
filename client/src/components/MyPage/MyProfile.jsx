@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
+import useUserStore from "../../store/useUserStore";
 
-export const MyProfile = ({ formData, setFormData }) => {
+export const MyProfile = () => {
+  const { userData, setUserData } = useUserStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({
-    userName: "",
-    userContact: "",
-    userLocation: "",
-  });
+  const [localUserData, setLocalUserData] = useState(userData);
 
   useEffect(() => {
-    setUserData({
-      userName: formData.userName,
-      userContact: formData.userContact,
-      userLocation: formData.userLocation,
-    });
-  }, [formData]);
+    setLocalUserData(userData);
+  }, [userData]);
 
   const updateProfile = async () => {
     const token = sessionStorage.getItem("token");
@@ -29,9 +23,9 @@ export const MyProfile = ({ formData, setFormData }) => {
       const response = await api.post(
         "http://localhost:8080/login/change-Profile",
         {
-          newName: userData.userName,
-          newContact: userData.userContact,
-          newLocation: userData.userLocation,
+          newName: localUserData.userName,
+          newContact: localUserData.userContact,
+          newLocation: localUserData.userLocation,
         },
         {
           headers: {
@@ -40,7 +34,7 @@ export const MyProfile = ({ formData, setFormData }) => {
         }
       );
       console.log("Profile updated:", response.data);
-      setFormData(userData);
+      setUserData(localUserData);
     } catch (error) {
       if (error.response) {
         console.log("Failed to verify token:", error.response.data.message);
@@ -69,7 +63,7 @@ export const MyProfile = ({ formData, setFormData }) => {
     const formattedValue =
       name === "userContact" ? formatPhoneNumber(value) : value;
 
-    setUserData((prevData) => ({
+    setLocalUserData((prevData) => ({
       ...prevData,
       [name]: formattedValue,
     }));
@@ -79,9 +73,9 @@ export const MyProfile = ({ formData, setFormData }) => {
     e.preventDefault();
 
     if (
-      userData.userName === formData.userName &&
-      userData.userContact === formData.userContact &&
-      userData.userLocation === formData.userLocation
+      localUserData.userName === userData.userName &&
+      localUserData.userContact === userData.userContact &&
+      localUserData.userLocation === userData.userLocation
     ) {
       console.log("바뀐데이터가 없습니다");
       setIsEditing(false);
@@ -101,7 +95,7 @@ export const MyProfile = ({ formData, setFormData }) => {
               Your Name
             </label>
             <p className="border p-2 rounded bg-gray-100">
-              {formData.userName}
+              {userData.userName}
             </p>
           </div>
           <div className="mb-4">
@@ -109,7 +103,7 @@ export const MyProfile = ({ formData, setFormData }) => {
               Contact
             </label>
             <p className="border p-2 rounded bg-gray-100">
-              {formData.userContact}
+              {userData.userContact}
             </p>
           </div>
 
@@ -118,7 +112,7 @@ export const MyProfile = ({ formData, setFormData }) => {
               Location
             </label>
             <p className="border p-2 rounded bg-gray-100">
-              {formData.userLocation || "not location"}
+              {userData.userLocation || "not location"}
             </p>
           </div>
           <div className="flex justify-center mt-4">
@@ -140,7 +134,7 @@ export const MyProfile = ({ formData, setFormData }) => {
               type="text"
               id="Name"
               name="userName"
-              value={userData.userName}
+              value={localUserData.userName}
               onChange={handleChange}
               className="border p-2 rounded w-full"
               placeholder="Enter your name"
@@ -154,7 +148,7 @@ export const MyProfile = ({ formData, setFormData }) => {
               type="text"
               id="contact"
               name="userContact"
-              value={userData.userContact}
+              value={localUserData.userContact}
               onChange={handleChange}
               className="border p-2 rounded w-full"
               placeholder="Enter your contact"
@@ -168,7 +162,7 @@ export const MyProfile = ({ formData, setFormData }) => {
               type="text"
               id="location"
               name="userLocation"
-              value={userData.userLocation}
+              value={localUserData.userLocation}
               onChange={handleChange}
               className="border p-2 rounded w-full"
               placeholder="Enter your location"
