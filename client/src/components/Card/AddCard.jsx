@@ -3,7 +3,7 @@ import { cardCompanies, initialCardInfo } from "../../constants/card";
 import useCardRegister from "../../hooks/useCardRegister";
 import CVCGuide from "./CVCGuide";
 import IncorrectCardModal from "./IncorrectCardModal";
-import { luhnCheck } from "../../utils/Algorithm/luhnCheck";
+import { luhnCheck } from "../../utils/algorithm/luhnCheck";
 
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
@@ -39,11 +39,14 @@ const AddCard = () => {
       nameInputRef.current.focus();
     }
 
-    // To-do: 신용 카드 유효성 검사 로직 필요!!
-    // To-do: 유효하지 않으면 빨간색으로 경고문 띄우기!!
-    luhnCheck()
-    setIsCardIncorrect(true);
-    // To-do: 유효한 카드이면 DB에 저장 필요!!
+    // 카드 번호 유효성 검증
+    if (luhnCheck(cardInfo.cardNumber)) {
+      console.log("유효한 카드 번호입니다");
+      // To-do: 유효한 카드이면 DB에 저장 및 예약 성공 페이지로 리디렉트 필요!!
+    } else {
+      console.log("유효하지 않는 카드 번호입니다");
+      setIsCardIncorrect(true);
+    }
   };
 
   // cvc guide가 열렸을 때, 다른 곳을 클릭했을 시 안 보이게 하기
