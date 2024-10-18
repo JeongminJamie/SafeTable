@@ -121,7 +121,7 @@ const MyPage = () => {
         <div>
           <h1 className="text-2xl font-bold">{userData.userName}</h1>
           <p>{userData.userEmail}</p>
-          <p>등록한 위치</p>
+          <p>{userData.userLocation}</p>
         </div>
       </div>
 
