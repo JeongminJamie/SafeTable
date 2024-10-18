@@ -149,6 +149,7 @@ router.get("/verify", verifyToken, async (req, res) => {
 //   }
 // });
 
+/* 비밀번호 바꾸기 */
 router.post("/change-password", verifyToken, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
@@ -201,6 +202,7 @@ router.post("/change-password", verifyToken, async (req, res) => {
   }
 });
 
+/* 유저 프로필 바꾸기 */
 router.post("/change-Profile", verifyToken, async (req, res) => {
   const { newName, newContact, newLocation } = req.body;
 

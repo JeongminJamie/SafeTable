@@ -1,15 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { api } from "../../api/api";
 import useUserStore from "../../store/useUserStore";
+import { LoginModal } from "../Login/loginModal";
+
+const debounce = (func, delay) => {
+  let timeoutId;
+  return (...args) => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
 
 export const MyProfile = () => {
   const { userData, setUserData } = useUserStore();
   const [isEditing, setIsEditing] = useState(false);
   const [localUserData, setLocalUserData] = useState(userData);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [currentForm, setCurrentForm] = useState("login");
+  const [token, setToken] = useState(null);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passCheck, setPassCheck] = useState("");
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   useEffect(() => {
     setLocalUserData(userData);
   }, [userData]);
+
+  const passwordRef = useRef(newPassword);
+
+  useEffect(() => {
+    passwordRef.current = newPassword;
+  }, [newPassword]);
+
+  const checkPasswordMatch = useRef(
+    debounce((value) => {
+      if (value !== passwordRef.current) {
+        setPasswordError("비밀번호가 일치하지 않습니다.");
+      } else {
+        setPasswordError("");
+      }
+    }, 300)
+  ).current;
+
+  const handlePasswordCheckChange = (e) => {
+    const value = e.target.value;
+    setPassCheck(value);
+    checkPasswordMatch(value);
+  };
 
   const updateProfile = async () => {
     const token = sessionStorage.getItem("token");
@@ -41,6 +86,40 @@ export const MyProfile = () => {
       } else {
         console.error("Error verifying token:", error.message);
       }
+    }
+  };
+
+  const changePassword = async () => {
+    try {
+      const token = sessionStorage.getItem("token"); // JWT 토큰 가져오기
+      const response = await api.post(
+        "http://localhost:8080/login/change-password",
+        {
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status !== 200) {
+        // HTTP 상태 코드가 200이 아닌 경우
+        console.error(response.data.message);
+        return { success: false, message: response.data.message };
+      }
+
+      console.log(response.data.message); // 성공 메시지
+      setCurrentPassword("");
+      setNewPassword("");
+      setPassCheck("");
+      closeModal(); // 모달 닫기
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      console.error("Error changing password:", error);
+      return { success: false, message: "Error changing password" };
     }
   };
 
@@ -178,6 +257,93 @@ export const MyProfile = () => {
           </div>
         </form>
       )}
+      <div
+        onClick={() => {
+          openModal();
+        }}
+      >
+        <p className="text-blue-500 underline hover:text-blue-700">
+          비밀번호 바꾸기
+        </p>
+      </div>
+      <LoginModal isOpen={isModalOpen} onClose={closeModal}>
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold mb-4">비밀번호 변경</h2>
+
+          <div>
+            {/* onChange, value 없으니까 만들어야함. 새로운 비번이랑 비번 확인이 맞는지만 확인하고 나머지는 서버에서 */}
+            <label htmlFor="currentPassword" className="block mb-1 text-sm">
+              현재 비밀번호
+            </label>
+            <input
+              type="password"
+              id="currentPassword"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="현재 비밀번호를 입력하세요"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="newPassword" className="block mb-1 text-sm">
+              새로운 비밀번호
+            </label>
+            <input
+              type="password"
+              id="newPassword"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="6자리 이상 새로운 비밀번호를 입력하세요"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="confirmNewPassword" className="block mb-1 text-sm">
+              새로운 비밀번호 확인
+            </label>
+            <input
+              type="password"
+              id="confirmNewPassword"
+              value={passCheck}
+              onChange={handlePasswordCheckChange}
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="다시 입력하세요"
+            />
+          </div>
+          <p
+            className={`text-sm ${
+              passCheck === ""
+                ? "invisible"
+                : passwordError
+                ? "text-red-500"
+                : "text-green-500"
+            } `}
+          >
+            {passCheck === ""
+              ? ""
+              : passwordError
+              ? "비밀번호 불일치"
+              : "비밀번호 일치"}
+          </p>
+
+          <div className="flex justify-end space-x-2 mt-4">
+            <button
+              onClick={closeModal}
+              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+            >
+              취소
+            </button>
+            <button
+              onClick={() => changePassword()}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            >
+              비밀번호 변경
+            </button>
+          </div>
+        </div>
+      </LoginModal>
     </div>
   );
 };
