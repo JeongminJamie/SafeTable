@@ -1,5 +1,5 @@
 import axios from "axios";
-import fisherYatesShuffle from "../algorithm/fisherYatesShuffle";
+import fisherYatesShuffle from "../utils/algorithm/fisherYatesShuffle";
 
 const serverURL = process.env.REACT_APP_SERVER_PORT_URL;
 const restaurantAPIKey = process.env.REACT_APP_RESTAURANT_API_KEY;

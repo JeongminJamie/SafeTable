@@ -8,7 +8,7 @@ import useRestaurantStore from "../../store/useRestaurantStore";
 import {
   fetchRegionsByInput,
   searchHandler,
-} from "../../utils/serviceLogic/searchService";
+} from "../../service/searchService";
 
 const SearchBox = () => {
   const { setSearchedValue } = useRestaurantStore();

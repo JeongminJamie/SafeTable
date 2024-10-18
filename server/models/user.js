@@ -20,10 +20,9 @@ const UserSchema = new mongoose.Schema({
   location: {
     type: String,
   },
-  // refreshToken: {
-  //   type: String,
-  //   default: null,
-  // },
+  card_number: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("user", UserSchema);

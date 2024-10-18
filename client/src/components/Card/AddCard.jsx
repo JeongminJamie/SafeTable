@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { cardCompanies, initialCardInfo } from "../../constants/card";
 import useCardRegister from "../../hooks/useCardRegister";
 import CVCGuide from "./CVCGuide";
 import IncorrectCardModal from "./IncorrectCardModal";
 import { luhnCheck } from "../../utils/algorithm/luhnCheck";
+import { saveCardNumber } from "../../service/cardService";
 
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
@@ -41,10 +43,16 @@ const AddCard = () => {
 
     // 카드 번호 유효성 검증
     if (luhnCheck(cardInfo.cardNumber)) {
-      console.log("유효한 카드 번호입니다");
-      // To-do: 유효한 카드이면 DB에 저장 및 예약 성공 페이지로 리디렉트 필요!!
+      // To-do: 유효한 카드이면 DB에 저장 및 예약금 결제 컴포넌트 보여주기 필요!!
+      const { mutate: saveCard } = useMutation(saveCardNumber, {
+        onSuccess: (data) => {
+          // 이어서 계속하기 !!
+        },
+        onError: (error) => {
+          console.error("카드 번호 저장 실패", error);
+        },
+      });
     } else {
-      console.log("유효하지 않는 카드 번호입니다");
       setIsCardIncorrect(true);
     }
   };

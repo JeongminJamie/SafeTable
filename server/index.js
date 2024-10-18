@@ -6,6 +6,7 @@ import login from "./routes/login/login.js";
 import register from "./routes/login/register.js";
 import session from "express-session";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import cardRoutes from "./routes/cardRoutes.js";
 
 dotenv.config({ path: ".env.local" });
 
@@ -24,9 +25,9 @@ app.use(
 app.use(express.json());
 app.use("/login", login);
 app.use("/register", register);
+app.use("/api/card", cardRoutes);
 
-// open api proxy 해결 구역
-
+// open api proxy 해결
 // 안심식당 조회
 app.use(
   "/api/restaurants",
@@ -39,7 +40,7 @@ app.use(
   })
 );
 
-// 지역명 조회
+// 지역명 안심식당 조회
 app.use(
   "/api/locations",
   createProxyMiddleware({
