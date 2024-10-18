@@ -15,7 +15,7 @@ const SafeTable = () => {
     useRestaurantStore();
 
   // 전체 및 검색 지역 안심식당 조회 쿼리 & 무한 스크롤링
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ["fetchRestaurants", searchedValue],
       queryFn: ({ pageParam }) => {
@@ -43,7 +43,6 @@ const SafeTable = () => {
     if (data) {
       const allFetchedRestaurants = data.pages.flatMap((page) => page.data);
       setFetchedRestaurants(allFetchedRestaurants);
-      console.log(allFetchedRestaurants);
     }
   }, [data]);
 
@@ -54,7 +53,7 @@ const SafeTable = () => {
   return (
     <>
       <SearchBox />
-      <SafeMain />
+      <SafeMain isLoading={isLoading} />
       <div ref={loadMoreRef}></div>
       {isFetchingNextPage && (
         <img
