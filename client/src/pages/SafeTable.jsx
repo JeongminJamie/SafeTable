@@ -8,7 +8,7 @@ import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import {
   fetchEntireRestaurants,
   fetchRestaurantByInput,
-} from "../utils/searchService";
+} from "../utils/serviceLogic/searchService";
 
 const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =

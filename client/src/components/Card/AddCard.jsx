@@ -3,6 +3,7 @@ import { cardCompanies, initialCardInfo } from "../../constants/card";
 import useCardRegister from "../../hooks/useCardRegister";
 import CVCGuide from "./CVCGuide";
 import IncorrectCardModal from "./IncorrectCardModal";
+import { luhnCheck } from "../../utils/Algorithm/luhnCheck";
 
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
@@ -39,7 +40,8 @@ const AddCard = () => {
     }
 
     // To-do: 신용 카드 유효성 검사 로직 필요!!
-    // To-do: 유효하지 않으면 모달 띄우기!!
+    // To-do: 유효하지 않으면 빨간색으로 경고문 띄우기!!
+    luhnCheck()
     setIsCardIncorrect(true);
     // To-do: 유효한 카드이면 DB에 저장 필요!!
   };
