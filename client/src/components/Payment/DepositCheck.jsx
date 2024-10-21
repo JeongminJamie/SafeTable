@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useReservationStore from "../../store/useReservationStore";
 import { useNavigate } from "react-router-dom";
 import AddCard from "../Card/AddCard";
@@ -7,6 +7,9 @@ const DepositCheck = () => {
   const navigate = useNavigate();
   const { partySize, deposit, setIsReservationChecked } = useReservationStore();
   const localedDeposit = deposit.toLocaleString();
+
+  // 여기서 유저의 카드 정보 유무 확인! 
+  useEffect(() => {}, []);
 
   return (
     <>
