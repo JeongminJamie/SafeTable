@@ -9,21 +9,19 @@ import usePaymentStore from "../../store/usePaymentStore";
 const DepositCheck = () => {
   const navigate = useNavigate();
   const { partySize, deposit, setIsReservationChecked } = useReservationStore();
-  const { setLastCardNumber } = usePaymentStore();
+  const { lastCardNumber, setLastCardNumber } = usePaymentStore();
   const localedDeposit = deposit.toLocaleString();
 
   // 해당 사용자의 카드 뒷자리 번호 패치
-  const { data: lastCardNumber } = useQuery({
-    queryKey: ["lastCardNumber"],
+  const { data: cardNumber } = useQuery({
+    queryKey: ["getCardNumber"],
     queryFn: getCardNumber,
     refetchOnWindowFocus: false,
     staleTime: 60 * 1000,
   });
 
   useEffect(() => {
-    if (lastCardNumber) {
-      setLastCardNumber(lastCardNumber);
-    }
+    setLastCardNumber(cardNumber);
   }, []);
 
   return (
@@ -52,7 +50,7 @@ const DepositCheck = () => {
           <p className="text-lg font-semibold">
             총 예약 보장금 <span>{localedDeposit}</span>원
           </p>
-          <p>{lastCardNumber}로 끝나는 회원님의 카드로 결제됩니다.</p>
+          <p>{lastCardNumber}로 끝나는 카드로 결제됩니다.</p>
           <div className="w-full flex flex-row justify-center gap-2">
             <button
               className="border border-gray-300 rounded font-medium w-5/12 h-12"

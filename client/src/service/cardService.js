@@ -9,6 +9,8 @@ export const getCardNumber = async () => {
 
   const response = await axios.get(`${serverPort}/api/card`, headersConfig);
 
+  if (!response.data.last_number) return null;
+
   return response.data.last_number;
 };
 
