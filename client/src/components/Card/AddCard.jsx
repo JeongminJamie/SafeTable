@@ -42,19 +42,19 @@ const AddCard = () => {
     }
 
     // 카드 번호 유효성 검증
-    if (luhnCheck(cardInfo.cardNumber)) {
-      // To-do: 유효한 카드이면 DB에 저장 및 예약금 결제 컴포넌트 보여주기 필요!!
-      const { mutate: saveCard } = useMutation(saveCardNumber, {
-        onSuccess: (data) => {
-          // 이어서 계속하기 !!
-        },
-        onError: (error) => {
-          console.error("카드 번호 저장 실패", error);
-        },
-      });
-    } else {
-      setIsCardIncorrect(true);
-    }
+    // if (luhnCheck(cardInfo.cardNumber)) {
+    //   // To-do: 유효한 카드이면 DB에 저장 및 예약금 결제 컴포넌트 보여주기 필요!!
+    //   const { mutate: saveCard } = useMutation(saveCardNumber, {
+    //     onSuccess: (data) => {
+    //       // 이어서 계속하기 !!
+    //     },
+    //     onError: (error) => {
+    //       console.error("카드 번호 저장 실패", error);
+    //     },
+    //   });
+    // } else {
+    //   setIsCardIncorrect(true);
+    // }
   };
 
   // cvc guide가 열렸을 때, 다른 곳을 클릭했을 시 안 보이게 하기

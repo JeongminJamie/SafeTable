@@ -1,38 +1,27 @@
 import axios from "axios";
+import { getAxiosHeaderConfig } from "../config";
 
 const serverPort = process.env.REACT_APP_SERVER_PORT_URL;
 
 export const getCardNumber = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    console.log("해당 유저의 토큰에 에러 발생");
-  }
+  const headersConfig = getAxiosHeaderConfig();
+  if (!headersConfig) return null;
 
-  const response = await axios.get(`${serverPort}/api/card`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.get(`${serverPort}/api/card`, headersConfig);
 
-  return response.data;
+  return response.data.last_number;
 };
 
 export const saveCardNumber = async (cardNumber) => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    console.log("해당 유저의 토큰에 에러 발생");
-  }
+  const headersConfig = getAxiosHeaderConfig();
+  if (!headersConfig) return;
 
   const response = await axios.post(
     `${serverPort}/api/card`,
     {
       cardNumber,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    headersConfig
   );
 
   return response.data;
