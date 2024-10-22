@@ -1,4 +1,5 @@
 import React from "react";
+import useSavedTableStore from "../../store/useSavedTableStore";
 
 export const TableCard = ({
   name,
@@ -12,8 +13,23 @@ export const TableCard = ({
   const reservedTables = 5;
   const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경 => 이 부분 어떻게 대체할까요?
 
+  const addRestaurant = useSavedTableStore((state) => state.addRestaurant);
+  const savedRestaurants = useSavedTableStore(
+    (state) => state.savedRestaurants
+  );
+
   const handleSaveRestaurant = () => {
     console.log("click");
+    const restaurant = {
+      id: seq,
+      name: name,
+      address: `${address1} ${address2}`,
+      telephone: telephone,
+      clicked: true,
+    };
+    addRestaurant(restaurant);
+    console.log("식당 정보가 저장되었습니다:", restaurant);
+    console.log("들어온 배열", savedRestaurants);
   };
 
   const handleRedirect = () => {

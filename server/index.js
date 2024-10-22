@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import login from "./routes/login/login.js";
 import register from "./routes/login/register.js";
-import session from "express-session";
+import saveTable from "./routes/user/saveTable.js";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
 dotenv.config({ path: ".env.local" });
@@ -24,6 +24,7 @@ app.use(
 app.use(express.json());
 app.use("/login", login);
 app.use("/register", register);
+app.use("/user", saveTable);
 
 // open api proxy 해결 구역
 
