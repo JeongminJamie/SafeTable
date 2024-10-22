@@ -13,7 +13,7 @@ const DepositCheck = () => {
   const localedDeposit = deposit.toLocaleString();
 
   // 해당 사용자의 카드 뒷자리 번호 패치
-  const { data: cardNumber } = useQuery({
+  const { data: cardNumber, isLoading } = useQuery({
     queryKey: ["getCardNumber"],
     queryFn: getCardNumber,
     refetchOnWindowFocus: false,
@@ -21,8 +21,10 @@ const DepositCheck = () => {
   });
 
   useEffect(() => {
-    setLastCardNumber(cardNumber);
-  }, []);
+    if (!isLoading) {
+      setLastCardNumber(cardNumber);
+    }
+  }, [isLoading]);
 
   return (
     <>

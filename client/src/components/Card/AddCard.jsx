@@ -49,11 +49,16 @@ const AddCard = () => {
   });
 
   // 등록 버튼 처리 함수
-  const confirmButtonHandler = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
 
-    if (nameLength > 30) {
+    if (nameLength < 0 || nameLength > 30) {
       nameInputRef.current.focus();
+      return;
+    }
+
+    if (!cardInfo.expireDate || !cardInfo.cvcNumber || !cardInfo.cardPassword) {
+      alert("모든 필드를 올바르게 입력해주세요.");
       return;
     }
 
@@ -91,7 +96,7 @@ const AddCard = () => {
       )}
       <div className="flex flex-col p-5">
         <h1 className="font-semibold text-3xl">카드 추가</h1>
-        <form className="flex flex-col gap-5 mt-10">
+        <form className="flex flex-col gap-5 mt-10" onSubmit={submitHandler}>
           <div className="flex w-full items-center gap-7">
             <label className="font-semibold text-slate-600">카드사</label>
             <select
@@ -199,10 +204,7 @@ const AddCard = () => {
               required
             />
           </div>
-          <button
-            className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto mt-2"
-            onClick={confirmButtonHandler}
-          >
+          <button className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto mt-2">
             등록
           </button>
         </form>
