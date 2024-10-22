@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import useReservationStore from "../../store/useReservationStore";
 
 import DatePicker from "react-datepicker";
@@ -46,13 +46,19 @@ const BookingDetails = () => {
         }
       }
 
-      setTime(hoursWithoutCurrentTime[0]);
       return hoursWithoutCurrentTime;
     }
 
     // 오늘 날짜와 캘린더에 선택된 날짜가 다를 경우, 모든 시간의 배열
     return TIME;
   }, [TIME, date]);
+
+  // 시간 업데이트
+  useEffect(() => {
+    if (restTime.length > 0) {
+      setTime(restTime[0]);
+    }
+  }, [restTime, setTime]);
 
   return (
     <div className="flex flex-row w-full items-center justify-around px-10 mb-5 gap-5">

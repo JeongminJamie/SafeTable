@@ -24,9 +24,15 @@ const PaymentModal = ({ isPaymentModalOpen, setIsPaymentModalOpen }) => {
           />
         </div>
         {isReservationChecked ? (
-          <DepositCheck setIsPaymentModalOpen={setIsPaymentModalOpen} />
+          <DepositCheck
+            setIsPaymentModalOpen={setIsPaymentModalOpen}
+            setIsReservationChecked={setIsReservationChecked}
+          />
         ) : (
-          <ReservationCheck setIsReservationChecked={setIsReservationChecked} />
+          <ReservationCheck
+            setIsPaymentModalOpen={setIsPaymentModalOpen}
+            setIsReservationChecked={setIsReservationChecked}
+          />
         )}
       </div>
     </div>

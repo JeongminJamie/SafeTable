@@ -57,7 +57,7 @@ const Reservation = () => {
     }
   };
 
-  // reset past reservation state
+  // 과거 예약 상태 초기화 
   useEffect(() => {
     resetReservation();
   }, []);

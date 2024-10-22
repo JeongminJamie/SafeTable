@@ -6,9 +6,9 @@ import { getCardNumber } from "../../service/cardService";
 import { useQuery } from "@tanstack/react-query";
 import usePaymentStore from "../../store/usePaymentStore";
 
-const DepositCheck = () => {
+const DepositCheck = ({ setIsReservationChecked }) => {
   const navigate = useNavigate();
-  const { partySize, deposit, setIsReservationChecked } = useReservationStore();
+  const { partySize, deposit } = useReservationStore();
   const { lastCardNumber, setLastCardNumber } = usePaymentStore();
   const localedDeposit = deposit.toLocaleString();
 
@@ -26,6 +26,9 @@ const DepositCheck = () => {
     }
   }, [isLoading]);
 
+  const confirmPayButtonHanlder = () => {
+    navigate("/reservation-completed");
+  };
   return (
     <>
       {!lastCardNumber ? (
@@ -52,7 +55,10 @@ const DepositCheck = () => {
           <p className="text-lg font-semibold">
             총 예약 보장금 <span>{localedDeposit}</span>원
           </p>
-          <p>{lastCardNumber}로 끝나는 카드로 결제됩니다.</p>
+          <p>
+            <span className="font-medium">{lastCardNumber}</span>로 끝나는
+            카드로 결제됩니다.
+          </p>
           <div className="w-full flex flex-row justify-center gap-2">
             <button
               className="border border-gray-300 rounded font-medium w-5/12 h-12"
@@ -60,10 +66,9 @@ const DepositCheck = () => {
             >
               이전
             </button>
-            {/* 실제 결제가 되는 기능 구현 필요, 현재는 그냥 결제 누르면 예약 완료가 되는 상태 */}
             <button
               className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white"
-              onClick={() => navigate("/reservation-completed")}
+              onClick={confirmPayButtonHanlder}
             >
               결제
             </button>
