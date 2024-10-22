@@ -5,14 +5,11 @@ import {
   formatTimeToKoean,
 } from "../../utils/formatToKorean";
 
-const ReservationCheck = () => {
-  const {
-    partySize,
-    date,
-    timeSlot,
-    setIsPaymentModalOpen,
-    setIsReservationChecked,
-  } = useReservationStore();
+const ReservationCheck = ({
+  setIsPaymentModalOpen,
+  setIsReservationChecked,
+}) => {
+  const { partySize, date, timeSlot } = useReservationStore();
 
   const formattedDate = useMemo(() => formatDateToKorean(date), [date]);
   const formattedTime = useMemo(() => formatTimeToKoean(timeSlot), [timeSlot]);

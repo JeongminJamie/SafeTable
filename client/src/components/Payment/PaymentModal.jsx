@@ -1,15 +1,9 @@
-import React from "react";
-import useReservationStore from "../../store/useReservationStore";
+import React, { useState } from "react";
 import ReservationCheck from "./ReservationCheck";
 import DepositCheck from "./DepositCheck";
 
-const PaymentModal = () => {
-  const {
-    isPaymentModalOpen,
-    isReservationChecked,
-    setIsPaymentModalOpen,
-    setIsReservationChecked,
-  } = useReservationStore();
+const PaymentModal = ({ isPaymentModalOpen, setIsPaymentModalOpen }) => {
+  const [isReservationChecked, setIsReservationChecked] = useState(false);
 
   if (!isPaymentModalOpen) return null;
 
@@ -29,7 +23,11 @@ const PaymentModal = () => {
             onClick={() => closeModalStates()}
           />
         </div>
-        {isReservationChecked ? <DepositCheck /> : <ReservationCheck />}
+        {isReservationChecked ? (
+          <DepositCheck setIsPaymentModalOpen={setIsPaymentModalOpen} />
+        ) : (
+          <ReservationCheck setIsReservationChecked={setIsReservationChecked} />
+        )}
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ app.use(
     credentials: true, // 쿠키, 세션 허용
   })
 );
+
 app.use(express.json());
 app.use("/login", login);
 app.use("/register", register);

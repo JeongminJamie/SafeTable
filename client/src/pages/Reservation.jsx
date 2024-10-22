@@ -1,5 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import useReservationStore from "../store/useReservationStore";
+import { getRestaurantBySEQ } from "../service/reservationService";
+
 import BookingDetails from "../components/Reservation/BookingDetails";
 import TimeSlot from "../components/Reservation/TimeSlot";
 import { toast } from "react-toastify";
@@ -8,11 +12,32 @@ import PaymentModal from "../components/Payment/PaymentModal";
 import OverTime from "../components/Reservation/OverTime";
 
 const Reservation = () => {
-  const { date, timeSlot, setIsPaymentModalOpen, resetReservation } =
+  const { seq } = useParams();
+  const { date, timeSlot, setRestaurantData, resetReservation } =
     useReservationStore();
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
-  // when deposit payment button clicked
-  const clickPayDepositButtonHandler = () => {
+  const { data: restaurantData } = useQuery({
+    queryKey: ["restaurantBySEQ", seq],
+    queryFn: () => getRestaurantBySEQ(seq),
+    enabled: !!seq,
+    staleTime: 120 * 1000,
+  });
+
+  useEffect(() => {
+    if (restaurantData) {
+      const neccesaryRestaurantData = {
+        seq: restaurantData.RELAX_SEQ,
+        name: restaurantData.RELAX_RSTRNT_NM,
+        address: restaurantData.RELAX_ADD1 + restaurantData.RELAX_ADD2,
+        category: restaurantData.RELAX_GUBUN_DETAIL,
+        telephone: restaurantData.RELAX_RSTRNT_TEL,
+      };
+      setRestaurantData(neccesaryRestaurantData);
+    }
+  }, [restaurantData]);
+
+  const clickConfirmButtonHandler = () => {
     if (!timeSlot) {
       toast.warning("시간대를 꼭 선택해주세요 :)");
     } else {
@@ -60,12 +85,15 @@ const Reservation = () => {
         </p>
         <button
           className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto"
-          onClick={clickPayDepositButtonHandler}
+          onClick={clickConfirmButtonHandler}
         >
           확인
         </button>
         <ReservationAlertToast />
-        <PaymentModal />
+        <PaymentModal
+          isPaymentModalOpen={isPaymentModalOpen}
+          setIsPaymentModalOpen={setIsPaymentModalOpen}
+        />
       </div>
     </div>
   );

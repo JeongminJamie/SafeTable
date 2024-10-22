@@ -22,7 +22,7 @@ function App() {
         <Route path="/" element={<Main />}></Route>
         <Route path="/about" element={<About />}></Route>
         <Route path="/safetable" element={<SafeTable />}></Route>
-        <Route path="/reservation" element={<Reservation />}></Route>
+        <Route path="/reservation/:seq" element={<Reservation />}></Route>
         <Route
           path="/reservation-completed"
           element={<ReservationCompleted />}
