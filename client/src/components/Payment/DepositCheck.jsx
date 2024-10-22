@@ -23,7 +23,6 @@ const DepositCheck = () => {
   useEffect(() => {
     if (!isLoading) {
       setLastCardNumber(cardNumber);
-      console.log("불러온 카드 넘버", cardNumber);
     }
   }, [isLoading]);
 
