@@ -5,7 +5,7 @@ const IncorrectCardModal = ({ isIncorrect, setIsIncorrect }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-300 ease-in-out">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg transform transition-transform duration-300 ease-in-out">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-4/5 max-w-lg transform transition-transform duration-300 ease-in-out">
         <div className="flex justify-end mb-7">
           <img
             src="/assets/exit.png"

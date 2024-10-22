@@ -8,12 +8,6 @@ const RestaurantSkeleton = () => {
       <Skeleton variant="text" width="80%" />
       <Skeleton variant="text" width="60%" />
       <Skeleton variant="text" width="40%" />
-      <div className="w-full flex flex-row gap-3">
-        <Skeleton variant="rectangular" width="50%" height={25} />
-        <Skeleton variant="rectangular" width="50%" height={25} />
-      </div>
-      <Skeleton variant="text" width="100%" />
-      <Skeleton variant="rectangular" width="100%" height={30} />
     </div>
   );
 };

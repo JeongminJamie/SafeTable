@@ -1,13 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { cardCompanies, initialCardInfo } from "../../constants/card";
 import useCardRegister from "../../hooks/useCardRegister";
 import CVCGuide from "./CVCGuide";
 import IncorrectCardModal from "./IncorrectCardModal";
+import { luhnCheck } from "../../utils/algorithm/luhnCheck";
+import { saveCardNumber } from "../../service/cardService";
+import usePaymentStore from "../../store/usePaymentStore";
 
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
   const [isCVCGuideClicked, setIsCVCGuideClicked] = useState(false);
   const [isCardIncorrect, setIsCardIncorrect] = useState(false);
+
+  const { setLastCardNumber } = usePaymentStore();
 
   const nameInputRef = useRef(null);
   const cvcGuideRef = useRef(null);
@@ -30,18 +36,38 @@ const AddCard = () => {
     setNameLength(lengthOfName);
   };
 
+  // 카드 번호 저장 요청 함수 : useMutation
+  const { mutate: saveCard } = useMutation({
+    mutationFn: saveCardNumber,
+    onSuccess: (data) => {
+      console.log("카드 번호 저장 성공", data);
+      setLastCardNumber(data.last_number);
+    },
+    onError: (error) => {
+      console.error("카드 번호 저장 실패", error);
+    },
+  });
+
   // 등록 버튼 처리 함수
-  const confirmButtonHandler = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
 
-    if (nameLength > 30) {
+    if (nameLength < 0 || nameLength > 30) {
       nameInputRef.current.focus();
+      return;
     }
 
-    // To-do: 신용 카드 유효성 검사 로직 필요!!
-    // To-do: 유효하지 않으면 모달 띄우기!!
-    setIsCardIncorrect(true);
-    // To-do: 유효한 카드이면 DB에 저장 필요!!
+    if (!cardInfo.expireDate || !cardInfo.cvcNumber || !cardInfo.cardPassword) {
+      alert("모든 필드를 올바르게 입력해주세요.");
+      return;
+    }
+
+    // 카드 번호 유효성 검증 및 서버로 저장 요청
+    if (luhnCheck(cardInfo.cardNumber)) {
+      saveCard(cardInfo.cardNumber);
+    } else {
+      setIsCardIncorrect(true);
+    }
   };
 
   // cvc guide가 열렸을 때, 다른 곳을 클릭했을 시 안 보이게 하기
@@ -70,7 +96,7 @@ const AddCard = () => {
       )}
       <div className="flex flex-col p-5">
         <h1 className="font-semibold text-3xl">카드 추가</h1>
-        <form className="flex flex-col gap-5 mt-10">
+        <form className="flex flex-col gap-5 mt-10" onSubmit={submitHandler}>
           <div className="flex w-full items-center gap-7">
             <label className="font-semibold text-slate-600">카드사</label>
             <select
@@ -91,6 +117,7 @@ const AddCard = () => {
               placeholder="0000 0000 0000 0000"
               onChange={(event) => cardNumberChangeHandler(event)}
               value={cardInfo.cardNumber}
+              required
             />
           </div>
           <div className="flex flex-col w-full items-start">
@@ -100,6 +127,7 @@ const AddCard = () => {
               placeholder="MM/YY"
               value={cardInfo.expireDate}
               onChange={(event) => expireDateChangeHandler(event)}
+              required
             />
           </div>
           <div className="flex flex-col w-full items-start">
@@ -129,6 +157,7 @@ const AddCard = () => {
               ref={nameInputRef}
               onChange={nameChangeHandler}
               onInput={calculateNameLength}
+              required
             />
             {/* 입력된 이름이 30자 이상이면 메세지 보여주기 */}
             {nameLength > 30 && (
@@ -160,6 +189,7 @@ const AddCard = () => {
               type="password"
               value={cardInfo.cvcNumber}
               onChange={(event) => cvcChangeHandler(event)}
+              required
             />
           </div>
           <div className="flex flex-col w-full items-start">
@@ -171,12 +201,10 @@ const AddCard = () => {
               type="password"
               value={cardInfo.cardPassword}
               onChange={(event) => passwordChangeHandler(event)}
+              required
             />
           </div>
-          <button
-            className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto mt-2"
-            onClick={confirmButtonHandler}
-          >
+          <button className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white m-auto mt-2">
             등록
           </button>
         </form>

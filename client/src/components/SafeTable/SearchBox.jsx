@@ -5,7 +5,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { InputAdornment } from "@mui/material";
 
 import useRestaurantStore from "../../store/useRestaurantStore";
-import { fetchRegionsByInput, searchHandler } from "../../utils/searchService";
+import {
+  fetchRegionsByInput,
+  searchHandler,
+} from "../../service/searchService";
 
 const SearchBox = () => {
   const { setSearchedValue } = useRestaurantStore();
