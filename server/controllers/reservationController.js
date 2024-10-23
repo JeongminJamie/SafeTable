@@ -6,6 +6,10 @@ export const saveReservation = async (req, res) => {
     const { seq, name, category, address, telephone, party_size, date, time } =
       req.body;
 
+    // 클라이언트와의 타임존이 9시간(한국) 차이가 나기 때문에 더해주기
+    const reserveDate = new Date(date);
+    reserveDate.setHours(reserveDate.getHours() + 9);
+
     const newReservation = new Reservation({
       user_id: userId,
       seq,
@@ -14,7 +18,7 @@ export const saveReservation = async (req, res) => {
       address,
       telephone,
       party_size,
-      date,
+      date: reserveDate,
       time,
     });
 
