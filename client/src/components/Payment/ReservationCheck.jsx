@@ -9,7 +9,7 @@ const ReservationCheck = ({
   setIsPaymentModalOpen,
   setIsReservationChecked,
 }) => {
-  const { restaurantData, partySize, date, timeSlot } = useReservationStore();
+  const { restaurant, partySize, date, timeSlot } = useReservationStore();
 
   const formattedDate = useMemo(() => formatDateToKorean(date), [date]);
   const formattedTime = useMemo(() => formatTimeToKoean(timeSlot), [timeSlot]);
@@ -21,8 +21,8 @@ const ReservationCheck = ({
       </div>
       <section className="h-auto border border-gray-300 rounded-2xl px-5 py-5 flex flex-col gap-7">
         <div>
-          <div className="text-xl font-semibold">{restaurantData.name}</div>
-          <div className="text-gray-700">{restaurantData.category}</div>
+          <div className="text-xl font-semibold">{restaurant.name}</div>
+          <div className="text-gray-700">{restaurant.category}</div>
         </div>
         <div className="flex items-start justify-center gap-7">
           <div className="flex flex-col justify-between h-auto space-y-4">

@@ -21,6 +21,7 @@ export const saveReservation = async (reservationStore) => {
   const reservationInfoToSend = {
     seq: restaurant.seq,
     name: restaurant.name,
+    category: restaurant.category,
     address: restaurant.address,
     telephone: restaurant.telephone,
     party_size: reservationStore.partySize,

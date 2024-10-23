@@ -9,6 +9,7 @@ import {
   fetchEntireRestaurants,
   fetchRestaurantByInput,
 } from "../service/searchService";
+import Loading from "../components/Loading";
 
 const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =
@@ -56,11 +57,7 @@ const SafeTable = () => {
       <SafeMain isLoading={isLoading} />
       <div ref={loadMoreRef}></div>
       {isFetchingNextPage && (
-        <img
-          src="/assets/loading-animation.gif"
-          alt="loading"
-          className="m-auto w-32 h-32 p-10"
-        />
+        <Loading width="w-32" height="h-32" padding="p-10" />
       )}
     </>
   );

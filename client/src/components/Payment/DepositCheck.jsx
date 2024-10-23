@@ -39,6 +39,7 @@ const DepositCheck = ({ setIsReservationChecked }) => {
 
   const confirmPayButtonHanlder = () => {
     // saveReservationRequest(reservationStore);
+    navigate("/reservation-completed");
   };
   return (
     <>

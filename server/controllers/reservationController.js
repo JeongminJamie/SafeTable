@@ -1,5 +1,31 @@
 import Reservation from "../models/reservation.js";
 
-export const saveReservation = (req, res) => {
-  const userId = req.userId;
+export const saveReservation = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { seq, name, category, address, telephone, party_size, date, time } =
+      req.body;
+
+    const newReservation = new Reservation({
+      user_id: userId,
+      seq,
+      name,
+      category,
+      address,
+      telephone,
+      party_size,
+      date,
+      time,
+    });
+
+    const savedReservation = await newResservation.save();
+
+    res.status(201).json({
+      message: "예약 저장에 성공하였습니다.",
+      savedReservation,
+    });
+  } catch (error) {
+    console.error("예약 저장 중 오류 발생", error);
+    res.status(500).send("예약 저장에 실패하였습니다.");
+  }
 };

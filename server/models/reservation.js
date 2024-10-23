@@ -14,6 +14,10 @@ const ReservationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    category: {
+      type: String,
+      required: true,
+    },
     address: {
       type: String,
       required: true,
