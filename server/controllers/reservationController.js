@@ -18,12 +18,9 @@ export const saveReservation = async (req, res) => {
       time,
     });
 
-    const savedReservation = await newResservation.save();
+    await newReservation.save();
 
-    res.status(201).json({
-      message: "예약 저장에 성공하였습니다.",
-      savedReservation,
-    });
+    res.status(201).send("예약 저장에 성공하였습니다.");
   } catch (error) {
     console.error("예약 저장 중 오류 발생", error);
     res.status(500).send("예약 저장에 실패하였습니다.");

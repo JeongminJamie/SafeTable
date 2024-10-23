@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import useReservationStore from "../../store/useReservationStore";
 import { useNavigate } from "react-router-dom";
-import AddCard from "../Card/AddCard";
-import { getCardNumber } from "../../service/cardService";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import useReservationStore from "../../store/useReservationStore";
 import usePaymentStore from "../../store/usePaymentStore";
+import AddCard from "../Card/AddCard";
+import Loading from "../Loading";
+import { getCardNumber } from "../../service/cardService";
 import { saveReservation } from "../../service/reservationService";
 
 const DepositCheck = ({ setIsReservationChecked }) => {
@@ -27,23 +28,25 @@ const DepositCheck = ({ setIsReservationChecked }) => {
     }
   }, [isLoading]);
 
-  // const { mutation: saveReservationRequest } = useMutation({
-  //   mutationFn: saveReservation,
-  //   onSuccess: (data) => {
-  //     navigate("/reservation-completed");
-  //   },
-  //   onError: (error) => {
-  //     console.log("예약 저장 중 에러 발생", error);
-  //   },
-  // });
+  // 예약 정보 저장 요청
+  const { mutate: saveReservationRequest } = useMutation({
+    mutationFn: saveReservation,
+    onSuccess: () => {
+      navigate("/reservation-completed");
+    },
+    onError: (error) => {
+      console.log("예약 저장 중 에러 발생", error);
+    },
+  });
 
   const confirmPayButtonHanlder = () => {
-    // saveReservationRequest(reservationStore);
-    navigate("/reservation-completed");
+    saveReservationRequest(reservationStore);
   };
   return (
     <>
-      {!lastCardNumber ? (
+      {isLoading ? (
+        <Loading width="w-32" height="h-32" padding="p-10" />
+      ) : !lastCardNumber ? (
         <AddCard />
       ) : (
         <div className="flex flex-col mt-5 gap-5">

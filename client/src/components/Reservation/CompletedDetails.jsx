@@ -6,7 +6,7 @@ import {
 } from "../../utils/formatToKorean";
 
 const CompletedDetails = () => {
-  const { partySize, date, timeSlot } = useReservationStore();
+  const { restaurant, partySize, date, timeSlot } = useReservationStore();
 
   const formattedDate = useMemo(() => formatDateToKorean(date), [date]);
   const formattedTime = useMemo(() => formatTimeToKoean(timeSlot), [timeSlot]);
@@ -14,9 +14,9 @@ const CompletedDetails = () => {
   return (
     <div className="w-full flex flex-col items-center gap-3 bg-header-signup-background p-6 rounded-2xl shadow-md">
       <div>
-        <h2 className="font-medium text-xl text-center">식당 이름</h2>
+        <h2 className="font-medium text-xl text-center">{restaurant.name}</h2>
         <p className="font-medium text-lg text-gray-600 text-center">
-          식당 업종
+          {restaurant.category}
         </p>
       </div>
       <div className="flex flex-col items-center text-lg gap-1">
