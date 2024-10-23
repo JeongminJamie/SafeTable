@@ -41,7 +41,7 @@ const SafeTable = () => {
   // 쿼리의 데이터 set
   useEffect(() => {
     if (data) {
-      const allFetchedRestaurants = data.pages.flatMap((page) => page.data);
+      const allFetchedRestaurants = data?.pages.flatMap((page) => page.data);
       setFetchedRestaurants(allFetchedRestaurants);
     }
   }, [data]);

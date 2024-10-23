@@ -4,9 +4,11 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import login from "./routes/login/login.js";
 import register from "./routes/login/register.js";
-import session from "express-session";
 import { createProxyMiddleware } from "http-proxy-middleware";
+
+// routes
 import cardRoutes from "./routes/cardRoutes.js";
+import reservationRoutes from "./routes/reservationRoutes.js";
 
 dotenv.config({ path: ".env.local" });
 
@@ -27,6 +29,7 @@ app.use(express.json());
 app.use("/login", login);
 app.use("/register", register);
 app.use("/api/card", cardRoutes);
+app.use("/api/reservation", reservationRoutes);
 
 // open api proxy 해결
 // 안심식당 조회

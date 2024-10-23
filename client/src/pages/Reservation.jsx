@@ -13,11 +13,11 @@ import OverTime from "../components/Reservation/OverTime";
 
 const Reservation = () => {
   const { seq } = useParams();
-  const { date, timeSlot, setRestaurantData, resetReservation } =
+  const { date, timeSlot, setRestaurant, resetReservation } =
     useReservationStore();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
-  const { data: restaurantData } = useQuery({
+  const { data: restaurant } = useQuery({
     queryKey: ["restaurantBySEQ", seq],
     queryFn: () => getRestaurantBySEQ(seq),
     enabled: !!seq,
@@ -25,17 +25,17 @@ const Reservation = () => {
   });
 
   useEffect(() => {
-    if (restaurantData) {
-      const neccesaryRestaurantData = {
-        seq: restaurantData.RELAX_SEQ,
-        name: restaurantData.RELAX_RSTRNT_NM,
-        address: restaurantData.RELAX_ADD1 + restaurantData.RELAX_ADD2,
-        category: restaurantData.RELAX_GUBUN_DETAIL,
-        telephone: restaurantData.RELAX_RSTRNT_TEL,
+    if (restaurant) {
+      const neccesaryRestaurantInfo = {
+        seq: restaurant.RELAX_SEQ,
+        name: restaurant.RELAX_RSTRNT_NM,
+        address: restaurant.RELAX_ADD1 + restaurant.RELAX_ADD2,
+        category: restaurant.RELAX_GUBUN_DETAIL,
+        telephone: restaurant.RELAX_RSTRNT_TEL,
       };
-      setRestaurantData(neccesaryRestaurantData);
+      setRestaurant(neccesaryRestaurantInfo);
     }
-  }, [restaurantData]);
+  }, [restaurant]);
 
   const clickConfirmButtonHandler = () => {
     if (!timeSlot) {
@@ -57,7 +57,7 @@ const Reservation = () => {
     }
   };
 
-  // 과거 예약 상태 초기화 
+  // 과거 예약 상태 초기화
   useEffect(() => {
     resetReservation();
   }, []);

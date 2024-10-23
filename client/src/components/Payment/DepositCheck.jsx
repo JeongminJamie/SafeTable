@@ -3,14 +3,15 @@ import useReservationStore from "../../store/useReservationStore";
 import { useNavigate } from "react-router-dom";
 import AddCard from "../Card/AddCard";
 import { getCardNumber } from "../../service/cardService";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import usePaymentStore from "../../store/usePaymentStore";
+import { saveReservation } from "../../service/reservationService";
 
 const DepositCheck = ({ setIsReservationChecked }) => {
   const navigate = useNavigate();
-  const { partySize, deposit } = useReservationStore();
+  const reservationStore = useReservationStore();
   const { lastCardNumber, setLastCardNumber } = usePaymentStore();
-  const localedDeposit = deposit.toLocaleString();
+  const localedDeposit = reservationStore.deposit.toLocaleString();
 
   // 해당 사용자의 카드 뒷자리 번호 패치
   const { data: cardNumber, isLoading } = useQuery({
@@ -26,8 +27,18 @@ const DepositCheck = ({ setIsReservationChecked }) => {
     }
   }, [isLoading]);
 
+  // const { mutation: saveReservationRequest } = useMutation({
+  //   mutationFn: saveReservation,
+  //   onSuccess: (data) => {
+  //     navigate("/reservation-completed");
+  //   },
+  //   onError: (error) => {
+  //     console.log("예약 저장 중 에러 발생", error);
+  //   },
+  // });
+
   const confirmPayButtonHanlder = () => {
-    navigate("/reservation-completed");
+    // saveReservationRequest(reservationStore);
   };
   return (
     <>
@@ -43,7 +54,7 @@ const DepositCheck = ({ setIsReservationChecked }) => {
               </div>
               <div className="flex flex-row justify-between">
                 <p>총 예약 인원</p>
-                <p className="font-medium">{partySize}</p>
+                <p className="font-medium">{reservationStore.partySize}</p>
               </div>
             </div>
             <div className="bg-gray-300 h-px -mx-7 mt-5 mb-5 p-0"></div>
