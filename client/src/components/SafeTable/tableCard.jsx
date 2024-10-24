@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export const TableCard = ({
   name,
@@ -9,8 +10,11 @@ export const TableCard = ({
   website,
   seq,
 }) => {
+  const navigate = useNavigate();
+  
   const reservedTables = 5;
   const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경 => 이 부분 어떻게 대체할까요?
+
 
   const handleSaveRestaurant = () => {
     console.log("click");
@@ -18,6 +22,10 @@ export const TableCard = ({
 
   const handleRedirect = () => {
     window.location.href = restaurantUrl; // URL로 이동
+  };
+
+  const BookButtonHandler = () => {
+    navigate(`/reservation/${seq}`);
   };
 
   return (
@@ -64,8 +72,11 @@ export const TableCard = ({
           <span className="font-bold text-blue-600">{reservedTables}</span>{" "}
           times today
         </p>
-        <button className="w-full bg-white text-blue-500 border border-blue-500 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-colors">
-          예약하러 가기
+        <button
+          className="w-full bg-white text-blue-500 border border-blue-500 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-colors"
+          onClick={BookButtonHandler}
+        >
+          예약하기
         </button>
       </div>
     </div>

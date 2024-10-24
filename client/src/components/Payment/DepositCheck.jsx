@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
-import useReservationStore from "../../store/useReservationStore";
 import { useNavigate } from "react-router-dom";
-import AddCard from "../Card/AddCard";
-import { getCardNumber } from "../../service/cardService";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import useReservationStore from "../../store/useReservationStore";
 import usePaymentStore from "../../store/usePaymentStore";
+import AddCard from "../Card/AddCard";
+import Loading from "../Loading";
+import { getCardNumber } from "../../service/cardService";
+import { saveReservation } from "../../service/reservationService";
 
-const DepositCheck = () => {
+const DepositCheck = ({ setIsReservationChecked }) => {
   const navigate = useNavigate();
-  const { partySize, deposit, setIsReservationChecked } = useReservationStore();
+  const reservationStore = useReservationStore();
   const { lastCardNumber, setLastCardNumber } = usePaymentStore();
-  const localedDeposit = deposit.toLocaleString();
+  const localedDeposit = reservationStore.deposit.toLocaleString();
 
   // 해당 사용자의 카드 뒷자리 번호 패치
   const { data: cardNumber, isLoading } = useQuery({
@@ -26,9 +28,25 @@ const DepositCheck = () => {
     }
   }, [isLoading]);
 
+  // 예약 정보 저장 요청
+  const { mutate: saveReservationRequest } = useMutation({
+    mutationFn: saveReservation,
+    onSuccess: () => {
+      navigate("/reservation-completed");
+    },
+    onError: (error) => {
+      console.log("예약 저장 중 에러 발생", error);
+    },
+  });
+
+  const confirmPayButtonHanlder = () => {
+    saveReservationRequest(reservationStore);
+  };
   return (
     <>
-      {!lastCardNumber ? (
+      {isLoading ? (
+        <Loading width="w-32" height="h-32" padding="p-10" />
+      ) : !lastCardNumber ? (
         <AddCard />
       ) : (
         <div className="flex flex-col mt-5 gap-5">
@@ -40,7 +58,7 @@ const DepositCheck = () => {
               </div>
               <div className="flex flex-row justify-between">
                 <p>총 예약 인원</p>
-                <p className="font-medium">{partySize}</p>
+                <p className="font-medium">{reservationStore.partySize}</p>
               </div>
             </div>
             <div className="bg-gray-300 h-px -mx-7 mt-5 mb-5 p-0"></div>
@@ -52,7 +70,10 @@ const DepositCheck = () => {
           <p className="text-lg font-semibold">
             총 예약 보장금 <span>{localedDeposit}</span>원
           </p>
-          <p>{lastCardNumber}로 끝나는 카드로 결제됩니다.</p>
+          <p>
+            <span className="font-medium">{lastCardNumber}</span>로 끝나는
+            카드로 결제됩니다.
+          </p>
           <div className="w-full flex flex-row justify-center gap-2">
             <button
               className="border border-gray-300 rounded font-medium w-5/12 h-12"
@@ -60,10 +81,9 @@ const DepositCheck = () => {
             >
               이전
             </button>
-            {/* 실제 결제가 되는 기능 구현 필요, 현재는 그냥 결제 누르면 예약 완료가 되는 상태 */}
             <button
               className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white"
-              onClick={() => navigate("/reservation-completed")}
+              onClick={confirmPayButtonHanlder}
             >
               결제
             </button>
