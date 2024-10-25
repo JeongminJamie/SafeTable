@@ -29,15 +29,16 @@ const DepositCheck = ({ setIsReservationChecked }) => {
   }, [isLoading]);
 
   // 예약 정보 저장 요청
-  const { mutate: saveReservationRequest } = useMutation({
-    mutationFn: saveReservation,
-    onSuccess: () => {
-      navigate("/reservation-completed");
-    },
-    onError: (error) => {
-      console.log("예약 저장 중 에러 발생", error);
-    },
-  });
+  const { mutate: saveReservationRequest, isLoading: saveLoading } =
+    useMutation({
+      mutationFn: saveReservation,
+      onSuccess: () => {
+        navigate("/reservation-completed");
+      },
+      onError: (error) => {
+        console.log("예약 저장 중 에러 발생", error);
+      },
+    });
 
   const confirmPayButtonHanlder = () => {
     saveReservationRequest(reservationStore);
@@ -85,7 +86,11 @@ const DepositCheck = ({ setIsReservationChecked }) => {
               className="rounded font-medium w-5/12 h-12 bg-amber-500 text-white"
               onClick={confirmPayButtonHanlder}
             >
-              결제
+              {saveLoading ? (
+                <Loading width="w-10" height="h-10" padding="p-2" />
+              ) : (
+                "결제"
+              )}
             </button>
           </div>
         </div>
