@@ -3,6 +3,8 @@ import Reservation from "../models/reservation.js";
 export const saveReservation = async (req, res) => {
   try {
     const userId = req.userId;
+    const userEmail = req.userEmail;
+
     const { seq, name, category, address, telephone, party_size, date, time } =
       req.body;
 
