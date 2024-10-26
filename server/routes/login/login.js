@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id },
+      { id: user._id, email: user.email },
       process.env.JWT_SECRET
       //{ expiresIn: 3600 } // 토큰 만료 시간 1시간
     );

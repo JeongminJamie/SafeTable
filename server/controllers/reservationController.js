@@ -1,8 +1,14 @@
 import Reservation from "../models/reservation.js";
+import { sendConfirmationEmail } from "../notifications/sendMail.js";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env.local" });
 
 export const saveReservation = async (req, res) => {
   try {
     const userId = req.userId;
+    const userEmail = req.userEmail;
+
     const { seq, name, category, address, telephone, party_size, date, time } =
       req.body;
 
@@ -22,11 +28,21 @@ export const saveReservation = async (req, res) => {
       time,
     });
 
-    await newReservation.save();
+    console.log("reserveDate 형식 확인", reserveDate);
 
-    res.status(201).send("예약 저장에 성공하였습니다.");
+    await newReservation.save();
+    await sendConfirmationEmail(
+      userEmail,
+      name,
+      category,
+      address,
+      party_size,
+      reserveDate,
+      time
+    );
+    res.status(201).send("예약 저장 및 확정 메일 전송에 성공하였습니다.");
   } catch (error) {
-    console.error("예약 저장 중 오류 발생", error);
-    res.status(500).send("예약 저장에 실패하였습니다.");
+    console.error("예약 처리 중 오류 발생", error);
+    res.status(500).send("예약 저장 또는 확정 메일 전송에 실패하였습니다.");
   }
 };
