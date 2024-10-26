@@ -1,5 +1,5 @@
-import React from "react";
-import useSavedTableStore from "../../store/useSavedTableStore";
+import React, { useEffect, useState } from "react";
+import { api } from "../../api/api";
 
 export const TableCard = ({
   name,
@@ -9,28 +9,90 @@ export const TableCard = ({
   category,
   website,
   seq,
+  savedRestaurants,
 }) => {
   const reservedTables = 5;
   const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경 => 이 부분 어떻게 대체할까요?
 
-  const addRestaurant = useSavedTableStore((state) => state.addRestaurant);
-  const savedRestaurants = useSavedTableStore(
-    (state) => state.savedRestaurants
-  );
+  const [restaurant, setRestaurant] = useState({
+    id: seq,
+    name,
+    address: `${address1} ${address2}`,
+    telephone,
+    clicked: false,
+  });
 
-  const handleSaveRestaurant = () => {
-    console.log("click");
-    const restaurant = {
-      id: seq,
-      name: name,
-      address: `${address1} ${address2}`,
-      telephone: telephone,
-      clicked: true,
-    };
-    addRestaurant(restaurant);
-    console.log("식당 정보가 저장되었습니다:", restaurant);
-    console.log("들어온 배열", savedRestaurants);
+  // savedRestaurants를 기반으로 `clicked` 상태 설정
+  useEffect(() => {
+    const savedRestaurant = savedRestaurants.find(
+      (res) => res.id === String(seq)
+    );
+    console.log("🚀 ~ useEffect ~ savedRestaurant:", savedRestaurant);
+    setRestaurant((prev) => ({
+      ...prev,
+      clicked: savedRestaurant ? savedRestaurant.clicked : false, // 찜 상태
+    }));
+  }, [savedRestaurants, seq]);
+
+  const handleSaveRestaurant = (e) => {
+    e.preventDefault();
+    setRestaurant((prev) => ({ ...prev, clicked: !prev.clicked }));
   };
+
+  useEffect(() => {
+    const saveRestaurant = async () => {
+      const token = sessionStorage.getItem("token");
+
+      try {
+        const response = await api.post("/user/save-table", restaurant, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.data.message) {
+          console.log(response.data);
+        } else {
+          console.log("Failed to save restaurant.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    const deleteRestaurant = async () => {
+      const token = sessionStorage.getItem("token");
+
+      try {
+        const response = await api.delete(
+          `/user/delete-table/${restaurant.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.message) {
+          console.log(response.data);
+        } else {
+          console.log("Failed to delete restaurant.");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    // savedRestaurants에서 현재 식당의 clicked 상태 확인
+    const isSaved = savedRestaurants.some((res) => res.id === String(seq));
+
+    if (restaurant.clicked) {
+      saveRestaurant();
+    } else if (isSaved) {
+      // clicked가 false이고 savedRestaurants에 있는 경우 삭제 요청
+      deleteRestaurant();
+    }
+  }, [restaurant, savedRestaurants]);
 
   const handleRedirect = () => {
     window.location.href = restaurantUrl; // URL로 이동
@@ -50,9 +112,9 @@ export const TableCard = ({
           className="absolute top-2 right-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-lg transition-colors shadow-lg flex items-center"
         >
           <img
-            src="./assets/save-icon.svg"
+            src={`./assets/${restaurant.clicked ? "save" : "unsave"}.svg`}
             className="w-6 h-6 mr-1"
-            alt="저장 아이콘"
+            alt={restaurant.clicked ? "찜" : "찜 취소"}
           />
           저장
         </button>
