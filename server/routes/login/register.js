@@ -1,21 +1,11 @@
 import express from "express";
 import User from "../../models/user.js";
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import Email from "../../models/emailcheck.js";
+import { transporter } from "../../config/nodemailer.js";
 
 dotenv.config({ path: ".env.local" });
-
-const transporter = nodemailer.createTransport({
-  auth: {
-    user: process.env.NAVER_USER,
-    pass: process.env.NAVER_PASS,
-  },
-  host: "smtp.naver.com",
-  port: 465, // SSL 포트
-  secure: true,
-});
 
 const sendVerificationEmail = async (userEmail, verificationToken) => {
   const mailOptions = {

@@ -1,6 +1,7 @@
 import React from "react";
-import CompletedDetails from "../components/Reservation/CompletedDetails";
 import { useNavigate } from "react-router-dom";
+import useReservationStore from "../store/useReservationStore";
+import CompletedDetails from "../components/Reservation/CompletedDetails";
 
 const ReservationCompleted = () => {
   const navigate = useNavigate();

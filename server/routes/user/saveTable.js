@@ -62,22 +62,21 @@ router.delete("/delete-table/:id", verifyToken, async (req, res) => {
   const userId = req.userId;
 
   try {
-    const user = await User.findById(userId);
-
     const restaurant = await Restaurant.findOne({ id });
     if (!restaurant) {
       return res.status(404).json({ error: "Restaurant not found." });
     }
 
-    const restaurantIndex = user.savedRestaurants.indexOf(restaurant._id);
-    if (restaurantIndex === -1) {
-      return res
-        .status(404)
-        .json({ error: "Restaurant not found in saved list." });
-    }
+    // 사용자 문서에서 `savedRestaurants` 목록에서 식당 ID 제거
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { savedRestaurants: restaurant._id } },
+      { new: true }
+    );
 
-    user.savedRestaurants.splice(restaurantIndex, 1);
-    await user.save();
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found." });
+    }
 
     // 레스토랑 테이블에서도 해당 식당 제거
     await Restaurant.deleteOne({ _id: restaurant._id });

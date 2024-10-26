@@ -6,7 +6,10 @@ import login from "./routes/login/login.js";
 import register from "./routes/login/register.js";
 import saveTable from "./routes/user/saveTable.js";
 import { createProxyMiddleware } from "http-proxy-middleware";
+
+// routes
 import cardRoutes from "./routes/cardRoutes.js";
+import reservationRoutes from "./routes/reservationRoutes.js";
 
 dotenv.config({ path: ".env.local" });
 
@@ -22,11 +25,13 @@ app.use(
     credentials: true, // 쿠키, 세션 허용
   })
 );
+
 app.use(express.json());
 app.use("/login", login);
 app.use("/register", register);
 app.use("/user", saveTable);
 app.use("/api/card", cardRoutes);
+app.use("/api/reservation", reservationRoutes);
 
 // open api proxy 해결
 // 안심식당 조회

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import SafeMain from "../components/SafeTable/SafeMain";
 import SearchBox from "../components/SafeTable/SearchBox";
-
 import { useInfiniteQuery } from "@tanstack/react-query";
 import useRestaurantStore from "../store/useRestaurantStore";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
@@ -9,6 +8,7 @@ import {
   fetchEntireRestaurants,
   fetchRestaurantByInput,
 } from "../service/searchService";
+import Loading from "../components/Loading";
 
 const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =
@@ -41,7 +41,7 @@ const SafeTable = () => {
   // 쿼리의 데이터 set
   useEffect(() => {
     if (data) {
-      const allFetchedRestaurants = data.pages.flatMap((page) => page.data);
+      const allFetchedRestaurants = data?.pages.flatMap((page) => page.data);
       setFetchedRestaurants(allFetchedRestaurants);
     }
   }, [data]);
@@ -56,11 +56,7 @@ const SafeTable = () => {
       <SafeMain isLoading={isLoading} />
       <div ref={loadMoreRef}></div>
       {isFetchingNextPage && (
-        <img
-          src="/assets/loading-animation.gif"
-          alt="loading"
-          className="m-auto w-32 h-32 p-10"
-        />
+        <Loading width="w-32" height="h-32" padding="p-10" />
       )}
     </>
   );

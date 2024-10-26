@@ -14,7 +14,7 @@ const SafeMain = ({ isLoading }) => {
   useEffect(() => {
     let timer;
     if (isLoading) {
-      timer = setTimeout(() => setShowSkeleton(true), 1000);
+      timer = setTimeout(() => setShowSkeleton(true), 500);
     }
 
     return () => {
