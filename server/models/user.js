@@ -23,6 +23,9 @@ const UserSchema = new mongoose.Schema({
   card_number: {
     type: String,
   },
+  savedRestaurants: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Restaurant", default: [] },
+  ],
 });
 
 const User = mongoose.model("user", UserSchema);

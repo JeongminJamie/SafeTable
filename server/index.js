@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import login from "./routes/login/login.js";
 import register from "./routes/login/register.js";
+import saveTable from "./routes/user/saveTable.js";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
 // routes
@@ -28,6 +29,7 @@ app.use(
 app.use(express.json());
 app.use("/login", login);
 app.use("/register", register);
+app.use("/user", saveTable);
 app.use("/api/card", cardRoutes);
 app.use("/api/reservation", reservationRoutes);
 

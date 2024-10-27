@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import SafeMain from "../components/SafeTable/SafeMain";
 import SearchBox from "../components/SafeTable/SearchBox";
-
 import { useInfiniteQuery } from "@tanstack/react-query";
 import useRestaurantStore from "../store/useRestaurantStore";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";

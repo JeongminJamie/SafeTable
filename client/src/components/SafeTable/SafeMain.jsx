@@ -3,10 +3,12 @@ import { TableCard } from "./tableCard";
 import EmptyRestaurant from "./EmptyRestaurant";
 import useRestaurantStore from "../../store/useRestaurantStore";
 import RestaurantSkeleton from "./RestaurantSkeleton";
+import { api } from "../../api/api";
 
 const SafeMain = ({ isLoading }) => {
   const { searchedValue, fetchedRestaurants } = useRestaurantStore();
   const [showSkeleton, setShowSkeleton] = useState(false);
+  const [savedRestaurants, setSavedRestaurants] = useState([]); // 배열로 초기화
 
   // 로딩이 1초 이상일 때부터 스켈레톤 보여주기
   useEffect(() => {
@@ -20,6 +22,21 @@ const SafeMain = ({ isLoading }) => {
     };
   }, [isLoading]);
 
+  // 유저의 찜 목록을 불러오는 함수
+  useEffect(() => {
+    const handleFetchSavedRestaurants = async () => {
+      try {
+        const token = sessionStorage.getItem("token");
+        const response = await api.get("/user/saved-tables", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSavedRestaurants(Array.isArray(response.data) ? response.data : []);
+      } catch (error) {
+        console.error("Error fetching saved restaurants:", error);
+      }
+    };
+    handleFetchSavedRestaurants();
+  }, []);
   return (
     <div className="px-10 mt-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-5 p-5 gap-y-10">
@@ -38,6 +55,7 @@ const SafeMain = ({ isLoading }) => {
                 category={restaurant.RELAX_GUBUN_DETAIL}
                 website={restaurant.RELAX_RSTRNT_ETC}
                 seq={restaurant.RELAX_SEQ}
+                savedRestaurants={savedRestaurants}
               />
             ))}
       </div>
