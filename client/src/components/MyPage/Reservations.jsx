@@ -1,30 +1,60 @@
-import React, { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { getMyReservation } from "../../service/reservationService";
+import {
+  formatDateToKorean,
+  formatTimeToKoean,
+  parseStringToDate,
+} from "../../utils/dateAndTime";
 
-const getToday = () => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today;
-};
-
-export const Reservations = ({ reservations }) => {
+export const Reservations = () => {
   const [currentReservations, setCurrentReservations] = useState([]);
   const [pastReservations, setPastReservations] = useState([]);
 
+  const { data: reservations = [], isLoading } = useQuery({
+    queryKey: ["getMyReservations"],
+    queryFn: getMyReservation,
+    refetchOnWindowFocus: false,
+    staleTime: 60 * 1000,
+  });
+
+  const formattedDate = useCallback(
+    (reservation) => {
+      return formatDateToKorean(reservation?.date);
+    },
+    [reservations]
+  );
+
+  const formattedTime = useCallback(
+    (reservation) => {
+      return formatTimeToKoean(reservation.time);
+    },
+    [reservations]
+  );
+
   useEffect(() => {
-    const today = getToday();
+    const today = new Date();
 
-    const current = reservations.filter((reservation) => {
-      const reservationDate = new Date(reservation.date);
-      return reservationDate >= today;
-    });
+    if (reservations.length !== 0) {
+      const current = reservations.filter((reservation) => {
+        const reservationDate = parseStringToDate(
+          reservation.date,
+          reservation.time
+        );
+        return reservationDate >= today;
+      });
 
-    const past = reservations.filter((reservation) => {
-      const reservationDate = new Date(reservation.date);
-      return reservationDate < today;
-    });
+      const past = reservations.filter((reservation) => {
+        const reservationDate = parseStringToDate(
+          reservation.date,
+          reservation.time
+        );
+        return reservationDate < today;
+      });
 
-    setCurrentReservations(current);
-    setPastReservations(past);
+      setCurrentReservations(current);
+      setPastReservations(past);
+    }
   }, [reservations]);
 
   const handleDelete = (id) => {
@@ -39,17 +69,17 @@ export const Reservations = ({ reservations }) => {
       <h2 className="text-xl font-semibold mb-4">Current Reservations</h2>
       <ul>
         {currentReservations.length > 0 ? (
-          currentReservations.map((reservation, index) => (
+          currentReservations.map((reservation) => (
             <li
-              key={index}
+              key={reservation._id}
               className="mb-4 border p-4 rounded shadow flex justify-between items-center"
             >
               <div>
                 <p>
-                  <strong>Restaurant:</strong> {reservation.restaurant}
+                  <strong>Restaurant:</strong> {reservation.name}
                 </p>
                 <p>
-                  <strong>Location:</strong> {reservation.location}
+                  <strong>Location:</strong> {reservation.address}
                 </p>
                 <div className="flex gap-5">
                   <p className="flex items-center">
@@ -58,7 +88,7 @@ export const Reservations = ({ reservations }) => {
                       className="w-4 h-4 mr-1"
                       alt="Person Icon"
                     />
-                    {reservation.people}
+                    {reservation.party_size}
                   </p>
                   <p className="flex items-center gap-2">
                     <img
@@ -66,13 +96,13 @@ export const Reservations = ({ reservations }) => {
                       className="w-4 h-4"
                       alt="Date Icon"
                     />
-                    {reservation.date} / {reservation.time}
+                    {formattedDate(reservation)} / {formattedTime(reservation)}
                   </p>
                 </div>
               </div>
               <button
                 className="mt-2 p-2 bg-red-500 text-white rounded"
-                onClick={() => handleDelete(reservation.id)}
+                onClick={() => handleDelete(reservation._id)}
               >
                 예약 취소
               </button>
@@ -91,17 +121,17 @@ export const Reservations = ({ reservations }) => {
       <h2 className="text-xl font-semibold mb-6 mt-8">Past Reservations</h2>
       <ul>
         {pastReservations.length > 0 ? (
-          pastReservations.map((reservation, index) => (
+          pastReservations.map((reservation) => (
             <li
-              key={index}
+              key={reservation._id}
               className="mb-4 border p-4 rounded shadow flex justify-between items-center"
             >
               <div>
                 <p>
-                  <strong>Restaurant:</strong> {reservation.restaurant}
+                  <strong>Restaurant:</strong> {reservation.name}
                 </p>
                 <p>
-                  <strong>Location:</strong> {reservation.location}
+                  <strong>Location:</strong> {reservation.address}
                 </p>
                 <div className="flex gap-5">
                   <p className="flex items-center">
@@ -110,7 +140,7 @@ export const Reservations = ({ reservations }) => {
                       className="w-4 h-4 mr-1"
                       alt="Person Icon"
                     />
-                    {reservation.people}
+                    {reservation.party_size}
                   </p>
                   <p className="flex items-center gap-2">
                     <img
@@ -118,7 +148,7 @@ export const Reservations = ({ reservations }) => {
                       className="w-4 h-4"
                       alt="Date Icon"
                     />
-                    {reservation.date} / {reservation.time}
+                    {formattedDate(reservation)} / {formattedTime(reservation)}
                   </p>
                 </div>
                 <p>

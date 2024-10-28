@@ -13,8 +13,18 @@ export const getRestaurantBySEQ = async (seq) => {
   return restaurantData;
 };
 
+export const getMyReservation = async () => {
+  const headersConfig = getAxiosHeaderConfig();
+  if (!headersConfig) return;
+
+  const response = await api.get("/api/reservation", headersConfig);
+  return response.data.reservations;
+};
+
 export const saveReservation = async (reservationStore) => {
   const headersConfig = getAxiosHeaderConfig();
+  if (!headersConfig) return;
+
   const restaurant = reservationStore.restaurant;
 
   const reservationInfoToSend = {
