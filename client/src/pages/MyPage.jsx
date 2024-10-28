@@ -22,7 +22,7 @@ const MyPage = () => {
     }
 
     try {
-      const response = await api.get("http://localhost:8080/login/verify", {
+      const response = await api.get("/login/verify", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
