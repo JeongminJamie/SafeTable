@@ -18,7 +18,7 @@ export const sendConfirmationEmail = async (
   const mailOptions = {
     from: process.env.NAVER_USER,
     to: userEmail,
-    subject: `안심테이블의 ${name} 예약 확정`,
+    subject: `안심테이블: ${name} 예약 확정`,
     html: confirmHTML(name, category, address, party_size, formattedDate, time),
   };
 

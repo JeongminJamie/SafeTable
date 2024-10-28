@@ -2,6 +2,7 @@ export const getToken = () => {
   const token = sessionStorage.getItem("token");
 
   if (!token) {
+    console.log("받은 토큰이 없습니다.");
     return null;
   }
 
@@ -12,7 +13,7 @@ export const getAxiosHeaderConfig = () => {
   const token = getToken();
 
   if (!token) {
-    console.log("해당 토큰에 오류 발생");
+    console.log("토큰이 유효하지 않습니다.");
     return null;
   }
 

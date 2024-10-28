@@ -66,7 +66,7 @@ export const MyProfile = () => {
 
     try {
       const response = await api.post(
-        "http://localhost:8080/login/change-Profile",
+        "/login/change-Profile",
         {
           newName: localUserData.userName,
           newContact: localUserData.userContact,
@@ -93,7 +93,7 @@ export const MyProfile = () => {
     try {
       const token = sessionStorage.getItem("token"); // JWT 토큰 가져오기
       const response = await api.post(
-        "http://localhost:8080/login/change-password",
+        "/login/change-password",
         {
           currentPassword: currentPassword,
           newPassword: newPassword,

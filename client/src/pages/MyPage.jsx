@@ -22,7 +22,7 @@ const MyPage = () => {
     }
 
     try {
-      const response = await api.get("http://localhost:8080/login/verify", {
+      const response = await api.get("/login/verify", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -43,6 +43,7 @@ const MyPage = () => {
     }
   };
 
+  // To-do: 로그인이 필요한 모든 페이지에 token 확인 하기!!
   useEffect(() => {
     if (!sessionStorage.getItem("token")) {
       navigate("/");
@@ -50,64 +51,64 @@ const MyPage = () => {
     verifyToken();
   }, []);
 
-  const reservations = [
-    {
-      id: 1,
-      restaurant: "Restaurant E",
-      people: 2,
-      date: "2023-12-25",
-      location: "서울",
-      time: "18:30",
-    },
-    {
-      id: 2,
-      restaurant: "Restaurant B",
-      people: 2,
-      date: "2024-09-12",
-      location: "부산",
-      time: "12:00",
-    },
-    {
-      id: 3,
-      restaurant: "Restaurant A",
-      people: 4,
-      date: "2024-09-15",
-      location: "인천",
-      time: "19:00",
-    },
-    {
-      id: 4,
-      restaurant: "Restaurant F",
-      people: 4,
-      date: "2024-09-17",
-      location: "대구",
-      time: "20:30",
-    },
-    {
-      id: 5,
-      restaurant: "Restaurant C",
-      people: 3,
-      date: "2024-09-20",
-      location: "서울",
-      time: "17:00",
-    },
-    {
-      id: 6,
-      restaurant: "Restaurant D",
-      people: 5,
-      date: "2024-10-05",
-      location: "광주",
-      time: "13:00",
-    },
-    {
-      id: 7,
-      restaurant: "Restaurant G",
-      people: 1,
-      date: "2024-10-15",
-      location: "대전",
-      time: "18:00",
-    },
-  ];
+  // const reservations = [
+  //   {
+  //     id: 1,
+  //     restaurant: "Restaurant E",
+  //     people: 2,
+  //     date: "2023-12-25",
+  //     location: "서울",
+  //     time: "18:30",
+  //   },
+  //   {
+  //     id: 2,
+  //     restaurant: "Restaurant B",
+  //     people: 2,
+  //     date: "2024-09-12",
+  //     location: "부산",
+  //     time: "12:00",
+  //   },
+  //   {
+  //     id: 3,
+  //     restaurant: "Restaurant A",
+  //     people: 4,
+  //     date: "2024-09-15",
+  //     location: "인천",
+  //     time: "19:00",
+  //   },
+  //   {
+  //     id: 4,
+  //     restaurant: "Restaurant F",
+  //     people: 4,
+  //     date: "2024-09-17",
+  //     location: "대구",
+  //     time: "20:30",
+  //   },
+  //   {
+  //     id: 5,
+  //     restaurant: "Restaurant C",
+  //     people: 3,
+  //     date: "2024-09-20",
+  //     location: "서울",
+  //     time: "17:00",
+  //   },
+  //   {
+  //     id: 6,
+  //     restaurant: "Restaurant D",
+  //     people: 5,
+  //     date: "2024-10-05",
+  //     location: "광주",
+  //     time: "13:00",
+  //   },
+  //   {
+  //     id: 7,
+  //     restaurant: "Restaurant G",
+  //     people: 1,
+  //     date: "2024-10-15",
+  //     location: "대전",
+  //     time: "18:00",
+  //   },
+  // ];
 
   return (
     <div className="mx-28 my-10">
@@ -161,7 +162,7 @@ const MyPage = () => {
         <div className="w-4/5">
           {activeTab === "aboutMe" && <AboutMe />}
           {activeTab === "Reservations" && (
-            <Reservations reservations={reservations} />
+            <Reservations/>
           )}
           {activeTab === "Payment Methods" && <MyCardInfo />}
         </div>

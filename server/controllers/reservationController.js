@@ -4,6 +4,24 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
 
+export const getMyReservation = async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const myReservations = await Reservation.find({ user_id: userId });
+
+    res.status(200).json({
+      message: "해당 사용자의 예약 내역입니다.",
+      reservations: myReservations,
+    });
+  } catch (error) {
+    console.error("해당 사용자의 예약 내역 조회 중 에러 발생");
+    res
+      .status(500)
+      .json({ message: "사용자 예약 내역 조회 중 오류 발생했습니다." });
+  }
+};
+
 export const saveReservation = async (req, res) => {
   try {
     const userId = req.userId;
@@ -28,8 +46,7 @@ export const saveReservation = async (req, res) => {
       time,
     });
 
-    console.log("reserveDate 형식 확인", reserveDate);
-
+    // 예약 저장 후 확정 이메일 보내기
     await newReservation.save();
     await sendConfirmationEmail(
       userEmail,
