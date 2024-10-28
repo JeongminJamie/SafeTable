@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthModal } from "./Login/AuthModal";
 import { useNavigate } from "react-router-dom";
+import { getToken } from "../config";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const Header = () => {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    const storedToken = sessionStorage.getItem("token");
+    const storedToken = getToken();
     if (storedToken) {
       setToken(storedToken);
     }
