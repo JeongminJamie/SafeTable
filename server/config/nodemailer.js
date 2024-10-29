@@ -71,6 +71,7 @@ export const confirmHTML = (name, category, address, partySize, date, time) => {
         <p><strong>시간:</strong> ${time}</p>
       </div>
       <div class="footer">
+        <p>당일 예약 취소 시, 예약 보장금 환불이 불가합니다.</p>
         <p>안심테이블을 이용해 주셔서 감사합니다.</p>
       </div>
     </body>

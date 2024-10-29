@@ -10,10 +10,16 @@ import {
   parseStringToDate,
 } from "../../utils/dateAndTime";
 import Loading from "../Loading";
+import CancelReservationModal from "./CancelReservationModal";
 
 export const Reservations = () => {
   const [currentReservations, setCurrentReservations] = useState([]);
   const [pastReservations, setPastReservations] = useState([]);
+
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [selectedCancelReservationId, setSelectedCancelReservationId] =
+    useState(null);
+  const [selectedCancelRestaurant, setSelectedCancelRestaurant] = useState("");
 
   // 내 예약 조회 & 내 예약 날짜/시간 포맷 & 과거와 현재 예약 구분
   const {
@@ -24,7 +30,6 @@ export const Reservations = () => {
     queryKey: ["getMyReservations"],
     queryFn: getMyReservation,
     refetchOnWindowFocus: false,
-    staleTime: 60 * 1000,
   });
 
   const formattedDate = useCallback(
@@ -70,7 +75,7 @@ export const Reservations = () => {
   const { mutate: cancelOrDeleteReservation } = useMutation({
     mutationFn: (reservationId) => cancelOrDeleteMyReservation(reservationId),
     onSuccess: (data) => {
-      console.log("예약 취소 성공 확인 메세지", data.message);
+      console.log(data.message);
       refetch();
     },
     onError: (error) => {
@@ -78,16 +83,29 @@ export const Reservations = () => {
     },
   });
 
-  const handleCacel = (reservationId) => {
-    cancelOrDeleteReservation(reservationId);
+  // 예약 취소 확인 모달 띄우기
+  const handleCancelButton = (reservationId, restaurantName) => {
+    setSelectedCancelReservationId(reservationId);
+    setSelectedCancelRestaurant(restaurantName);
+    setIsCancelModalOpen(true);
   };
 
+  // 과거 예약 삭제
   const handleDelete = (reservationId) => {
     cancelOrDeleteReservation(reservationId);
   };
 
   return (
     <>
+      {isCancelModalOpen && (
+        <CancelReservationModal
+          isCancelModalOpen={isCancelModalOpen}
+          setIsCancelModalOpen={setIsCancelModalOpen}
+          reservationId={selectedCancelReservationId}
+          restaurantName={selectedCancelRestaurant}
+          cancelOrDeleteReservation={cancelOrDeleteReservation}
+        />
+      )}
       {isLoading ? (
         <Loading width="w-32" height="h-32" padding="p-10 mt-24 mb-24" />
       ) : (
@@ -130,7 +148,9 @@ export const Reservations = () => {
                   </div>
                   <button
                     className="mt-2 p-2 bg-red-500 text-white rounded"
-                    onClick={() => handleCacel(reservation._id)}
+                    onClick={() =>
+                      handleCancelButton(reservation._id, reservation.name)
+                    }
                   >
                     예약 취소
                   </button>
@@ -152,8 +172,14 @@ export const Reservations = () => {
               pastReservations.map((reservation) => (
                 <li
                   key={reservation._id}
-                  className="mb-4 border p-4 rounded shadow flex justify-between items-center"
+                  className="mb-4 border p-4 rounded shadow flex justify-between items-center relative"
                 >
+                  <img
+                    src="/assets/exit.png"
+                    alt="delete"
+                    className="absolute w-5 h-5 top-4 end-6 hover:cursor-pointer"
+                    onClick={() => handleDelete(reservation._id)}
+                  />
                   <div>
                     <p>
                       <strong>Restaurant:</strong> {reservation.name}
