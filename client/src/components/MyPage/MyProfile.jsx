@@ -102,7 +102,7 @@ export const MyProfile = () => {
       setCurrentPassword("");
       setNewPassword("");
       setPassCheck("");
-      closeModal(); // 모달 닫기
+      closeModal();
       return { success: true, message: response.data.message };
     } catch (error) {
       console.error("Error changing password:", error);
