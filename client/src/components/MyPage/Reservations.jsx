@@ -1,6 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { getMyReservation } from "../../service/reservationService";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  cancelOrDeleteMyReservation,
+  getMyReservation,
+} from "../../service/reservationService";
 import {
   formatDateToKorean,
   formatTimeToKoean,
@@ -12,7 +15,12 @@ export const Reservations = () => {
   const [currentReservations, setCurrentReservations] = useState([]);
   const [pastReservations, setPastReservations] = useState([]);
 
-  const { data: reservations = [], isLoading } = useQuery({
+  // 내 예약 조회 & 내 예약 날짜/시간 포맷 & 과거와 현재 예약 구분
+  const {
+    data: reservations = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["getMyReservations"],
     queryFn: getMyReservation,
     refetchOnWindowFocus: false,
@@ -58,10 +66,24 @@ export const Reservations = () => {
     }
   }, [reservations]);
 
-  const handleDelete = (id) => {
-    setCurrentReservations((prevReservations) =>
-      prevReservations.filter((reservation) => reservation.id !== id)
-    );
+  // 내 예약 취소/삭제 및 리패치
+  const { mutate: cancelOrDeleteReservation } = useMutation({
+    mutationFn: (reservationId) => cancelOrDeleteMyReservation(reservationId),
+    onSuccess: (data) => {
+      console.log("예약 취소 성공 확인 메세지", data.message);
+      refetch();
+    },
+    onError: (error) => {
+      console.error(error.message);
+    },
+  });
+
+  const handleCacel = (reservationId) => {
+    cancelOrDeleteReservation(reservationId);
+  };
+
+  const handleDelete = (reservationId) => {
+    cancelOrDeleteReservation(reservationId);
   };
 
   return (
@@ -108,7 +130,7 @@ export const Reservations = () => {
                   </div>
                   <button
                     className="mt-2 p-2 bg-red-500 text-white rounded"
-                    onClick={() => handleDelete(reservation._id)}
+                    onClick={() => handleCacel(reservation._id)}
                   >
                     예약 취소
                   </button>
