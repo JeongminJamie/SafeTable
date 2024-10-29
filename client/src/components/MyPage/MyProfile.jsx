@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { api } from "../../api/api";
 import useUserStore from "../../store/useUserStore";
 import { LoginModal } from "../Login/loginModal";
+import { getAxiosHeaderConfig } from "../../config";
 
 const debounce = (func, delay) => {
   let timeoutId;
@@ -18,8 +19,6 @@ export const MyProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [localUserData, setLocalUserData] = useState(userData);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [currentForm, setCurrentForm] = useState("login");
-  const [token, setToken] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -57,12 +56,8 @@ export const MyProfile = () => {
   };
 
   const updateProfile = async () => {
-    const token = sessionStorage.getItem("token");
-
-    if (!token) {
-      console.log("No access token found");
-      return;
-    }
+    const headersConfig = getAxiosHeaderConfig();
+    if (!headersConfig) return;
 
     try {
       const response = await api.post(
@@ -72,11 +67,7 @@ export const MyProfile = () => {
           newContact: localUserData.userContact,
           newLocation: localUserData.userLocation,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        headersConfig
       );
       console.log("Profile updated:", response.data);
       setUserData(localUserData);
@@ -91,27 +82,23 @@ export const MyProfile = () => {
 
   const changePassword = async () => {
     try {
-      const token = sessionStorage.getItem("token"); // JWT 토큰 가져오기
+      const headersConfig = getAxiosHeaderConfig();
+      if (!headersConfig) return;
+
       const response = await api.post(
         "http://localhost:8080/login/change-password",
         {
           currentPassword: currentPassword,
           newPassword: newPassword,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        headersConfig
       );
 
       if (response.status !== 200) {
-        // HTTP 상태 코드가 200이 아닌 경우
         console.error(response.data.message);
         return { success: false, message: response.data.message };
       }
 
-      console.log(response.data.message); // 성공 메시지
       setCurrentPassword("");
       setNewPassword("");
       setPassCheck("");
