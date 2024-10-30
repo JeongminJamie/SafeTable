@@ -33,7 +33,7 @@ app.use("/user", saveTable);
 app.use("/api/card", cardRoutes);
 app.use("/api/reservation", reservationRoutes);
 
-// open api proxy 해결
+// open api proxy
 // 안심식당 조회
 app.use(
   "/api/restaurants",

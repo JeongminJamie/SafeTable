@@ -37,7 +37,7 @@ const MainHeader = () => {
           </div>
           <div
             className="hover:cursor-pointer hover:text-xl"
-            onClick={() => navigate("/reservation")}
+            onClick={() => navigate("/about")}
           >
             소개
           </div>

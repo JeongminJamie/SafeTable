@@ -46,3 +46,15 @@ export const saveReservation = async (reservationStore) => {
 
   return response.data;
 };
+
+export const cancelOrDeleteMyReservation = async (reservationId) => {
+  const headersConfig = getAxiosHeaderConfig();
+  if (!headersConfig) return;
+
+  const response = await api.delete(
+    `/api/reservation/${reservationId}`,
+    headersConfig
+  );
+
+  return response.data;
+};
