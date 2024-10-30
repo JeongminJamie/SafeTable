@@ -1,7 +1,5 @@
-import axios from "axios";
 import fisherYatesShuffle from "../utils/algorithm/fisherYatesShuffle";
-
-const serverURL = process.env.REACT_APP_SERVER_PORT_URL;
+import { api } from "../api/api";
 const restaurantAPIKey = process.env.REACT_APP_RESTAURANT_API_KEY;
 
 // 안심식당 전체 조회 함수
@@ -10,8 +8,8 @@ export const fetchEntireRestaurants = async (pageParam) => {
   const endIndex = pageParam * 100;
 
   try {
-    const response = await axios.get(
-      `${serverURL}/api/restaurants/openapi/${restaurantAPIKey}/json/Grid_20200713000000000605_1/${startIndex}/${endIndex}?RELAX_SI_NM=서울특별시`
+    const response = await api.get(
+      `/api/restaurants/openapi/${restaurantAPIKey}/json/Grid_20200713000000000605_1/${startIndex}/${endIndex}?RELAX_SI_NM=서울특별시`
     );
 
     const data = response.data.Grid_20200713000000000605_1.row;
@@ -37,8 +35,8 @@ export const fetchRestaurantByInput = async (searchedValue, pageParam) => {
   const endIndex = pageParam * 100;
 
   try {
-    const response = await axios.get(
-      `${serverURL}/api/restaurants/openapi/${restaurantAPIKey}/json/Grid_20200713000000000605_1/${startIndex}/${endIndex}?RELAX_SI_NM=${encodedSi}&RELAX_SIDO_NM=${encodedSido}`
+    const response = await api.get(
+      `/api/restaurants/openapi/${restaurantAPIKey}/json/Grid_20200713000000000605_1/${startIndex}/${endIndex}?RELAX_SI_NM=${encodedSi}&RELAX_SIDO_NM=${encodedSido}`
     );
 
     const restaurantData = response.data.Grid_20200713000000000605_1?.row || [];
@@ -56,8 +54,8 @@ export const fetchRestaurantByInput = async (searchedValue, pageParam) => {
 // autocomplete을 위한 입력값에 따른 시군구 open api 지역명 요청
 export const fetchRegionsByInput = async (inputValue) => {
   try {
-    const response = await axios.get(
-      `${serverURL}/api/locations/2ddata/adsigg/data?apiKey=${
+    const response = await api.get(
+      `/api/locations/2ddata/adsigg/data?apiKey=${
         process.env.REACT_APP_LOCATION_API_KEY
       }&domain=${
         process.env.REACT_APP_LOCATION_DOMAIN

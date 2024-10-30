@@ -1,9 +1,6 @@
 import React, { useMemo } from "react";
 import useReservationStore from "../../store/useReservationStore";
-import {
-  formatDateToKorean,
-  formatTimeToKoean,
-} from "../../utils/formatToKorean";
+import { formatDateToKorean, formatTimeToKoean } from "../../utils/dateAndTime";
 
 const CompletedDetails = () => {
   const { restaurant, partySize, date, timeSlot } = useReservationStore();

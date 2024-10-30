@@ -61,7 +61,7 @@ export const MyProfile = () => {
 
     try {
       const response = await api.post(
-        "http://localhost:8080/login/change-Profile",
+        "/login/change-Profile",
         {
           newName: localUserData.userName,
           newContact: localUserData.userContact,
@@ -86,7 +86,7 @@ export const MyProfile = () => {
       if (!headersConfig) return;
 
       const response = await api.post(
-        "http://localhost:8080/login/change-password",
+        "/login/change-password",
         {
           currentPassword: currentPassword,
           newPassword: newPassword,

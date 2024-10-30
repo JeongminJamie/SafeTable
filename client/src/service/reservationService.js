@@ -1,12 +1,11 @@
-import axios from "axios";
 import { getAxiosHeaderConfig } from "../config";
+import { api } from "../api/api";
 
-const serverURL = process.env.REACT_APP_SERVER_PORT_URL;
 const restaurantAPIKey = process.env.REACT_APP_RESTAURANT_API_KEY;
 
 export const getRestaurantBySEQ = async (seq) => {
-  const response = await axios.get(
-    `${serverURL}/api/restaurants/openapi/${restaurantAPIKey}/json/Grid_20200713000000000605_1/1/1?RELAX_SEQ=${seq}`
+  const response = await api.get(
+    `/api/restaurants/openapi/${restaurantAPIKey}/json/Grid_20200713000000000605_1/1/1?RELAX_SEQ=${seq}`
   );
 
   const restaurantData = response.data.Grid_20200713000000000605_1?.row[0];
@@ -14,8 +13,18 @@ export const getRestaurantBySEQ = async (seq) => {
   return restaurantData;
 };
 
+export const getMyReservation = async () => {
+  const headersConfig = getAxiosHeaderConfig();
+  if (!headersConfig) return;
+
+  const response = await api.get("/api/reservation", headersConfig);
+  return response.data.reservations;
+};
+
 export const saveReservation = async (reservationStore) => {
   const headersConfig = getAxiosHeaderConfig();
+  if (!headersConfig) return;
+
   const restaurant = reservationStore.restaurant;
 
   const reservationInfoToSend = {
@@ -29,9 +38,21 @@ export const saveReservation = async (reservationStore) => {
     time: reservationStore.timeSlot,
   };
 
-  const response = await axios.post(
-    `${serverURL}/api/reservation`,
+  const response = await api.post(
+    `/api/reservation`,
     reservationInfoToSend,
+    headersConfig
+  );
+
+  return response.data;
+};
+
+export const cancelOrDeleteMyReservation = async (reservationId) => {
+  const headersConfig = getAxiosHeaderConfig();
+  if (!headersConfig) return;
+
+  const response = await api.delete(
+    `/api/reservation/${reservationId}`,
     headersConfig
   );
 

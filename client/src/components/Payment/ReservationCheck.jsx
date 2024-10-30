@@ -3,7 +3,7 @@ import useReservationStore from "../../store/useReservationStore";
 import {
   formatDateToKorean,
   formatTimeToKoean,
-} from "../../utils/formatToKorean";
+} from "../../utils/dateAndTime";
 
 const ReservationCheck = ({
   setIsPaymentModalOpen,
