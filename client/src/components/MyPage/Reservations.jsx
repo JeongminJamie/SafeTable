@@ -15,11 +15,8 @@ import CancelReservationModal from "./CancelReservationModal";
 export const Reservations = () => {
   const [currentReservations, setCurrentReservations] = useState([]);
   const [pastReservations, setPastReservations] = useState([]);
-
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
-  const [selectedCancelReservationId, setSelectedCancelReservationId] =
-    useState(null);
-  const [selectedCancelRestaurant, setSelectedCancelRestaurant] = useState("");
+  const [selectedReservation, setSelectedReservation] = useState({});
 
   // 내 예약 조회 & 내 예약 날짜/시간 포맷 & 과거와 현재 예약 구분
   const {
@@ -32,19 +29,13 @@ export const Reservations = () => {
     refetchOnWindowFocus: false,
   });
 
-  const formattedDate = useCallback(
-    (reservation) => {
-      return formatDateToKorean(reservation?.date);
-    },
-    [reservations]
-  );
+  const formattedDate = useCallback((reservation) => {
+    return formatDateToKorean(reservation?.date, reservation?._id);
+  }, []);
 
-  const formattedTime = useCallback(
-    (reservation) => {
-      return formatTimeToKoean(reservation.time);
-    },
-    [reservations]
-  );
+  const formattedTime = useCallback((reservation) => {
+    return formatTimeToKoean(reservation.time);
+  }, []);
 
   useEffect(() => {
     const today = new Date();
@@ -84,9 +75,8 @@ export const Reservations = () => {
   });
 
   // 예약 취소 확인 모달 띄우기
-  const handleCancelButton = (reservationId, restaurantName) => {
-    setSelectedCancelReservationId(reservationId);
-    setSelectedCancelRestaurant(restaurantName);
+  const handleCancelButton = (reservation) => {
+    setSelectedReservation(reservation);
     setIsCancelModalOpen(true);
   };
 
@@ -101,8 +91,7 @@ export const Reservations = () => {
         <CancelReservationModal
           isCancelModalOpen={isCancelModalOpen}
           setIsCancelModalOpen={setIsCancelModalOpen}
-          reservationId={selectedCancelReservationId}
-          restaurantName={selectedCancelRestaurant}
+          reservation={selectedReservation}
           cancelOrDeleteReservation={cancelOrDeleteReservation}
         />
       )}
@@ -148,9 +137,7 @@ export const Reservations = () => {
                   </div>
                   <button
                     className="mt-2 p-2 bg-red-500 text-white rounded"
-                    onClick={() =>
-                      handleCancelButton(reservation._id, reservation.name)
-                    }
+                    onClick={() => handleCancelButton(reservation)}
                   >
                     예약 취소
                   </button>

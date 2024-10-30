@@ -1,24 +1,35 @@
-import React from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 
 const CancelReservationModal = ({
   isCancelModalOpen,
   setIsCancelModalOpen,
-  reservationId,
-  restaurantName,
+  // reservationId,
+  // restaurantName,
+  reservation,
   cancelOrDeleteReservation,
 }) => {
+  const closeModal = useCallback(() => {
+    setIsCancelModalOpen(false);
+  }, []);
+
+  // 당일 예약 취소 시, 예약보장금 환불 불가 안내 & 당일 취소가 아닐 시 환불 안내
+  const checkReservationToday = useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+    const reservationDate = reservation.date.split("T")[0];
+
+    if (today === reservationDate) {
+      return true;
+    } else {
+      return false;
+    }
+  }, []);
+
+  const confirmButtonHandler = useCallback(() => {
+    cancelOrDeleteReservation(reservation._id);
+    setIsCancelModalOpen(false);
+  }, []);
+
   if (!isCancelModalOpen) return null;
-
-  const closeModal = () => {
-    setIsCancelModalOpen(false);
-  };
-
-  const confirmButtonHandler = () => {
-    cancelOrDeleteReservation(reservationId);
-    setIsCancelModalOpen(false);
-  };
-
-  //To-do: 당일 예약 취소 시, 예약보장금 환불이 불가하다는 문구 띄워주기 그게 아니면 예약 보장금이 환불 된다는 문구 띄워주기
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-300 ease-in-out">
@@ -34,10 +45,17 @@ const CancelReservationModal = ({
         <div className="flex flex-col items-center gap-10 p-4">
           <p className="text-lg font-medium">
             <strong className="text-2xl text-amber-600">
-              {restaurantName}
+              {reservation.name}
             </strong>{" "}
             예약을 취소하시겠어요?
           </p>
+          {checkReservationToday ? (
+            <p className="text-red-400 font-medium">
+              당일 예약 취소 시, 예약 보장금 환불이 불가합니다
+            </p>
+          ) : (
+            <p>결제하신 카드로 예약 보장금 환불이 진행됩니다.</p>
+          )}
           <div className="w-full flex flex-row justify-center gap-3">
             <button
               className="border border-gray-300 rounded font-medium w-5/12 h-12"
