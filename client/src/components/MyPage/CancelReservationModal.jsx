@@ -43,19 +43,23 @@ const CancelReservationModal = ({
           />
         </div>
         <div className="flex flex-col items-center gap-10 p-4">
-          <p className="text-lg font-medium">
-            <strong className="text-2xl text-amber-600">
-              {reservation.name}
-            </strong>{" "}
-            예약을 취소하시겠어요?
-          </p>
-          {checkReservationToday ? (
-            <p className="text-red-400 font-medium">
-              당일 예약 취소 시, 예약 보장금 환불이 불가합니다
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-lg font-medium">
+              <strong className="text-2xl text-amber-600">
+                {reservation.name}
+              </strong>{" "}
+              예약을 취소하시겠어요?
             </p>
-          ) : (
-            <p>결제하신 카드로 예약 보장금 환불이 진행됩니다.</p>
-          )}
+            {checkReservationToday ? (
+              <p className="text-red-400 font-medium text-sm">
+                당일 예약 취소 시, 예약 보장금 환불이 불가합니다
+              </p>
+            ) : (
+              <p className="font-medium text-sm">
+                결제하신 카드로 예약 보장금 환불이 진행됩니다.
+              </p>
+            )}
+          </div>
           <div className="w-full flex flex-row justify-center gap-3">
             <button
               className="border border-gray-300 rounded font-medium w-5/12 h-12"

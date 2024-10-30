@@ -17,7 +17,7 @@ export const getMyReservation = async (req, res) => {
         address: 1,
         time: 1,
       }
-    );
+    ).sort({ date: 1 });
 
     res.status(200).json({
       message: "해당 사용자의 예약 내역입니다.",
@@ -97,7 +97,8 @@ export const deleteMyReservation = async (req, res) => {
       });
     } else {
       res.status(403).json({
-        message: "해당 예약자와 취소/삭제 요청을 한 사용자가 일치하지 않습니다.",
+        message:
+          "해당 예약자와 취소/삭제 요청을 한 사용자가 일치하지 않습니다.",
       });
     }
   } catch (error) {
