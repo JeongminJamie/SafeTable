@@ -4,6 +4,7 @@ import EmptyRestaurant from "./EmptyRestaurant";
 import useRestaurantStore from "../../store/useRestaurantStore";
 import RestaurantSkeleton from "./RestaurantSkeleton";
 import { api } from "../../api/api";
+import { getAxiosHeaderConfig } from "../../config";
 
 const SafeMain = ({ isLoading }) => {
   const { searchedValue, fetchedRestaurants } = useRestaurantStore();
@@ -22,14 +23,13 @@ const SafeMain = ({ isLoading }) => {
     };
   }, [isLoading]);
 
-  // 유저의 찜 목록을 불러오는 함수 만약에 토큰이 없다면?
+  // 유저의 찜 목록을 불러오기
   useEffect(() => {
     const handleFetchSavedRestaurants = async () => {
+      const headersConfig = getAxiosHeaderConfig();
+      if (!headersConfig) return;
       try {
-        const token = sessionStorage.getItem("token");
-        const response = await api.get("/user/saved-tables", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await api.get("/user/saved-tables", headersConfig);
         setSavedRestaurants(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching saved restaurants:", error);
