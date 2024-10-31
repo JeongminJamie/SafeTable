@@ -5,15 +5,15 @@ import useCardRegister from "../../hooks/useCardRegister";
 import CVCGuide from "./CVCGuide";
 import IncorrectCardModal from "./IncorrectCardModal";
 import { luhnCheck } from "../../utils/algorithm/luhnCheck";
-import { saveCardNumber } from "../../service/cardService";
-import usePaymentStore from "../../store/usePaymentStore";
+import { saveCard } from "../../service/cardService";
+import useCardStore from "../../store/useCardStore";
 
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
   const [isCVCGuideClicked, setIsCVCGuideClicked] = useState(false);
   const [isCardIncorrect, setIsCardIncorrect] = useState(false);
 
-  const { setLastCardNumber } = usePaymentStore();
+  const { setLastCardNumber } = useCardStore();
 
   const nameInputRef = useRef(null);
   const cvcGuideRef = useRef(null);
@@ -37,11 +37,11 @@ const AddCard = () => {
   };
 
   // 카드 번호 저장 요청 함수 : useMutation
-  const { mutate: saveCard } = useMutation({
-    mutationFn: saveCardNumber,
+  const { mutate: saveNewCard } = useMutation({
+    mutationFn: saveCard,
     onSuccess: (data) => {
-      console.log("카드 번호 저장 성공", data);
-      setLastCardNumber(data.last_number);
+      console.log("카드 번호 저장 성공", data.card_number);
+      setLastCardNumber(data.card_number.slice(-4));
     },
     onError: (error) => {
       console.error("카드 번호 저장 실패", error);
@@ -64,7 +64,10 @@ const AddCard = () => {
 
     // 카드 번호 유효성 검증 및 서버로 저장 요청
     if (luhnCheck(cardInfo.cardNumber)) {
-      saveCard(cardInfo.cardNumber);
+      saveNewCard({
+        cardCompany: cardInfo.cardCompany,
+        cardNumber: cardInfo.cardNumber,
+      });
     } else {
       setIsCardIncorrect(true);
     }

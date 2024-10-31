@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { AboutMe } from "../components/MyPage/AboutMe";
 import { Reservations } from "../components/MyPage/Reservations";
-import MyCardInfo from "../components/Card/MyCardInfo";
-import NoCard from "../components/Card/NoCard";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../store/useUserStore";
+import PaymentMethod from "../components/MyPage/PaymentMethod";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -103,7 +102,7 @@ const MyPage = () => {
         <div className="w-4/5">
           {activeTab === "aboutMe" && <AboutMe />}
           {activeTab === "Reservations" && <Reservations />}
-          {activeTab === "Payment Methods" && <MyCardInfo />}
+          {activeTab === "Payment Methods" && <PaymentMethod />}
         </div>
       </div>
     </div>

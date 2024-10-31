@@ -2,31 +2,32 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import useReservationStore from "../../store/useReservationStore";
-import usePaymentStore from "../../store/usePaymentStore";
+import useCardStore from "../../store/useCardStore";
 import AddCard from "../Card/AddCard";
 import Loading from "../Loading";
-import { getCardNumber } from "../../service/cardService";
+import { getMyCard } from "../../service/cardService";
 import { saveReservation } from "../../service/reservationService";
 
 const DepositCheck = ({ setIsReservationChecked }) => {
   const navigate = useNavigate();
   const reservationStore = useReservationStore();
-  const { lastCardNumber, setLastCardNumber } = usePaymentStore();
+  const { lastCardNumber, setLastCardNumber } = useCardStore();
   const localedDeposit = reservationStore.deposit.toLocaleString();
 
   // 해당 사용자의 카드 뒷자리 번호 패치
-  const { data: cardNumber, isLoading } = useQuery({
-    queryKey: ["getCardNumber"],
-    queryFn: getCardNumber,
-    refetchOnWindowFocus: false,
+  const { data: userCard, isLoading } = useQuery({
+    queryKey: ["getUserCard"],
+    queryFn: getMyCard,
     staleTime: 60 * 1000,
+    enabled: !lastCardNumber,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
-    if (!isLoading) {
-      setLastCardNumber(cardNumber);
+    if (!isLoading && userCard) {
+      setLastCardNumber(userCard.card_number.slice(-4));
     }
-  }, [isLoading]);
+  }, [userCard, isLoading]);
 
   // 예약 정보 저장 요청
   const { mutate: saveReservationRequest, isLoading: saveLoading } =
