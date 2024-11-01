@@ -13,7 +13,7 @@ const AddCard = () => {
   const [isCVCGuideClicked, setIsCVCGuideClicked] = useState(false);
   const [isCardIncorrect, setIsCardIncorrect] = useState(false);
 
-  const { setLastCardNumber } = useCardStore();
+  const { setCard, setLastCardNumber } = useCardStore();
 
   const nameInputRef = useRef(null);
   const cvcGuideRef = useRef(null);
@@ -39,9 +39,10 @@ const AddCard = () => {
   // 카드 번호 저장 요청 함수 : useMutation
   const { mutate: saveNewCard } = useMutation({
     mutationFn: saveCard,
-    onSuccess: (data) => {
-      console.log("카드 번호 저장 성공", data.card_number);
-      setLastCardNumber(data.card_number.slice(-4));
+    onSuccess: (newCard) => {
+      console.log("카드 번호 저장 성공", newCard.card_number);
+      setCard(newCard);
+      setLastCardNumber(newCard.card_number.slice(-4));
     },
     onError: (error) => {
       console.error("카드 번호 저장 실패", error);

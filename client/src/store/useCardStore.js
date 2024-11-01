@@ -1,19 +1,27 @@
 import { create } from "zustand";
 
-const useCardStore = create((set) => ({
-  cardCompany: "",
-  cardNumber: "",
+const initialState = {
+  card: {
+    cardCompany: "",
+    cardNumber: "",
+  },
   lastCardNumber: "",
+};
 
-  setCardCompany: (cardCompany) =>
+const useCardStore = create((set) => ({
+  ...initialState,
+
+  setCard: (card) =>
     set({
-      cardCompany,
+      card: {
+        cardCompany: card.card_company,
+        cardNumber: card.card_number,
+      },
     }),
-  setCardNumber: (cardNumber) =>
-    set({
-      cardNumber,
-    }),
-  setLastCardNumber: (cardNumber) => set({ lastCardNumber: cardNumber }),
+
+  setLastCardNumber: (lastCardNumber) => set({ lastCardNumber }),
+
+  reset: () => set(initialState),
 }));
 
 export default useCardStore;

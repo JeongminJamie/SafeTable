@@ -29,9 +29,11 @@ export const saveCard = async (req, res) => {
 
     const savedCard = await newCard.save();
 
+    const { user_id, ...cardWithoutUserId } = savedCard.toObject();
+
     return res.status(200).json({
       message: "성공적으로 카드를 저장했습니다.",
-      card_number: savedCard.card_number,
+      savedCard: cardWithoutUserId,
     });
   } catch (error) {
     console.log("카드 저장 중 에러 발생", error);

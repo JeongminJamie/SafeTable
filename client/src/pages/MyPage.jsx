@@ -4,7 +4,7 @@ import { Reservations } from "../components/MyPage/Reservations";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../store/useUserStore";
-import PaymentMethod from "../components/MyPage/PaymentMethod";
+import MyCardInfo from "../components/Card/MyCardInfo";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -102,7 +102,7 @@ const MyPage = () => {
         <div className="w-4/5">
           {activeTab === "aboutMe" && <AboutMe />}
           {activeTab === "Reservations" && <Reservations />}
-          {activeTab === "Payment Methods" && <PaymentMethod />}
+          {activeTab === "Payment Methods" && <MyCardInfo />}
         </div>
       </div>
     </div>
