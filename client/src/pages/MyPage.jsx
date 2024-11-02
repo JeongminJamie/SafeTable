@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { AboutMe } from "../components/MyPage/AboutMe";
 import { Reservations } from "../components/MyPage/Reservations";
-import MyCardInfo from "../components/Card/MyCardInfo";
-import NoCard from "../components/Card/NoCard";
 import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../store/useUserStore";
+import MyCardInfo from "../components/Card/MyCardInfo";
 
 const MyPage = () => {
   const navigate = useNavigate();

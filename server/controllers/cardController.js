@@ -1,22 +1,14 @@
-import User from "../models/user.js";
+import Card from "../models/Card.js";
 
-export const getCardNumber = async (req, res) => {
+export const getMyCard = async (req, res) => {
   const userId = req.userId;
 
   try {
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).send("해당 사용자를 찾을 수 없습니다.");
-    }
-
-    if (!user.card_number) {
-      return res.status(204).send("해당 사용자의 카드 번호가 없습니다.");
-    }
+    const card = await Card.find({ user_id: userId }).select("-user_id");
 
     return res.status(200).json({
-      message: "해당 사용자의 카드 번호 조회 성공",
-      last_number: user.card_number.slice(-4),
+      message: "해당 사용자의 카드 번호 조회",
+      card,
     });
   } catch (error) {
     console.error("해당 사용자 카드 번호 조회 중 오류 발생", error);
@@ -24,29 +16,27 @@ export const getCardNumber = async (req, res) => {
   }
 };
 
-export const saveCardNumber = async (req, res) => {
+export const saveCard = async (req, res) => {
   const userId = req.userId;
-  const { cardNumber } = req.body;
+  const { cardCompany, cardNumber } = req.body;
 
   try {
-    const user = await User.findByIdAndUpdate(
-      userId,
-      {
-        card_number: cardNumber,
-      },
-      { new: true }
-    );
+    const newCard = new Card({
+      user_id: userId,
+      card_company: cardCompany,
+      card_number: cardNumber,
+    });
 
-    if (!user) {
-      return res.status(404).send("해당 사용자를 찾을 수 없습니다.");
-    }
+    const savedCard = await newCard.save();
+
+    const { user_id, ...cardWithoutUserId } = savedCard.toObject();
 
     return res.status(200).json({
-      message: "성공적으로 카드 번호를 저장했습니다.",
-      last_number: user.card_number.slice(-4),
+      message: "성공적으로 카드를 저장했습니다.",
+      savedCard: cardWithoutUserId,
     });
   } catch (error) {
-    console.log("카드 번호 저장 중 에러 발생", error);
-    res.status(500).send("카드 번호 저장 중에 에러가 발생했습니다.");
+    console.log("카드 저장 중 에러 발생", error);
+    res.status(500).send("카드 저장 중에 에러가 발생했습니다.");
   }
 };
