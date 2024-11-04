@@ -39,6 +39,8 @@ export const TableCard = ({
 
   const handleSaveRestaurant = (e) => {
     e.preventDefault();
+    const headersConfig = getAxiosHeaderConfig();
+    if (!headersConfig) return;
     setRestaurant((prev) => ({ ...prev, clicked: !prev.clicked }));
   };
 
@@ -111,14 +113,13 @@ export const TableCard = ({
         {/* 식당 저장 버튼 */}
         <button
           onClick={handleSaveRestaurant}
-          className="absolute top-2 right-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-lg transition-colors shadow-lg flex items-center"
+          className="absolute top-2 right-2 bg-amber-200 hover:bg-amber-500 text-white font-semibold py-1 px-2 rounded-lg transition-colors shadow-lg flex items-center"
         >
           <img
             src={`./assets/${restaurant.clicked ? "save" : "unsave"}.svg`}
             className="w-6 h-6 mr-1"
             alt={restaurant.clicked ? "찜" : "찜 취소"}
           />
-          저장
         </button>
       </div>
       <div className="m-3">
