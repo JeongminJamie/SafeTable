@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
 import { useNavigate } from "react-router-dom";
+import { getAxiosHeaderConfig } from "../../config";
 
 export const TableCard = ({
   name,
@@ -30,7 +31,6 @@ export const TableCard = ({
     const savedRestaurant = savedRestaurants.find(
       (res) => res.id === String(seq)
     );
-    console.log("🚀 ~ useEffect ~ savedRestaurant:", savedRestaurant);
     setRestaurant((prev) => ({
       ...prev,
       clicked: savedRestaurant ? savedRestaurant.clicked : false, // 찜 상태
@@ -44,14 +44,15 @@ export const TableCard = ({
 
   useEffect(() => {
     const saveRestaurant = async () => {
-      const token = sessionStorage.getItem("token");
+      const headersConfig = getAxiosHeaderConfig();
+      if (!headersConfig) return;
 
       try {
-        const response = await api.post("/user/save-table", restaurant, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.post(
+          "/user/save-table",
+          restaurant,
+          headersConfig
+        );
 
         if (response.data.message) {
           console.log(response.data);
@@ -64,16 +65,13 @@ export const TableCard = ({
     };
 
     const deleteRestaurant = async () => {
-      const token = sessionStorage.getItem("token");
+      const headersConfig = getAxiosHeaderConfig();
+      if (!headersConfig) return;
 
       try {
         const response = await api.delete(
           `/user/delete-table/${restaurant.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          headersConfig
         );
 
         if (response.data.message) {
@@ -86,16 +84,13 @@ export const TableCard = ({
       }
     };
 
-    // savedRestaurants에서 현재 식당의 clicked 상태 확인
-    const isSaved = savedRestaurants.some((res) => res.id === String(seq));
-
     if (restaurant.clicked) {
       saveRestaurant();
-    } else if (isSaved) {
-      // clicked가 false이고 savedRestaurants에 있는 경우 삭제 요청
-      deleteRestaurant();
+    } else {
+      const wasSaved = savedRestaurants.some((res) => res.id === String(seq));
+      if (wasSaved) deleteRestaurant();
     }
-  }, [restaurant, savedRestaurants]);
+  }, [restaurant.clicked]);
 
   const handleRedirect = () => {
     window.location.href = restaurantUrl; // URL로 이동
