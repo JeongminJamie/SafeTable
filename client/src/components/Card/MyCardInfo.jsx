@@ -1,11 +1,13 @@
-import React, { useMemo, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useMemo, useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useCardStore from "../../store/useCardStore";
-import { getMyCard } from "../../service/cardService";
+import { deleteCard, getMyCard } from "../../service/cardService";
 import NoCard from "./NoCard";
+import DeleteCardModal from "./DeleteCardModal";
 
 const MyCardInfo = () => {
-  const { card, setCard } = useCardStore();
+  const { card, setCard, reset } = useCardStore();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // 내 카드 조회
   const { data: myCard, isLoading } = useQuery({
@@ -19,8 +21,7 @@ const MyCardInfo = () => {
     if (!isLoading && !Array.isArray(myCard)) {
       setCard(myCard);
 
-      console.log("내 카드 조회 mycardinfo에서 확인", myCard);
-      console.log("내 카드 상태 정보 확인", card);
+      console.log("myCard 로그 확인", myCard);
     }
   }, [myCard, isLoading, setCard]);
 
@@ -37,13 +38,43 @@ const MyCardInfo = () => {
     return "";
   }, [card]);
 
-  // 카드 삭제 버튼 처리
+  // 내 카드 삭제
+  const { mutate: deleteMyCard, isDeleteLoading } = useMutation({
+    mutationFn: (cardId) => deleteCard(cardId),
+    onSuccess: (data) => {
+      setIsDeleteModalOpen(false);
+      reset();
+      console.log("카드 삭제 성공");
+      console.log(data.message);
+    },
+    onError: (response) => {
+      console.log(response.text());
+    },
+  });
+
   const deleteCardHandler = () => {
-    // To-do: 서버로 삭제 요청
+    if (isLoading || !myCard || !myCard._id) {
+      console.error("유효한 카드가 없습니다.");
+      return; // 유효한 카드가 없을 경우 요청을 보내지 않음
+    }
+    console.log("내 카드 아이디 확인", myCard._id);
+    deleteMyCard(myCard._id);
+  };
+
+  const deleteButtonHandler = () => {
+    setIsDeleteModalOpen(true);
   };
 
   return (
     <>
+      {isDeleteModalOpen && (
+        <DeleteCardModal
+          isDeleteModalOpen={isDeleteModalOpen}
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
+          deleteCardHandler={deleteCardHandler}
+          isDeleteLoading={isDeleteLoading}
+        />
+      )}
       {!card.cardCompany ? (
         <NoCard />
       ) : (
@@ -60,7 +91,7 @@ const MyCardInfo = () => {
             </section>
             <button
               className="border border-gray-300 rounded-md p-2 w-16 text-sm"
-              onClick={deleteCardHandler}
+              onClick={deleteButtonHandler}
             >
               삭제
             </button>
