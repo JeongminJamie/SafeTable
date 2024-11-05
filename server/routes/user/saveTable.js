@@ -26,7 +26,7 @@ router.post("/save-table", verifyToken, async (req, res) => {
   const { id, name, address, telephone, clicked } = req.body;
   const userId = req.userId;
 
-  if (!id || !name || !address || !telephone) {
+  if (!id || !name || !address) {
     return res.status(400).json({ error: "All fields are required." });
   }
 
@@ -38,7 +38,7 @@ router.post("/save-table", verifyToken, async (req, res) => {
         id,
         name,
         address,
-        telephone,
+        telephone: telephone || undefined,
         clicked,
       });
       await restaurant.save();
