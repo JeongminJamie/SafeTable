@@ -1,42 +1,57 @@
-import React, { useMemo, useEffect, useState } from "react";
+import React, { useMemo, useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import useCardStore from "../../store/useCardStore";
 import { deleteCard, getMyCard } from "../../service/cardService";
 import NoCard from "./NoCard";
 import DeleteCardModal from "./DeleteCardModal";
+import Loading from "../Loading";
 
 const MyCardInfo = () => {
   const { card, setCard, reset } = useCardStore();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // 내 카드 조회
-  const { data: myCard, isLoading } = useQuery({
+  const {
+    data: myCard = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["getMyCard"],
     queryFn: getMyCard,
-    staleTime: 60 * 1000,
     refetchOnWindowFocus: false,
   });
 
+  // 데이터를 가져왔을 때, []라면 cardStore 리셋 아니면 card 저장 
   useEffect(() => {
-    if (!isLoading && !Array.isArray(myCard)) {
-      setCard(myCard);
-
-      console.log("myCard 로그 확인", myCard);
+    if (!isLoading) {
+      if (myCard.length === 0) {
+        reset();
+      } else {
+        setCard(myCard[0]);
+        console.log("myCard 로그 확인", myCard);
+      }
     }
-  }, [myCard, isLoading, setCard]);
+  }, [myCard, isLoading, setCard, reset]);
 
   // 카드 정보 마지막 4자리 마스킹하기
   const maskedCardNumber = useMemo(() => {
-    const cardNumber = card.cardNumber;
+    if (!isLoading && myCard?.length !== 0) {
+      const cardNumber = myCard[0].card_number;
 
-    if (cardNumber) {
       const showedCardNumber = cardNumber.slice(0, 12);
       const maskedCardNumber = cardNumber.slice(12, 16).replace(/\d/g, "*");
 
       return showedCardNumber + maskedCardNumber;
     }
     return "";
-  }, [card]);
+  }, [myCard]);
+
+  // 성공적으로 저장한 카드는 있지만, 서버에서 가져온 데이터에 정보가 없을 때
+  useEffect(() => {
+    if (!isLoading && card.cardNumber && myCard.length === 0) {
+      refetch();
+    }
+  }, [card, myCard, isLoading, refetch]);
 
   // 내 카드 삭제
   const { mutate: deleteMyCard, isDeleteLoading } = useMutation({
@@ -44,26 +59,23 @@ const MyCardInfo = () => {
     onSuccess: (data) => {
       setIsDeleteModalOpen(false);
       reset();
-      console.log("카드 삭제 성공");
+      refetch();
       console.log(data.message);
     },
-    onError: (response) => {
-      console.log(response.text());
+    onError: (error) => {
+      console.log(error);
     },
   });
 
-  const deleteCardHandler = () => {
-    if (isLoading || !myCard || !myCard._id) {
-      console.error("유효한 카드가 없습니다.");
-      return; // 유효한 카드가 없을 경우 요청을 보내지 않음
+  const deleteCardHandler = useCallback(() => {
+    if (myCard?.length !== 0) {
+      deleteMyCard(myCard[0]._id);
     }
-    console.log("내 카드 아이디 확인", myCard._id);
-    deleteMyCard(myCard._id);
-  };
+  }, [myCard]);
 
-  const deleteButtonHandler = () => {
+  const deleteButtonHandler = useCallback(() => {
     setIsDeleteModalOpen(true);
-  };
+  }, []);
 
   return (
     <>
@@ -75,7 +87,9 @@ const MyCardInfo = () => {
           isDeleteLoading={isDeleteLoading}
         />
       )}
-      {!card.cardCompany ? (
+      {isLoading ? (
+        <Loading width="w-32" height="h-32" padding="p-10 mt-24 mb-24" />
+      ) : !card.cardCompany && myCard?.length === 0 ? (
         <NoCard />
       ) : (
         <div className="py-12 flex h-full justify-center items-center">
@@ -86,7 +100,7 @@ const MyCardInfo = () => {
               className="w-20 h-5/6"
             />
             <section className="flex flex-col">
-              <p className="text-lg">{card.cardCompany}</p>
+              <p className="text-lg">{myCard[0]?.card_company}</p>
               <p>{maskedCardNumber}</p>
             </section>
             <button
