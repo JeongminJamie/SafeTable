@@ -1,4 +1,4 @@
-const fisherYatesShuffle = async (array) => {
+const fisherYatesShuffle = (array) => {
   // 가져온 api의 data 그 자체를 바꿔서 리턴할 수 없으므로 복제하기
   let duplicatedArray = [...array];
 

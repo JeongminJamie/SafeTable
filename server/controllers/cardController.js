@@ -37,6 +37,32 @@ export const saveCard = async (req, res) => {
     });
   } catch (error) {
     console.log("카드 저장 중 에러 발생", error);
-    res.status(500).send("카드 저장 중에 에러가 발생했습니다.");
+    return res.status(500).send("카드 저장 중에 에러가 발생했습니다.");
+  }
+};
+
+export const deleteCard = async (req, res) => {
+  const userId = req.userId;
+  const { cardId } = req.params;
+
+  try {
+    const existCardForUserId = await Card.findOne({ user_id: userId });
+
+    if (!existCardForUserId) {
+      return res.status(404).send("해당 사용자의 저장된 카드가 없습니다.");
+    }
+
+    if (existCardForUserId._id.toString() === cardId) {
+      await Card.deleteOne({ _id: cardId });
+
+      return res.status(200).json({
+        message: "해당 사용자의 카드가 성공적으로 삭제되었습니다.",
+      });
+    } else {
+      return res.status(404).send("해당 카드가 존재하지 않습니다.");
+    }
+  } catch (error) {
+    console.error("카드 삭제 중 오류 발생", error);
+    return res.status(500).send("카드 삭제 중 에러가 발생했습니다.");
   }
 };
