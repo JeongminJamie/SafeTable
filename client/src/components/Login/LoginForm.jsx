@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { api } from "../../api/api";
 
-export const LoginForm = ({ onClose, onSwitchToSignup, setToken }) => {
+export const LoginForm = ({
+  onClose,
+  onSwitchToSignup,
+  setToken,
+  onLoginSuccess,
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 관리
@@ -20,6 +25,10 @@ export const LoginForm = ({ onClose, onSwitchToSignup, setToken }) => {
       console.log("로그인 되었습니다.");
       sessionStorage.setItem("token", response.data.token);
       setToken(response.data.token);
+      // onLoginSuccess가 있으면 호출 & 로그인 성공 시 콜백 호출
+      if (onLoginSuccess) {
+        onLoginSuccess();
+      }
       setErrorMessage(""); // 성공 시 에러 메시지 초기화
       return true;
     } catch (e) {
