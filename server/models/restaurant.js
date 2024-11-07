@@ -4,7 +4,7 @@ const restaurantSchema = new mongoose.Schema({
   id: { type: String, required: true },
   name: { type: String, required: true },
   address: { type: String, required: true },
-  telephone: { type: String, required: true },
+  telephone: { type: String },
   clicked: { type: Boolean, required: true },
 });
 
