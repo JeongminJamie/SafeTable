@@ -17,7 +17,11 @@ export const fetchEntireRestaurants = async (pageParam) => {
       return { data: [], nextCursor: undefined };
     }
 
-    const shuffledData = await fisherYatesShuffle(data);
+    const shuffledData = fisherYatesShuffle(data);
+
+    const restaurantNames = shuffledData.map(
+      (restaurant) => restaurant.RELAX_RSTRNT_NM
+    ); // 구글 서비스의 사진을 가져오는 함수에 패스할 변수 
 
     return { data: shuffledData, nextCursor: pageParam + 1 };
   } catch (error) {
