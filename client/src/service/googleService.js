@@ -1,1 +1,7 @@
-export const fetchEntireRestaurantPhoto = (restaurantData) => {};
+import axios from "axios";
+
+const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
+
+export const getRestaurantPhoto = (restaurantName) => {
+
+};
