@@ -1,25 +1,50 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AboutImage from "../components/About/AboutImage";
 import Introduction from "../components/About/Introduction";
 import { useQuery } from "@tanstack/react-query";
-import { getRestaurantPhotoReference } from "../service/googleService";
+import {
+  getRestaurantPhoto,
+  getRestaurantPhotoReference,
+} from "../service/googleService";
 
 const About = () => {
   const restaurantName = "대방골";
+  const [imageUrl, setImageUrl] = useState("");
+
+  // 사진 레퍼런스 받아오는 요청
   const { data, isLoading } = useQuery({
     queryKey: ["getPhotoReference"],
     queryFn: () => getRestaurantPhotoReference(restaurantName),
   });
 
+  // 레퍼런스가 있을 때, 사진 불러오는 요청
+  const { data: photoUrl, isLoading: isPhotoLoading } = useQuery({
+    queryKey: ["getRestaurantPhotoUrl"],
+    queryFn: () => getRestaurantPhoto(data),
+    enabled: !!data,
+  });
+
   useEffect(() => {
-    if (!isLoading && data) {
-      console.log("포토 레퍼런스 패칭 데이터 확인", data);
+    if (!isPhotoLoading && photoUrl) {
+      setImageUrl(photoUrl);
+
+      return () => {
+        URL.revokeObjectURL(photoUrl);
+      };
     }
-  }, []);
+  }, [isPhotoLoading, photoUrl]);
+
   return (
     <div>
       <AboutImage />
       <Introduction />
+      <div>
+        {isLoading || isPhotoLoading ? (
+          <p>이미지를 로딩 중...</p>
+        ) : (
+          imageUrl && <img src={imageUrl} alt="restaurant-image" />
+        )}
+      </div>
     </div>
   );
 };

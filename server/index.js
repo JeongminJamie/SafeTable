@@ -66,7 +66,7 @@ app.use(
     target: process.env.GOOGLE_URL,
     changeOrigin: true,
     pathRewrite: {
-      "^/api/photos": "/maps/api/place",
+      "^/api/photos": "",
     },
     secure: true,
   })

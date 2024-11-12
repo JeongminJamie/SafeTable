@@ -6,16 +6,29 @@ const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 export const getRestaurantPhotoReference = async (restaurantName) => {
   try {
     const response = await api.get(
-      `${serverURL}/api/photos/textsearch/json?query=${restaurantName}&key=${googleApiKey}&language=ko`
+      `${serverURL}/api/photos/maps/api/place/textsearch/json?query=${restaurantName}&key=${googleApiKey}&language=ko`
     );
 
-    const photoReference = response.data;
-
-    console.log("포토 레퍼런스 확인", photoReference);
+    const photoReference = response.data.results[0].photos[0]?.photo_reference;
     return photoReference;
   } catch (error) {
     console.error("포토 레퍼런스를 가져오는 도중 에러 발생", error);
   }
 };
 
-export const getRestaurantPhoto = async (photoReference) => {};
+export const getRestaurantPhoto = async (photoReference) => {
+  try {
+    const response = await api.get(
+      `${serverURL}/api/photos/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${googleApiKey}`,
+      {
+        responseType: "blob",
+      }
+    );
+
+    const photoUrl = URL.createObjectURL(response.data);
+
+    return photoUrl;
+  } catch (error) {
+    console.error("photo url 찾는 중 에러 발생", error);
+  }
+};
