@@ -3,6 +3,7 @@ import { api } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import { getAxiosHeaderConfig } from "../../config";
 import { AuthModal } from "../Login/AuthModal";
+import useRestaurantStore from "../../store/useRestaurantStore";
 
 export const TableCard = ({
   name,
@@ -13,6 +14,7 @@ export const TableCard = ({
   website,
   seq,
   savedRestaurants,
+  reservations,
 }) => {
   const navigate = useNavigate();
 
@@ -33,11 +35,15 @@ export const TableCard = ({
     clicked: false,
   });
 
-  // savedRestaurants를 기반으로 `clicked` 상태 설정
+  const reservationRestaurant = (reservations || []).find(
+    (res) => res.name === name
+  );
+
   useEffect(() => {
     const savedRestaurant = savedRestaurants.find(
       (res) => res.id === String(seq)
     );
+
     setRestaurant((prev) => ({
       ...prev,
       clicked: savedRestaurant ? savedRestaurant.clicked : false, // 찜 상태
@@ -153,8 +159,9 @@ export const TableCard = ({
               onClick={handleRedirect} // 버튼 클릭 시 URL로 이동
               className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 ml-1"
             >
-              {/* 이 부분 웹사이트 데이터를 갖고 있는 곳이 거의 없음  */}
-              {website}
+              {reservationRestaurant
+                ? `${reservationRestaurant.date} 예약`
+                : "없음"}
             </button>
           </div>
           <p className="text-sm text-gray-500 mb-2">
