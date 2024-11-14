@@ -9,8 +9,15 @@ export const getRestaurantPhotoReference = async (restaurantName) => {
       `${serverURL}/api/photos/maps/api/place/textsearch/json?query=${restaurantName}&key=${googleApiKey}&language=ko`
     );
 
-    const photoReference = response.data.results[0].photos[0]?.photo_reference;
-    return photoReference;
+    if (response.data.results.length < 0) {
+      return null;
+    } else if (response.data.results[0].photos.length < 0) {
+      return null;
+    } else {
+      const photoReference =
+        response.data.results[0].photos[0]?.photo_reference;
+      return photoReference;
+    }
   } catch (error) {
     console.error("포토 레퍼런스를 가져오는 도중 에러 발생", error);
   }

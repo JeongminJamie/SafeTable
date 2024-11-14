@@ -8,7 +8,8 @@ import {
 } from "../service/googleService";
 
 const About = () => {
-  const restaurantName = "대방골";
+  const restaurantName = "제주항구";
+  const noImageUrl = "https://ducatiperformance.hu/storage/media/noimg.png";
   const [imageUrl, setImageUrl] = useState("");
 
   // 사진 레퍼런스 받아오는 요청
@@ -25,9 +26,12 @@ const About = () => {
   });
 
   useEffect(() => {
-    if (!isPhotoLoading && photoUrl) {
-      setImageUrl(photoUrl);
-
+    if (!isPhotoLoading) {
+      if (photoUrl) {
+        setImageUrl(photoUrl);
+      } else {
+        setImageUrl(noImageUrl);
+      }
       return () => {
         URL.revokeObjectURL(photoUrl);
       };

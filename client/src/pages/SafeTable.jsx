@@ -41,6 +41,7 @@ const SafeTable = () => {
   // 쿼리의 데이터 set
   useEffect(() => {
     if (data) {
+      console.log("안심식당 조회 데이터 확인", data);
       const allFetchedRestaurants = data?.pages.flatMap((page) => page.data);
       setFetchedRestaurants(allFetchedRestaurants);
     }
