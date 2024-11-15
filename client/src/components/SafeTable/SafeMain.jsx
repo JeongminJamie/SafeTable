@@ -11,17 +11,12 @@ const SafeMain = ({ isLoading }) => {
   const [showSkeleton, setShowSkeleton] = useState(false);
   const [savedRestaurants, setSavedRestaurants] = useState([]); // 배열로 초기화
 
-  // 로딩이 1초 이상일 때부터 스켈레톤 보여주기
+  // 식당과 사진 데이터 불러오는데 시간이 걸리므로 1초 지연 없이 바로 스켈레톤 보여주는 걸로 수정
   useEffect(() => {
-    let timer;
-    if (isLoading) {
-      timer = setTimeout(() => setShowSkeleton(true), 500);
+    if (isLoading || !fetchedRestaurants?.length) {
+      setShowSkeleton(true);
     }
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [isLoading]);
+  }, [isLoading, fetchedRestaurants]);
 
   // 유저의 찜 목록을 불러오기
   useEffect(() => {
@@ -49,6 +44,7 @@ const SafeMain = ({ isLoading }) => {
           : fetchedRestaurants?.map((restaurant) => (
               <TableCard
                 key={restaurant.RELAX_SEQ}
+                photoUrl={restaurant.PHOTO_URL}
                 name={restaurant.RELAX_RSTRNT_NM}
                 address1={restaurant.RELAX_ADD1}
                 address2={restaurant.RELAX_ADD2}

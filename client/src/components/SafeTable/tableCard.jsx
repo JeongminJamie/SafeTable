@@ -5,6 +5,7 @@ import { getAxiosHeaderConfig } from "../../config";
 import { AuthModal } from "../Login/AuthModal";
 
 export const TableCard = ({
+  photoUrl,
   name,
   address1,
   address2,
@@ -119,7 +120,7 @@ export const TableCard = ({
       <div className="w-80 border border-gray-300 rounded-lg bg-white transition-transform transform hover:scale-105 hover:cursor-pointer shadow-md">
         <div className="relative w-full h-40 bg-gray-200  overflow-hidden mb-4">
           <img
-            src="사진링크"
+            src={photoUrl}
             alt="식당 이미지"
             className="absolute inset-0 w-full h-full object-cover"
           />

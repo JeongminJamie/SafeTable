@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import SafeMain from "../components/SafeTable/SafeMain";
 import SearchBox from "../components/SafeTable/SearchBox";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
@@ -9,10 +9,13 @@ import {
   fetchRestaurantByInput,
 } from "../service/searchService";
 import Loading from "../components/Loading";
+import { attachPhotoToRestaurant } from "../service/googleService";
 
 const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =
     useRestaurantStore();
+  const [restaurantData, setRestaurantData] = useState(null);
+  const [isEntireDataLoading, setIsEntireDataLoading] = useState(false);
 
   // 전체 및 검색 지역 안심식당 조회 쿼리 & 무한 스크롤링
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -41,11 +44,28 @@ const SafeTable = () => {
   // 쿼리의 데이터 set
   useEffect(() => {
     if (data) {
-      console.log("안심식당 조회 데이터 확인", data);
       const allFetchedRestaurants = data?.pages.flatMap((page) => page.data);
-      setFetchedRestaurants(allFetchedRestaurants);
+      setRestaurantData(allFetchedRestaurants);
     }
   }, [data]);
+
+  // 식당 데이터와 사진을 합치는 함수 호출
+  const fetchRestaurantsWithPhotos = useCallback(async (restaurantData) => {
+    const restaurantsWithPhotos = await attachPhotoToRestaurant(restaurantData);
+    setFetchedRestaurants(restaurantsWithPhotos);
+  }, []);
+
+  // restaurantData가 있을 때 fetchedRestaurants에 사진과 함께 식당 정보 업데이트
+  useEffect(() => {
+    if (restaurantData) {
+      setIsEntireDataLoading(true);
+      fetchRestaurantsWithPhotos(restaurantData);
+    }
+
+    return () => {
+      setIsEntireDataLoading(false);
+    };
+  }, [restaurantData]);
 
   useEffect(() => {
     setSearchedValue("");
@@ -54,9 +74,9 @@ const SafeTable = () => {
   return (
     <>
       <SearchBox />
-      <SafeMain isLoading={isLoading} />
+      <SafeMain isEntireDataLoading={isLoading} />
       <div ref={loadMoreRef}></div>
-      {isFetchingNextPage && (
+      {!isEntireDataLoading && isFetchingNextPage && (
         <Loading width="w-32" height="h-32" padding="p-10" />
       )}
     </>
