@@ -3,6 +3,7 @@ import { api } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import { getAxiosHeaderConfig } from "../../config";
 import { AuthModal } from "../Login/AuthModal";
+import useRestaurantStore from "../../store/useRestaurantStore";
 
 export const TableCard = ({
   photoUrl,
@@ -14,6 +15,7 @@ export const TableCard = ({
   website,
   seq,
   savedRestaurants,
+  reservations,
 }) => {
   const navigate = useNavigate();
 
@@ -31,14 +33,24 @@ export const TableCard = ({
     name,
     address: `${address1} ${address2}`,
     telephone,
+
     clicked: false,
   });
 
-  // savedRestaurants를 기반으로 `clicked` 상태 설정
+  const matchingReservations = (reservations || []).filter(
+    (res) => res.name === name && res.address === `${address1}${address2}`
+  );
+
+  // const reservationRestaurant = (reservations || []).find((res) => {
+  //   //address에 있는 공백 추가 금진
+  //   return res.name === name && res.address === `${address1}${address2}`;
+  // });
+
   useEffect(() => {
     const savedRestaurant = savedRestaurants.find(
       (res) => res.id === String(seq)
     );
+
     setRestaurant((prev) => ({
       ...prev,
       clicked: savedRestaurant ? savedRestaurant.clicked : false, // 찜 상태
@@ -107,10 +119,6 @@ export const TableCard = ({
     }
   }, [restaurant.clicked]);
 
-  const handleRedirect = () => {
-    window.location.href = restaurantUrl; // URL로 이동
-  };
-
   const BookButtonHandler = () => {
     navigate(`/reservation/${seq}`);
   };
@@ -150,19 +158,21 @@ export const TableCard = ({
             <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 mr-1">
               {category}
             </button>
-            <button
-              onClick={handleRedirect} // 버튼 클릭 시 URL로 이동
-              className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 ml-1"
-            >
-              {/* 이 부분 웹사이트 데이터를 갖고 있는 곳이 거의 없음  */}
-              {website}
-            </button>
+            {matchingReservations.length ? (
+              <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded ml-1">
+                <p className="text-sm text-gray-500 mb-2">
+                  Booked{" "}
+                  <span className="font-bold text-blue-600">
+                    {matchingReservations.length}
+                  </span>{" "}
+                  times
+                </p>
+              </button>
+            ) : (
+              ""
+            )}
           </div>
-          <p className="text-sm text-gray-500 mb-2">
-            Booked{" "}
-            <span className="font-bold text-blue-600">{reservedTables}</span>{" "}
-            times today
-          </p>
+
           <button
             className="w-full bg-white text-blue-500 border border-blue-500 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-colors"
             onClick={BookButtonHandler}
