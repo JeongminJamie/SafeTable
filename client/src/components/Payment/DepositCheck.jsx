@@ -24,10 +24,12 @@ const DepositCheck = ({ setIsReservationChecked }) => {
   });
 
   useEffect(() => {
-    if (!isLoading && userCard) {
-      setLastCardNumber(userCard.card_number.slice(-4));
+    if (!isLoading && userCard.length !== 0) {
+      setLastCardNumber(userCard[0].card_number.slice(-4));
     }
   }, [userCard, isLoading]);
+
+  console.log("userCard 데이터 확인", userCard);
 
   // 예약 정보 저장 요청
   const { mutate: saveReservationRequest, isLoading: saveLoading } =

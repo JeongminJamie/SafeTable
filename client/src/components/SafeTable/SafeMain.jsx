@@ -5,6 +5,8 @@ import useRestaurantStore from "../../store/useRestaurantStore";
 import RestaurantSkeleton from "./RestaurantSkeleton";
 import { api } from "../../api/api";
 import { getAxiosHeaderConfig } from "../../config";
+import { getMyReservation } from "../../service/reservationService";
+import { useQuery } from "@tanstack/react-query";
 
 const SafeMain = ({ isLoading }) => {
   const { searchedValue, fetchedRestaurants } = useRestaurantStore();
@@ -38,6 +40,13 @@ const SafeMain = ({ isLoading }) => {
     handleFetchSavedRestaurants();
   }, []);
 
+  const { data: reservations = [], isLoading: isReservationsLoading } =
+    useQuery({
+      queryKey: ["getMyReservations"],
+      queryFn: getMyReservation,
+      refetchOnWindowFocus: false,
+    });
+  console.log("🚀 ~ SafeMain ~ reservations:", reservations);
   return (
     <div className="px-10 mt-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-5 p-5 gap-y-10">
@@ -57,6 +66,7 @@ const SafeMain = ({ isLoading }) => {
                 website={restaurant.RELAX_RSTRNT_ETC}
                 seq={restaurant.RELAX_SEQ}
                 savedRestaurants={savedRestaurants}
+                reservations={reservations}
               />
             ))}
       </div>
