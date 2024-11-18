@@ -15,7 +15,7 @@ const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =
     useRestaurantStore();
   const [restaurantData, setRestaurantData] = useState(null);
-  const [isEntireDataLoading, setIsEntireDataLoading] = useState(false);
+  const [isPageLoading, setIsPageLoading] = useState(false);
 
   // 전체 및 검색 지역 안심식당 조회 쿼리 & 무한 스크롤링
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -51,20 +51,17 @@ const SafeTable = () => {
 
   // 식당 데이터와 사진을 합치는 함수 호출
   const fetchRestaurantsWithPhotos = useCallback(async (restaurantData) => {
+    setIsPageLoading(true);
     const restaurantsWithPhotos = await attachPhotoToRestaurant(restaurantData);
     setFetchedRestaurants(restaurantsWithPhotos);
+    setIsPageLoading(false);
   }, []);
 
   // restaurantData가 있을 때 fetchedRestaurants에 사진과 함께 식당 정보 업데이트
   useEffect(() => {
     if (restaurantData) {
-      setIsEntireDataLoading(true);
       fetchRestaurantsWithPhotos(restaurantData);
     }
-
-    return () => {
-      setIsEntireDataLoading(false);
-    };
   }, [restaurantData]);
 
   useEffect(() => {
@@ -74,9 +71,9 @@ const SafeTable = () => {
   return (
     <>
       <SearchBox />
-      <SafeMain isEntireDataLoading={isLoading} />
+      <SafeMain isLoading={isPageLoading} />
       <div ref={loadMoreRef}></div>
-      {!isEntireDataLoading && isFetchingNextPage && (
+      {!isPageLoading && isFetchingNextPage && (
         <Loading width="w-32" height="h-32" padding="p-10" />
       )}
     </>

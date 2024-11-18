@@ -15,7 +15,8 @@ const SafeMain = ({ isLoading }) => {
 
   // 식당과 사진 데이터 불러오는데 시간이 걸리므로 1초 지연 없이 바로 스켈레톤 보여주는 걸로 수정
   useEffect(() => {
-    if (isLoading || !fetchedRestaurants?.length) {
+    console.log("메인화면의 로딩 상태 확인", isLoading);
+    if (isLoading) {
       setShowSkeleton(true);
     }
   }, [isLoading, fetchedRestaurants]);
@@ -46,7 +47,7 @@ const SafeMain = ({ isLoading }) => {
     <div className="px-10 mt-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-5 p-5 gap-y-10">
         {/* 로딩 중일 때 Skeleton 표시 */}
-        {showSkeleton
+        {!showSkeleton
           ? Array(16)
               .fill(0)
               .map((_, index) => <RestaurantSkeleton key={index} />)

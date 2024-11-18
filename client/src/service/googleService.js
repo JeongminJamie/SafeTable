@@ -3,6 +3,8 @@ import { api } from "../api/api";
 const serverURL = process.env.REACT_APP_SERVER_PORT_URL;
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 
+const noImageUrl = "https://ducatiperformance.hu/storage/media/noimg.png";
+
 export const getRestaurantPhotoReference = async (restaurantName) => {
   try {
     const response = await api.get(
@@ -15,13 +17,12 @@ export const getRestaurantPhotoReference = async (restaurantName) => {
     return photoReference;
   } catch (error) {
     console.error("포토 레퍼런스를 가져오는 도중 에러 발생", error);
+    return null;
   }
 };
 
 export const getRestaurantPhoto = async (photoReference) => {
   try {
-    const noImageUrl = "https://ducatiperformance.hu/storage/media/noimg.png";
-
     // photo reference가 null일 때, 사진 없음 이미지 반환
     if (!photoReference) return noImageUrl;
 
@@ -37,7 +38,13 @@ export const getRestaurantPhoto = async (photoReference) => {
     return photoUrl;
   } catch (error) {
     console.error("photo url 찾는 중 에러 발생", error);
+    return noImageUrl;
   }
+};
+
+// 식당 사진이나 레퍼런스 응답이 400/500일 때의 경우, noImageUrl 날리기(한번씩 식당 하나가 응답 500을 보내요)
+export const handleSettledResult = (result, defaultValue) => {
+  return result?.status === "fulfilled" ? result.value : defaultValue;
 };
 
 export const attachPhotoToRestaurant = async (restaurantData) => {
@@ -48,23 +55,30 @@ export const attachPhotoToRestaurant = async (restaurantData) => {
   );
 
   // 식당 사진 references 가져오기
-  const restaurantPhotoReferences = await Promise.all(
+  const restaurantPhotoReferences = await Promise.allSettled(
     restaurantNames.map(async (restaurantName) =>
       getRestaurantPhotoReference(restaurantName)
     )
   );
+  const resolvedPhotoReferences = restaurantPhotoReferences.map((result) =>
+    handleSettledResult(result, null)
+  );
 
   // 식당 사진 url들 가져오기
-  const restaurantPhotos = await Promise.all(
-    restaurantPhotoReferences.map((photoReference) =>
+  const restaurantPhotos = await Promise.allSettled(
+    resolvedPhotoReferences.map((photoReference) =>
       getRestaurantPhoto(photoReference)
     )
+  );
+
+  const resolvedPhotoUrls = restaurantPhotos.map((result) =>
+    handleSettledResult(result, noImageUrl)
   );
 
   // restaurant data와 photos 합치기
   const restaurantDataWithPhotos = duplicatedRestaurantData.map(
     (restaurantData, index) => {
-      return { ...restaurantData, PHOTO_URL: restaurantPhotos[index] };
+      return { ...restaurantData, PHOTO_URL: resolvedPhotoUrls[index] };
     }
   );
 
