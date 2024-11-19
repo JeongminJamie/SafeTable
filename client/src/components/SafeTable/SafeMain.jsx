@@ -43,11 +43,12 @@ const SafeMain = ({ isLoading }) => {
       refetchOnWindowFocus: false,
     });
   console.log("🚀 ~ SafeMain ~ reservations:", reservations);
+  
   return (
     <div className="px-10 mt-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-x-5 p-5 gap-y-10">
         {/* 로딩 중일 때 Skeleton 표시 */}
-        {!showSkeleton
+        {showSkeleton
           ? Array(16)
               .fill(0)
               .map((_, index) => <RestaurantSkeleton key={index} />)

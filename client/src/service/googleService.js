@@ -6,40 +6,30 @@ const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 const noImageUrl = "https://ducatiperformance.hu/storage/media/noimg.png";
 
 export const getRestaurantPhotoReference = async (restaurantName) => {
-  try {
-    const response = await api.get(
-      `${serverURL}/api/photos/maps/api/place/textsearch/json?query=${restaurantName}&key=${googleApiKey}&language=ko`
-    );
+  const response = await api.get(
+    `${serverURL}/api/photos/maps/api/place/textsearch/json?query=${restaurantName}&key=${googleApiKey}&language=ko`
+  );
 
-    const photoReference =
-      response.data?.results?.[0]?.photos?.[0]?.photo_reference || null;
+  const photoReference =
+    response.data?.results?.[0]?.photos?.[0]?.photo_reference || null;
 
-    return photoReference;
-  } catch (error) {
-    console.error("포토 레퍼런스를 가져오는 도중 에러 발생", error);
-    return null;
-  }
+  return photoReference;
 };
 
 export const getRestaurantPhoto = async (photoReference) => {
-  try {
-    // photo reference가 null일 때, 사진 없음 이미지 반환
-    if (!photoReference) return noImageUrl;
+  // photo reference가 null일 때, 사진 없음 이미지 반환
+  if (!photoReference) return noImageUrl;
 
-    const response = await api.get(
-      `${serverURL}/api/photos/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${googleApiKey}`,
-      {
-        responseType: "blob",
-      }
-    );
+  const response = await api.get(
+    `${serverURL}/api/photos/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${googleApiKey}`,
+    {
+      responseType: "blob",
+    }
+  );
 
-    const photoUrl = URL.createObjectURL(response.data);
+  const photoUrl = URL.createObjectURL(response.data);
 
-    return photoUrl;
-  } catch (error) {
-    console.error("photo url 찾는 중 에러 발생", error);
-    return noImageUrl;
-  }
+  return photoUrl;
 };
 
 // 식당 사진이나 레퍼런스 응답이 400/500일 때의 경우, noImageUrl 날리기(한번씩 식당 하나가 응답 500을 보내요)
