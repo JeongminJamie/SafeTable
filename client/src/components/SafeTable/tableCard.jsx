@@ -41,6 +41,11 @@ export const TableCard = ({
     (res) => res.name === name && res.address === `${address1}${address2}`
   );
 
+  useEffect(() => {
+    console.log("테이블 카드 콘솔 확인")
+    console.log("포토 url 확인", photoUrl);
+  }, []);
+
   // const reservationRestaurant = (reservations || []).find((res) => {
   //   //address에 있는 공백 추가 금진
   //   return res.name === name && res.address === `${address1}${address2}`;

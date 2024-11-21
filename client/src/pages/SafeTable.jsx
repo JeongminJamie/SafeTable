@@ -3,7 +3,7 @@ import SafeMain from "../components/SafeTable/SafeMain";
 import SearchBox from "../components/SafeTable/SearchBox";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import useRestaurantStore from "../store/useRestaurantStore";
-import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import useInfiniteObserver from "../hooks/useInfiniteObserver";
 import {
   fetchEntireRestaurants,
   fetchRestaurantByInput,
@@ -35,7 +35,7 @@ const SafeTable = () => {
     });
 
   // 무한 스크롤링을 위한 observer 커스텀 훅 호출
-  const loadMoreRef = useIntersectionObserver({
+  const loadMoreRef = useInfiniteObserver({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -53,6 +53,7 @@ const SafeTable = () => {
   const fetchRestaurantsWithPhotos = useCallback(async (restaurantData) => {
     setIsPageLoading(true);
     const restaurantsWithPhotos = await attachPhotoToRestaurant(restaurantData);
+    console.log("attachto어쩌구함수 실행 후 값 로그", restaurantsWithPhotos);
     setFetchedRestaurants(restaurantsWithPhotos);
     setIsPageLoading(false);
   }, []);

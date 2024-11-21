@@ -53,6 +53,7 @@ export const attachPhotoToRestaurant = async (restaurantData) => {
   const resolvedPhotoReferences = restaurantPhotoReferences.map((result) =>
     handleSettledResult(result, null)
   );
+  console.log("테스트1");
 
   // 식당 사진 url들 가져오기
   const restaurantPhotos = await Promise.allSettled(
@@ -60,10 +61,13 @@ export const attachPhotoToRestaurant = async (restaurantData) => {
       getRestaurantPhoto(photoReference)
     )
   );
+  console.log("테스트2");
 
   const resolvedPhotoUrls = restaurantPhotos.map((result) =>
     handleSettledResult(result, noImageUrl)
   );
+
+  console.log("테스트3");
 
   // restaurant data와 photos 합치기
   const restaurantDataWithPhotos = duplicatedRestaurantData.map(

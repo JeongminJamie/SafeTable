@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const useIntersectionObserver = ({
+const useInfiniteObserver = ({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
@@ -35,4 +35,4 @@ const useIntersectionObserver = ({
   return loadMoreRef;
 };
 
-export default useIntersectionObserver;
+export default useInfiniteObserver;
