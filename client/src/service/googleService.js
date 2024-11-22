@@ -50,10 +50,10 @@ export const attachPhotoToRestaurant = async (restaurantData) => {
       getRestaurantPhotoReference(restaurantName)
     )
   );
+
   const resolvedPhotoReferences = restaurantPhotoReferences.map((result) =>
     handleSettledResult(result, null)
   );
-  console.log("테스트1");
 
   // 식당 사진 url들 가져오기
   const restaurantPhotos = await Promise.allSettled(
@@ -61,13 +61,10 @@ export const attachPhotoToRestaurant = async (restaurantData) => {
       getRestaurantPhoto(photoReference)
     )
   );
-  console.log("테스트2");
 
   const resolvedPhotoUrls = restaurantPhotos.map((result) =>
     handleSettledResult(result, noImageUrl)
   );
-
-  console.log("테스트3");
 
   // restaurant data와 photos 합치기
   const restaurantDataWithPhotos = duplicatedRestaurantData.map(
@@ -77,4 +74,33 @@ export const attachPhotoToRestaurant = async (restaurantData) => {
   );
 
   return restaurantDataWithPhotos;
+};
+
+// 식당 이름으로 레퍼런스와 photoURL 가져와서 붙이기
+// 현재 데이터 배열로 사진을 가져오는게 아닌 보이는 tableCard대로 데이터 패치하기
+export const addPhotoToRestaurant = async (restaurantData, restaurantName) => {
+  try {
+    if (!restaurantData) return;
+
+    const duplicatedRestaurantData = [...restaurantData];
+
+    const photoReference = await getRestaurantPhotoReference(restaurantName);
+
+    const photoUrl = await getRestaurantPhoto(photoReference);
+
+    const restaurantIndex = duplicatedRestaurantData.findIndex((element) => {
+      return element.RELAX_RSTRNT_NM === restaurantName;
+    });
+
+    duplicatedRestaurantData[restaurantIndex] = {
+      ...duplicatedRestaurantData[restaurantIndex],
+      photoUrl,
+    };
+
+    return duplicatedRestaurantData;
+  } catch (error) {
+    console.error(
+      "식당 이름으로 사진 레퍼런스와 사진 url 가져오는 도중 에러 발생"
+    );
+  }
 };

@@ -15,7 +15,7 @@ const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =
     useRestaurantStore();
   const [restaurantData, setRestaurantData] = useState(null);
-  const [isPageLoading, setIsPageLoading] = useState(false);
+  // const [isPageLoading, setIsPageLoading] = useState(false);
 
   // 전체 및 검색 지역 안심식당 조회 쿼리 & 무한 스크롤링
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -49,21 +49,20 @@ const SafeTable = () => {
     }
   }, [data]);
 
-  // 식당 데이터와 사진을 합치는 함수 호출
-  const fetchRestaurantsWithPhotos = useCallback(async (restaurantData) => {
-    setIsPageLoading(true);
-    const restaurantsWithPhotos = await attachPhotoToRestaurant(restaurantData);
-    console.log("attachto어쩌구함수 실행 후 값 로그", restaurantsWithPhotos);
-    setFetchedRestaurants(restaurantsWithPhotos);
-    setIsPageLoading(false);
-  }, []);
+  // 식당 데이터와 사진을 합치는 함수 호출 ---> tablecard onvisible로 진행중
+  // const fetchRestaurantsWithPhotos = useCallback(async (restaurantData) => {
+  //   setIsPageLoading(true);
+  //   const restaurantsWithPhotos = await attachPhotoToRestaurant(restaurantData);
+  //   setFetchedRestaurants(restaurantsWithPhotos);
+  //   setIsPageLoading(false);
+  // }, []);
 
-  // restaurantData가 있을 때 fetchedRestaurants에 사진과 함께 식당 정보 업데이트
-  useEffect(() => {
-    if (restaurantData) {
-      fetchRestaurantsWithPhotos(restaurantData);
-    }
-  }, [restaurantData]);
+  // restaurantData가 있을 때 fetchedRestaurants에 사진과 함께 식당 정보 업데이트 ---> tablecard onvisible로 진행중
+  // useEffect(() => {
+  //   if (restaurantData) {
+  //     fetchRestaurantsWithPhotos(restaurantData);
+  //   }
+  // }, [restaurantData]);
 
   useEffect(() => {
     setSearchedValue("");
@@ -72,9 +71,13 @@ const SafeTable = () => {
   return (
     <>
       <SearchBox />
-      <SafeMain isLoading={isPageLoading} />
+      <SafeMain
+        isLoading={isLoading}
+        restaurantData={restaurantData}
+        setRestaurantData={setRestaurantData}
+      />
       <div ref={loadMoreRef}></div>
-      {!isPageLoading && isFetchingNextPage && (
+      {!isLoading && isFetchingNextPage && (
         <Loading width="w-32" height="h-32" padding="p-10" />
       )}
     </>

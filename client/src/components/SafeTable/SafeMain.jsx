@@ -8,18 +8,32 @@ import RestaurantSkeleton from "./RestaurantSkeleton";
 import { api } from "../../api/api";
 import { getAxiosHeaderConfig } from "../../config";
 import { getMyReservation } from "../../service/reservationService";
+import { addPhotoToRestaurant } from "../../service/googleService";
 
-const SafeMain = ({ isLoading }) => {
-  const { searchedValue, fetchedRestaurants } = useRestaurantStore();
+const SafeMain = ({ isLoading, restaurantData, setRestaurantData }) => {
+  const { searchedValue, fetchedRestaurants, setFetchedRestaurants } =
+    useRestaurantStore();
   const [showSkeleton, setShowSkeleton] = useState(false);
   const [savedRestaurants, setSavedRestaurants] = useState([]); // 배열로 초기화
 
   // 식당과 사진 데이터 불러오는데 시간이 걸리므로 1초 지연 없이 바로 스켈레톤 보여주는 걸로 수정
   useEffect(() => {
+    console.log("로딩 확인", isLoading);
     if (isLoading) {
       setShowSkeleton(true);
     }
   }, [isLoading, fetchedRestaurants]);
+
+  // 각 테이블 카드가 보일 때 식당 이름으로 사진 url 패치 ---- 진행중
+  const onVisibleGetPhoto = async (restaurantData, restaurantName) => {
+    const restaurantDataWithPhoto = await addPhotoToRestaurant(
+      restaurantData,
+      restaurantName
+    );
+
+    setRestaurantData(restaurantDataWithPhoto);
+    setFetchedRestaurants(restaurantDataWithPhoto);
+  };
 
   // 유저의 찜 목록을 불러오기
   useEffect(() => {
@@ -53,11 +67,15 @@ const SafeMain = ({ isLoading }) => {
             .fill(0)
             .map((_, index) => <RestaurantSkeleton key={index} />)}
         {fetchedRestaurants?.map((restaurant) => (
+          // TableCard가 onVisible일 때 이미지 패치 하는 부분 ---> 진행중
           <LazyLoad
             key={restaurant.RELAX_SEQ}
             height={200}
             offset={100}
             placeholder={<RestaurantSkeleton />}
+            onVisible={() =>
+              onVisibleGetPhoto(restaurantData, restaurant.RELAX_RSTRNT_NM)
+            }
           >
             <TableCard
               key={restaurant.RELAX_SEQ}
@@ -72,6 +90,7 @@ const SafeMain = ({ isLoading }) => {
               savedRestaurants={savedRestaurants}
               reservations={reservations}
             />
+            //{" "}
           </LazyLoad>
         ))}
       </div>
