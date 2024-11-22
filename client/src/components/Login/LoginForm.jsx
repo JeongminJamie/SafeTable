@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { api } from "../../api/api";
+import useInput from "../../hooks/useInput";
 
 export const LoginForm = ({
   onClose,
@@ -7,8 +8,8 @@ export const LoginForm = ({
   setToken,
   onLoginSuccess,
 }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailInput] = useInput(""); // email 상태 관리
+  const [passwordInput] = useInput(""); // password 상태 관리
   const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 관리
 
   const connectLogin = async () => {
@@ -16,8 +17,8 @@ export const LoginForm = ({
       const response = await api.post(
         "/login",
         {
-          user_email: email,
-          user_password: password,
+          user_email: emailInput.value,
+          user_password: passwordInput.value,
         },
         { withCredentials: true }
       );
@@ -25,16 +26,15 @@ export const LoginForm = ({
       console.log("로그인 되었습니다.");
       sessionStorage.setItem("token", response.data.token);
       setToken(response.data.token);
-      // onLoginSuccess가 있으면 호출 & 로그인 성공 시 콜백 호출
       if (onLoginSuccess) {
         onLoginSuccess();
       }
-      setErrorMessage(""); // 성공 시 에러 메시지 초기화
+      setErrorMessage("");
       return true;
     } catch (e) {
       const error = e.response?.data?.message || e.message;
       console.log("로그인 실패:", error);
-      setErrorMessage("아이디 또는 비밀번호를 다시 확인해주세요."); // 에러 메시지 설정
+      setErrorMessage("아이디 또는 비밀번호를 다시 확인해주세요.");
       return false;
     }
   };
@@ -63,8 +63,7 @@ export const LoginForm = ({
           <input
             type="email"
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            {...emailInput} //useInput으로 바인딩
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="이메일을 입력하세요"
             required
@@ -80,8 +79,7 @@ export const LoginForm = ({
           <input
             type="password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...passwordInput}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="비밀번호를 입력하세요"
             required
