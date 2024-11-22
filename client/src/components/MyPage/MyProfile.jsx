@@ -1,18 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
 import useUserStore from "../../store/useUserStore";
 import { LoginModal } from "../Login/loginModal";
 import { getAxiosHeaderConfig } from "../../config";
-
-const debounce = (func, delay) => {
-  let timeoutId;
-  return (...args) => {
-    if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
+import { useDebounce } from "../../hooks/useDebounce";
 
 export const MyProfile = () => {
   const { userData, setUserData } = useUserStore();
@@ -21,8 +12,10 @@ export const MyProfile = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
   const [passCheck, setPassCheck] = useState("");
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => {
@@ -33,27 +26,21 @@ export const MyProfile = () => {
     setLocalUserData(userData);
   }, [userData]);
 
-  const passwordRef = useRef(newPassword);
+  // 디바운스된 비밀번호 확인 함수
+  const debouncedCheckPassword = useDebounce((password, confirmPassword) => {
+    if (password.length >= 6) {
+      setPasswordError(password !== confirmPassword);
+    }
+  }, 200);
 
   useEffect(() => {
-    passwordRef.current = newPassword;
-  }, [newPassword]);
+    const isValid = newPassword.length >= 6;
+    setIsPasswordValid(isValid);
 
-  const checkPasswordMatch = useRef(
-    debounce((value) => {
-      if (value !== passwordRef.current) {
-        setPasswordError("비밀번호가 일치하지 않습니다.");
-      } else {
-        setPasswordError("");
-      }
-    }, 300)
-  ).current;
-
-  const handlePasswordCheckChange = (e) => {
-    const value = e.target.value;
-    setPassCheck(value);
-    checkPasswordMatch(value);
-  };
+    if (isValid) {
+      debouncedCheckPassword(newPassword, passCheck);
+    }
+  }, [newPassword, passCheck, debouncedCheckPassword]);
 
   const updateProfile = async () => {
     const headersConfig = getAxiosHeaderConfig();
@@ -150,6 +137,17 @@ export const MyProfile = () => {
 
     updateProfile();
     setIsEditing(false);
+  };
+
+  const handleConfirmPasswordChange = () => {
+    setIsConfirming(true);
+  };
+
+  const handleFinalPasswordChange = async () => {
+    const result = await changePassword();
+    if (result.success) {
+      setIsConfirming(false);
+    }
   };
 
   return (
@@ -254,82 +252,107 @@ export const MyProfile = () => {
         </p>
       </div>
       <LoginModal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold mb-4">비밀번호 변경</h2>
+        {!isConfirming ? (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">비밀번호 변경</h2>
 
-          <div>
-            {/* onChange, value 없으니까 만들어야함. 새로운 비번이랑 비번 확인이 맞는지만 확인하고 나머지는 서버에서 */}
-            <label htmlFor="currentPassword" className="block mb-1 text-sm">
-              현재 비밀번호
-            </label>
-            <input
-              type="password"
-              id="currentPassword"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="현재 비밀번호를 입력하세요"
-            />
-          </div>
+            <div>
+              <label htmlFor="currentPassword" className="block mb-1 text-sm">
+                현재 비밀번호
+              </label>
+              <input
+                type="password"
+                id="currentPassword"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="현재 비밀번호를 입력하세요"
+              />
+            </div>
 
-          <div>
-            <label htmlFor="newPassword" className="block mb-1 text-sm">
-              새로운 비밀번호
-            </label>
-            <input
-              type="password"
-              id="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="6자리 이상 새로운 비밀번호를 입력하세요"
-            />
-          </div>
+            <div>
+              <label htmlFor="newPassword" className="block mb-1 text-sm">
+                새로운 비밀번호
+              </label>
+              <input
+                type="password"
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="6자리 이상 새로운 비밀번호를 입력하세요"
+              />
+            </div>
 
-          <div>
-            <label htmlFor="confirmNewPassword" className="block mb-1 text-sm">
-              새로운 비밀번호 확인
-            </label>
-            <input
-              type="password"
-              id="confirmNewPassword"
-              value={passCheck}
-              onChange={handlePasswordCheckChange}
-              className="w-full p-2 border border-gray-300 rounded"
-              placeholder="다시 입력하세요"
-            />
-          </div>
-          <p
-            className={`text-sm ${
-              passCheck === ""
-                ? "invisible"
+            <div>
+              <label
+                htmlFor="confirmNewPassword"
+                className="block mb-1 text-sm"
+              >
+                새로운 비밀번호 확인
+              </label>
+              <input
+                type="password"
+                id="confirmNewPassword"
+                value={passCheck}
+                onChange={(e) => setPassCheck(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="다시 입력하세요"
+              />
+            </div>
+            <p
+              className={`text-sm ${
+                passCheck === ""
+                  ? "invisible"
+                  : passwordError
+                  ? "text-red-500"
+                  : "text-green-500"
+              }`}
+            >
+              {passCheck === ""
+                ? ""
                 : passwordError
-                ? "text-red-500"
-                : "text-green-500"
-            } `}
-          >
-            {passCheck === ""
-              ? ""
-              : passwordError
-              ? "비밀번호 불일치"
-              : "비밀번호 일치"}
-          </p>
+                ? "비밀번호 불일치"
+                : "비밀번호 일치"}
+            </p>
 
-          <div className="flex justify-end space-x-2 mt-4">
-            <button
-              onClick={closeModal}
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
-            >
-              취소
-            </button>
-            <button
-              onClick={() => changePassword()}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-            >
-              비밀번호 변경
-            </button>
+            <div className="flex justify-end space-x-2 mt-4">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleConfirmPasswordChange}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                disabled={!isPasswordValid || passwordError}
+              >
+                비밀번호 변경
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          // 확인 메시지
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold mb-4">비밀번호 변경 확인</h2>
+            <p>정말로 비밀번호를 변경하시겠습니까?</p>
+            <div className="flex justify-end space-x-2 mt-4">
+              <button
+                onClick={() => setIsConfirming(false)}
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+              >
+                취소
+              </button>
+              <button
+                onClick={handleFinalPasswordChange}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        )}
       </LoginModal>
     </div>
   );
