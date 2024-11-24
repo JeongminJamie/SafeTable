@@ -24,11 +24,12 @@ export const signup = async ({ email, password, username, phoneNumber }) => {
 };
 
 //메일발송
-// export const sendCodeToEmail = async () => {
-//   const response = await api.post("/register/send-verification-email", {
-//     email: useremail,
-//   });
-// };
+export const sendCodeToEmail = async ({ email }) => {
+  const response = await api.post("/register/send-verification-email", {
+    email: email,
+  });
+  return response.data;
+};
 
 //인증번호 체크
 

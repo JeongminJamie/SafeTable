@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { api } from "../../api/api";
-import { useSignup } from "../../hooks/queries/auth";
+import { useSendEmail, useSignup } from "../../hooks/queries/auth";
 
 export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
@@ -53,37 +53,31 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
     onErrorRegister
   );
 
-  //이메일로 코드 보내기
-  const sendemailapi = async (useremail) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(useremail)) {
-      setEmailError("유효한 이메일 주소를 입력해주세요.");
-      setEmailOk("");
-      return;
-    }
-
-    try {
-      const response = await api.post("/register/send-verification-email", {
-        email: useremail,
-      });
-      if (response.data.message === "Verification email sent") {
-        setEmailError("");
-        setEmailOk("이메일로 인증코드를 발송했습니다.");
-        setEmailClick(true);
-      }
-    } catch (error) {
-      if (
-        error.response?.data?.msg ===
-        "Email already exists, please use a different email"
-      ) {
-        setEmailError("이미 등록된 이메일입니다. 다른 이메일을 기입해주세요.");
-        setEmailOk("");
-      } else {
-        setEmailError("다시 시도해주세요.");
-        setEmailOk("");
-      }
+  // 인증코드발송-성공
+  const onSuccessSendCodeToEmail = (data) => {
+    if (data.message === "Verification email sent") {
+      setEmailError("");
+      setEmailOk("이메일로 인증코드를 발송했습니다.");
+      setEmailClick(true);
     }
   };
+
+  // 인증코드발송-에러
+  const onErrorSendCodeToEmail = (error) => {
+    if (
+      error.response?.data?.msg ===
+      "Email already exists, please use a different email"
+    ) {
+      setEmailError("이미 등록된 이메일입니다. 다른 이메일을 기입해주세요.");
+      setEmailOk("");
+    }
+  };
+
+  // 인증코드발송
+  const { mutate: sendEmailMutate } = useSendEmail(
+    onSuccessSendCodeToEmail,
+    onErrorSendCodeToEmail
+  );
 
   //인증번호 없을때, 인증번호 시간 앖을때
   const checkemailapi = async (code) => {
@@ -143,7 +137,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
               <button
                 type="button"
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
-                onClick={() => sendemailapi(email)}
+                onClick={() => sendEmailMutate({ email })}
               >
                 이메일 인증
               </button>
