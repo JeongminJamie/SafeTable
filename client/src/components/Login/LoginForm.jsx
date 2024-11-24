@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { api } from "../../api/api";
 import useInput from "../../hooks/useInput";
+import { useSignin } from "../../hooks/queries/auth";
 
 export const LoginForm = ({
   onClose,
@@ -12,47 +12,34 @@ export const LoginForm = ({
   const [passwordInput] = useInput(""); // password 상태 관리
   const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 관리
 
-  const connectLogin = async () => {
-    try {
-      const response = await api.post(
-        "/login",
-        {
-          user_email: emailInput.value,
-          user_password: passwordInput.value,
-        },
-        { withCredentials: true }
-      );
-
-      console.log("로그인 되었습니다.");
-      sessionStorage.setItem("token", response.data.token);
-      setToken(response.data.token);
-      if (onLoginSuccess) {
-        onLoginSuccess();
-      }
-      setErrorMessage("");
-      return true;
-    } catch (e) {
-      const error = e.response?.data?.message || e.message;
-      console.log("로그인 실패:", error);
-      setErrorMessage("아이디 또는 비밀번호를 다시 확인해주세요.");
-      return false;
+  const onSuccess = (data) => {
+    console.log("로그인 되었습니다.");
+    sessionStorage.setItem("token", data.token);
+    setToken(data.token);
+    if (onLoginSuccess) {
+      onLoginSuccess();
     }
+    setErrorMessage("");
+    onClose();
   };
 
-  const handleLogin = async (e) => {
+  const onError = (error) => {
+    const errorMessage = error?.response?.data?.message ?? "";
+    console.log("로그인 실패:", errorMessage);
+    setErrorMessage("아이디 또는 비밀번호를 다시 확인해주세요.");
+  };
+
+  const { mutate: signinMutate } = useSignin(onSuccess, onError);
+
+  const handleLoginButtonClick = async (e) => {
     e.preventDefault();
-
-    const success = await connectLogin();
-
-    if (success) {
-      onClose();
-    }
+    signinMutate({ email: emailInput.value, password: passwordInput.value });
   };
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">로그인</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLoginButtonClick}>
         <div className="mb-4">
           <label
             className="block text-sm font-medium text-gray-700 mb-1"
