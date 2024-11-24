@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { api } from "../../api/api";
+import { useSignup } from "../../hooks/queries/auth";
 
 export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
@@ -34,23 +35,25 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
     return () => clearTimeout(debounceTimeout);
   }, [passCheck]);
 
-  const register = async () => {
-    try {
-      const response = await api.post("/register", {
-        user_email: email,
-        user_password: password,
-        user_name: username,
-        user_contact: phoneNumber,
-      });
-
-      if (response.data) {
-        onSwitchToLogin();
-      }
-    } catch (e) {
-      console.log(e.response?.data?.msg);
-    }
+  // 유저등록-성공
+  const onSuccessRegister = (data) => {
+    console.log("회원가입 성공:", data);
+    onSwitchToLogin();
   };
 
+  // 유저등록-에러
+  const onErrorRegister = (error) => {
+    const errorMessage = error?.msg || "회원가입에 실패했습니다.";
+    console.error("회원가입 실패:", errorMessage);
+  };
+
+  // 유저등록
+  const { mutate: signupMutate } = useSignup(
+    onSuccessRegister,
+    onErrorRegister
+  );
+
+  //이메일로 코드 보내기
   const sendemailapi = async (useremail) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(useremail)) {
@@ -110,7 +113,8 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
       setPasswordError("비밀번호가 일치하지 않습니다.");
       return;
     }
-    register();
+
+    signupMutate({ email, password, username, phoneNumber });
   };
 
   return (

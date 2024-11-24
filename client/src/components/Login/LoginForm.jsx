@@ -8,9 +8,9 @@ export const LoginForm = ({
   setToken,
   onLoginSuccess,
 }) => {
-  const [emailInput] = useInput(""); // email 상태 관리
-  const [passwordInput] = useInput(""); // password 상태 관리
-  const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 관리
+  const [emailInput] = useInput("");
+  const [passwordInput] = useInput("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onSuccess = (data) => {
     console.log("로그인 되었습니다.");
@@ -50,7 +50,7 @@ export const LoginForm = ({
           <input
             type="email"
             id="email"
-            {...emailInput} //useInput으로 바인딩
+            {...emailInput}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="이메일을 입력하세요"
             required
