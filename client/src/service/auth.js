@@ -1,5 +1,6 @@
 import { api } from "../api/api";
 
+//로그인
 export const signin = async ({ email, password }) => {
   const response = await api.post(
     "/login",
@@ -32,10 +33,10 @@ export const sendCodeToEmail = async ({ email }) => {
 };
 
 //인증번호 체크
-
-// export const verifyCode = async () => {
-//   const response = await api.post("/register/verify-email", {
-//     email: email,
-//     verificationCode: code,
-//   });
-// };
+export const verifyCode = async ({ email, emailToken }) => {
+  const response = await api.post("/register/verify-email", {
+    email: email,
+    verificationCode: emailToken,
+  });
+  return response.data;
+};

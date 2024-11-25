@@ -1,5 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { sendCodeToEmail, signin, signup } from "../../service/auth";
+import {
+  sendCodeToEmail,
+  signin,
+  signup,
+  verifyCode,
+} from "../../service/auth";
 
 export const useSignin = (onSuccess, onError) =>
   useMutation({ mutationFn: signin, onSuccess, onError });
@@ -19,4 +24,11 @@ export const useSendEmail = (
     mutationFn: sendCodeToEmail,
     onSuccess: onSuccessSendCodeToEmail,
     onError: onErrorSendCodeToEmail,
+  });
+
+export const useVerityCode = (onSuccessVerifyCode, onErrorVerifyCode) =>
+  useMutation({
+    mutationFn: verifyCode,
+    onSuccess: onSuccessVerifyCode,
+    onError: onErrorVerifyCode,
   });

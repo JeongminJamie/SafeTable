@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { api } from "../../api/api";
-import { useSendEmail, useSignup } from "../../hooks/queries/auth";
+import {
+  useSendEmail,
+  useSignup,
+  useVerityCode,
+} from "../../hooks/queries/auth";
 
 export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
@@ -79,27 +82,25 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
     onErrorSendCodeToEmail
   );
 
-  //인증번호 없을때, 인증번호 시간 앖을때
-  const checkemailapi = async (code) => {
-    try {
-      const response = await api.post("/register/verify-email", {
-        email: email,
-        verificationCode: code,
-      });
-      if (response.data.message === "Email verified successfully") {
-        setIsVerified(true);
-      }
-    } catch (e) {
-      console.error(e);
-      if (
-        e.response?.data?.message === "Invalid or expired verification code"
-      ) {
-        setEmailCodeError("유효한 코드 6자리를 입력해주세요.");
-      } else if (e.response?.data?.message === "User not found") {
-        setEmailCodeError("유효한 코드 6자리를 입력해주세요.");
-      }
+  // 인증코드확인 - 성공
+  const onSuccessVerifyCode = (data) => {
+    if (data?.message === "Email verified successfully") {
+      setIsVerified(true);
     }
   };
+
+  // 인증코드확인 - 에러
+  const onErrorVerifyCode = (error) => {
+    if (error?.data?.message) {
+      setEmailCodeError("유효한 코드 6자리를 입력해주세요.");
+    }
+  };
+
+  // 인증코드확인
+  const { mutate: verifyCodeMutate } = useVerityCode(
+    onSuccessVerifyCode,
+    onErrorVerifyCode
+  );
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -180,7 +181,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
               <button
                 type="button"
                 className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
-                onClick={() => checkemailapi(emailToken)}
+                onClick={() => verifyCodeMutate({ email, emailToken })}
               >
                 인증
               </button>
