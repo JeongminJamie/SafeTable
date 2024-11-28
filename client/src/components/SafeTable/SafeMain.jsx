@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import LazyLoad from "react-lazyload";
 import { useQuery } from "@tanstack/react-query";
 import { TableCard } from "./tableCard";
 import EmptyRestaurant from "./EmptyRestaurant";
@@ -10,7 +9,7 @@ import { getAxiosHeaderConfig } from "../../config";
 import { getMyReservation } from "../../service/reservationService";
 import { addPhotoToRestaurant } from "../../service/googleService";
 
-const SafeMain = ({ isLoading, restaurantData, setRestaurantData }) => {
+const SafeMain = ({ isLoading }) => {
   const { searchedValue, fetchedRestaurants, setFetchedRestaurants } =
     useRestaurantStore();
   const [showSkeleton, setShowSkeleton] = useState(false);
@@ -18,9 +17,10 @@ const SafeMain = ({ isLoading, restaurantData, setRestaurantData }) => {
 
   // 식당과 사진 데이터 불러오는데 시간이 걸리므로 1초 지연 없이 바로 스켈레톤 보여주는 걸로 수정
   useEffect(() => {
-    console.log("로딩 확인", isLoading);
     if (isLoading) {
       setShowSkeleton(true);
+    } else {
+      setShowSkeleton(false);
     }
   }, [isLoading, fetchedRestaurants]);
 
@@ -31,7 +31,6 @@ const SafeMain = ({ isLoading, restaurantData, setRestaurantData }) => {
       restaurantName
     );
 
-    setRestaurantData(restaurantDataWithPhoto);
     setFetchedRestaurants(restaurantDataWithPhoto);
   };
 
@@ -56,7 +55,6 @@ const SafeMain = ({ isLoading, restaurantData, setRestaurantData }) => {
       queryFn: getMyReservation,
       refetchOnWindowFocus: false,
     });
-  console.log("🚀 ~ SafeMain ~ reservations:", reservations);
 
   return (
     <div className="px-10 mt-10">
@@ -67,31 +65,34 @@ const SafeMain = ({ isLoading, restaurantData, setRestaurantData }) => {
             .fill(0)
             .map((_, index) => <RestaurantSkeleton key={index} />)}
         {fetchedRestaurants?.map((restaurant) => (
-          // TableCard가 onVisible일 때 이미지 패치 하는 부분 ---> 진행중
-          <LazyLoad
+          // <LazyLoad
+          //   key={restaurant.RELAX_SEQ}
+          //   height={200}
+          //   offset={100}
+          //   placeholder={<RestaurantSkeleton />}
+          //   onVisible={() =>
+          //     onVisibleGetPhoto(restaurantData, restaurant.RELAX_RSTRNT_NM)
+          //   }
+          // >
+          // ---> onVisible의 함수가 실행되지 않음 : intersection observer를 사용해도 !제일 먼저 진행해야 할 것
+          <TableCard
             key={restaurant.RELAX_SEQ}
-            height={200}
-            offset={100}
-            placeholder={<RestaurantSkeleton />}
-            onVisible={() =>
-              onVisibleGetPhoto(restaurantData, restaurant.RELAX_RSTRNT_NM)
+            photoUrl={
+              restaurant.hasOwnProperty("PHOTO_URL") ? restaurant.PHOTO_URL : ""
             }
-          >
-            <TableCard
-              key={restaurant.RELAX_SEQ}
-              photoUrl={restaurant.PHOTO_URL}
-              name={restaurant.RELAX_RSTRNT_NM}
-              address1={restaurant.RELAX_ADD1}
-              address2={restaurant.RELAX_ADD2}
-              telephone={restaurant.RELAX_RSTRNT_TEL}
-              category={restaurant.RELAX_GUBUN_DETAIL}
-              website={restaurant.RELAX_RSTRNT_ETC}
-              seq={restaurant.RELAX_SEQ}
-              savedRestaurants={savedRestaurants}
-              reservations={reservations}
-            />
-            //{" "}
-          </LazyLoad>
+            name={restaurant.RELAX_RSTRNT_NM}
+            address1={restaurant.RELAX_ADD1}
+            address2={restaurant.RELAX_ADD2}
+            telephone={restaurant.RELAX_RSTRNT_TEL}
+            category={restaurant.RELAX_GUBUN_DETAIL}
+            website={restaurant.RELAX_RSTRNT_ETC}
+            seq={restaurant.RELAX_SEQ}
+            savedRestaurants={savedRestaurants}
+            reservations={reservations}
+            onVisible={() =>
+              onVisibleGetPhoto(fetchedRestaurants, restaurant.RELAX_RSTRNT_NM)
+            }
+          />
         ))}
       </div>
       {/* 입력값에 따른 안심식당 정보가 없을 때 아래 컴포넌트 보여줌 */}

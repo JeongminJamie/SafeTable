@@ -14,8 +14,6 @@ import { attachPhotoToRestaurant } from "../service/googleService";
 const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =
     useRestaurantStore();
-  const [restaurantData, setRestaurantData] = useState(null);
-  // const [isPageLoading, setIsPageLoading] = useState(false);
 
   // 전체 및 검색 지역 안심식당 조회 쿼리 & 무한 스크롤링
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -45,7 +43,7 @@ const SafeTable = () => {
   useEffect(() => {
     if (data) {
       const allFetchedRestaurants = data?.pages.flatMap((page) => page.data);
-      setRestaurantData(allFetchedRestaurants);
+      setFetchedRestaurants(allFetchedRestaurants);
     }
   }, [data]);
 
@@ -71,11 +69,7 @@ const SafeTable = () => {
   return (
     <>
       <SearchBox />
-      <SafeMain
-        isLoading={isLoading}
-        restaurantData={restaurantData}
-        setRestaurantData={setRestaurantData}
-      />
+      <SafeMain isLoading={isLoading} />
       <div ref={loadMoreRef}></div>
       {!isLoading && isFetchingNextPage && (
         <Loading width="w-32" height="h-32" padding="p-10" />

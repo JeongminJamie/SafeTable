@@ -3,7 +3,7 @@ import { api } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import { getAxiosHeaderConfig } from "../../config";
 import { AuthModal } from "../Login/AuthModal";
-import useRestaurantStore from "../../store/useRestaurantStore";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 export const TableCard = ({
   photoUrl,
@@ -16,8 +16,10 @@ export const TableCard = ({
   seq,
   savedRestaurants,
   reservations,
+  onVisible,
 }) => {
   const navigate = useNavigate();
+  const cardRef = useIntersectionObserver({ onVisibleFn: onVisible });
 
   const reservedTables = 5;
   const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경 => 이 부분 어떻게 대체할까요?
@@ -40,11 +42,6 @@ export const TableCard = ({
   const matchingReservations = (reservations || []).filter(
     (res) => res.name === name && res.address === `${address1}${address2}`
   );
-
-  useEffect(() => {
-    console.log("테이블 카드 콘솔 확인")
-    console.log("포토 url 확인", photoUrl);
-  }, []);
 
   // const reservationRestaurant = (reservations || []).find((res) => {
   //   //address에 있는 공백 추가 금진
@@ -130,7 +127,10 @@ export const TableCard = ({
 
   return (
     <>
-      <div className="w-80 border border-gray-300 rounded-lg bg-white transition-transform transform hover:scale-105 hover:cursor-pointer shadow-md">
+      <div
+        className="w-80 border border-gray-300 rounded-lg bg-white transition-transform transform hover:scale-105 hover:cursor-pointer shadow-md"
+        ref={cardRef}
+      >
         <div className="relative w-full h-40 bg-gray-200  overflow-hidden mb-4">
           <img
             src={photoUrl}
