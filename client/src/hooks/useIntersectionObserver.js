@@ -2,12 +2,15 @@ import { useEffect, useRef } from "react";
 
 const useIntersectionObserver = ({ onVisibleFn }) => {
   const targetRef = useRef(null);
+  let photoURL = "";
 
   useEffect(() => {
+    if (!onVisibleFn) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          onVisibleFn();
+          photoURL = onVisibleFn();
           observer.disconnect();
         }
       },
@@ -25,7 +28,7 @@ const useIntersectionObserver = ({ onVisibleFn }) => {
     };
   }, [onVisibleFn]);
 
-  return targetRef;
+  return { photoURL, targetRef };
 };
 
 export default useIntersectionObserver;
