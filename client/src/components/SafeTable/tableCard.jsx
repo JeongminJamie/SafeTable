@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getAxiosHeaderConfig } from "../../config";
 import { AuthModal } from "../Login/AuthModal";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
-import Loading from "../Loading";
+import RestaurantSkeleton from "./RestaurantSkeleton";
 
 export const TableCard = React.memo(
   ({
@@ -54,7 +54,9 @@ export const TableCard = React.memo(
 
     // 실제 구글 식당 사진으로 URL 업데이트
     useEffect(() => {
-      setPhotoSource(photoURL);
+      if (photoURL) {
+        setPhotoSource(photoURL);
+      }
     }, [photoURL]);
 
     useEffect(() => {
@@ -141,7 +143,7 @@ export const TableCard = React.memo(
           ref={cardRef}
         >
           <div className="relative w-full h-40 bg-gray-200  overflow-hidden mb-4">
-            {/* 식당 사진 업데이트 유무에 따른 이미지 */}
+            {/* 사진 업데이트에 따라 이미지 또는 무지 회색 바탕 */}
             {photoSource ? (
               <img
                 src={photoSource}
@@ -149,11 +151,7 @@ export const TableCard = React.memo(
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
-              <img
-                src="assets/loading-animation.gif"
-                alt="로딩 이미지"
-                className="absolute inset-0 m-auto w-2/12 h-2/12 object-cover"
-              />
+              <div className="w-full h-full bg-slate-200"></div>
             )}
             {/* 식당 저장 버튼 */}
             <button
