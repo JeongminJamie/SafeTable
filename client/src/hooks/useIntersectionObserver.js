@@ -1,38 +1,35 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const useIntersectionObserver = ({
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
-}) => {
-  const loadMoreRef = useRef(null);
+const useIntersectionObserver = ({ onVisibleFn }) => {
+  const targetRef = useRef(null);
+  const [state, setState] = useState(null);
 
   useEffect(() => {
+    if (!onVisibleFn) return;
+
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
+      async ([entry]) => {
+        if (entry.isIntersecting) {
+          const visibleSource = await onVisibleFn();
+          setState(visibleSource);
+          observer.disconnect();
         }
       },
-      {
-        root: null,
-        rootMargin: "0px",
-        threshold: 0.5,
-      }
+      { threshold: 0.1 }
     );
 
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
+    if (targetRef.current) {
+      observer.observe(targetRef.current);
     }
 
     return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
+      if (targetRef.current) {
+        observer.disconnect();
       }
     };
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [onVisibleFn]);
 
-  return loadMoreRef;
+  return { state, targetRef };
 };
 
 export default useIntersectionObserver;

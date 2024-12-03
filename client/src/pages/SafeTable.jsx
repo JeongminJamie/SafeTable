@@ -3,12 +3,11 @@ import SafeMain from "../components/SafeTable/SafeMain";
 import SearchBox from "../components/SafeTable/SearchBox";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import useRestaurantStore from "../store/useRestaurantStore";
-import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import useInfiniteObserver from "../hooks/useInfiniteObserver";
 import {
   fetchEntireRestaurants,
   fetchRestaurantByInput,
 } from "../service/searchService";
-import Loading from "../components/Loading";
 
 const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =
@@ -32,7 +31,7 @@ const SafeTable = () => {
     });
 
   // 무한 스크롤링을 위한 observer 커스텀 훅 호출
-  const loadMoreRef = useIntersectionObserver({
+  const loadMoreRef = useInfiniteObserver({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -55,9 +54,6 @@ const SafeTable = () => {
       <SearchBox />
       <SafeMain isLoading={isLoading} />
       <div ref={loadMoreRef}></div>
-      {isFetchingNextPage && (
-        <Loading width="w-32" height="h-32" padding="p-10" />
-      )}
     </>
   );
 };
