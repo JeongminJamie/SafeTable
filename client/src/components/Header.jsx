@@ -10,6 +10,11 @@ const Header = () => {
   const [currentForm, setCurrentForm] = useState("login");
   const [token, setToken] = useState(null);
 
+  const onLoginSuccess = (newToken) => {
+    setToken(newToken);
+    closeModal();
+  };
+
   useEffect(() => {
     const storedToken = getToken();
     if (storedToken) {
@@ -116,6 +121,7 @@ const Header = () => {
         currentForm={currentForm}
         setCurrentForm={setCurrentForm}
         setToken={setToken}
+        onLoginSuccess={onLoginSuccess}
       />
     </>
   );

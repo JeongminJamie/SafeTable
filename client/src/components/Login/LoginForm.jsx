@@ -19,7 +19,7 @@ export const LoginForm = ({
     sessionStorage.setItem("refreshToken", data.refreshToken);
     setToken(data.token);
     if (onLoginSuccess) {
-      onLoginSuccess();
+      onLoginSuccess(data.accessToken);
     }
     setErrorMessage("");
     onClose();

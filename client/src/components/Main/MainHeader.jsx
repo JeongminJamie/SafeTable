@@ -9,6 +9,11 @@ const MainHeader = () => {
   const [currentForm, setCurrentForm] = useState("login");
   const [token, setToken] = useState(null);
 
+  const onLoginSuccess = (newToken) => {
+    setToken(newToken);
+    closeModal();
+  };
+
   useEffect(() => {
     const storedToken = getToken();
     if (storedToken) {
@@ -17,7 +22,7 @@ const MainHeader = () => {
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("accessToken");
     setToken(null);
     console.log("로그아웃 되었습니다.");
   };
@@ -92,6 +97,7 @@ const MainHeader = () => {
           currentForm={currentForm}
           setCurrentForm={setCurrentForm}
           setToken={setToken}
+          onLoginSuccess={onLoginSuccess}
         />
       </main>
     </>
