@@ -59,6 +59,19 @@ app.use(
   })
 );
 
+// 안심식당 구글 사진 조회
+app.use(
+  "/api/photos",
+  createProxyMiddleware({
+    target: process.env.GOOGLE_URL,
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api/photos": "",
+    },
+    secure: true,
+  })
+);
+
 const port = 8080;
 app.listen(port, () => {
   console.log(`Port number ${port} is running`);

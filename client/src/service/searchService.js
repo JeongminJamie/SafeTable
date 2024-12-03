@@ -17,7 +17,7 @@ export const fetchEntireRestaurants = async (pageParam) => {
       return { data: [], nextCursor: undefined };
     }
 
-    const shuffledData = await fisherYatesShuffle(data);
+    const shuffledData = fisherYatesShuffle(data);
 
     return { data: shuffledData, nextCursor: pageParam + 1 };
   } catch (error) {
