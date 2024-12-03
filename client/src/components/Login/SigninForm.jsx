@@ -1,16 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { api } from "../../api/api";
 
-const debounce = (func, delay) => {
-  let timeoutId;
-  return (...args) => {
-    if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
-
 export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
   const [emailToken, setEmailtoken] = useState("");
@@ -27,19 +17,22 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
 
   const passwordRef = useRef(password);
 
+  // 비밀번호 변경 시 최신값으로 업데이트
   useEffect(() => {
     passwordRef.current = password;
   }, [password]);
 
-  const checkPasswordMatch = useRef(
-    debounce((value) => {
-      if (value !== passwordRef.current) {
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      if (passCheck !== passwordRef.current) {
         setPasswordError("비밀번호가 일치하지 않습니다.");
       } else {
         setPasswordError("");
       }
-    }, 300)
-  ).current;
+    }, 1000); // 1초 후
+
+    return () => clearTimeout(debounceTimeout);
+  }, [passCheck]);
 
   const register = async () => {
     try {
@@ -118,12 +111,6 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
       return;
     }
     register();
-  };
-
-  const handlePasswordCheckChange = (e) => {
-    const value = e.target.value;
-    setPassCheck(value);
-    checkPasswordMatch(value);
   };
 
   return (
@@ -238,7 +225,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 type="password"
                 id="passwordCheck"
                 value={passCheck}
-                onChange={handlePasswordCheckChange}
+                onChange={(e) => setPassCheck(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="비밀번호를 다시 입력하세요"
                 required
