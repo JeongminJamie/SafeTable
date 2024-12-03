@@ -10,6 +10,7 @@ export const signin = async ({ email, password }) => {
     },
     { withCredentials: true }
   );
+
   return response.data;
 };
 

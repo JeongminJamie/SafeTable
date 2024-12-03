@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
+import { getAxiosHeaderConfig } from "../../config";
 
 const SaveTable = () => {
   const restaurantUrl = "https://www.safe-restaurant.com";
   const [savedRestaurants, setSavedRestaurants] = useState([]); // 배열로 초기화
 
   const handleFetchSavedRestaurants = async () => {
+    const headersConfig = await getAxiosHeaderConfig();
+    if (!headersConfig) return;
     try {
-      const token = sessionStorage.getItem("token");
-      const response = await api.get("/user/saved-tables", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get("/user/saved-tables", headersConfig);
 
       setSavedRestaurants(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
@@ -29,13 +27,13 @@ const SaveTable = () => {
   };
 
   const handleClick = async (restaurant) => {
+    const headersConfig = await getAxiosHeaderConfig();
+    if (!headersConfig) return;
     try {
-      const token = sessionStorage.getItem("token");
-      const response = await api.delete(`/user/delete-table/${restaurant.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.delete(
+        `/user/delete-table/${restaurant.id}`,
+        headersConfig
+      );
 
       if (response.status === 200) {
         setSavedRestaurants((prev) =>
@@ -77,7 +75,7 @@ const SaveTable = () => {
                       src={`./assets/${
                         restaurant.clicked ? "save" : "unsave"
                       }.svg`}
-                      className="w-10 h-10"
+                      className="w-8 h-8"
                       alt={restaurant.clicked ? "찜" : "찜 취소"}
                     />
                   </button>

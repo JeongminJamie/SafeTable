@@ -18,7 +18,8 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
     setToken(null);
     console.log("로그아웃 되었습니다.");
     navigate("/");

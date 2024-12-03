@@ -17,9 +17,6 @@ export const TableCard = ({
   reservations,
 }) => {
   const navigate = useNavigate();
-
-  const reservedTables = 5;
-  const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경 => 이 부분 어떻게 대체할까요?
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState("login");
   const [token, setToken] = useState(null); //이거 이렇게 두면 안됨. 변경필요
@@ -39,11 +36,6 @@ export const TableCard = ({
   const matchingReservations = (reservations || []).filter(
     (res) => res.name === name && res.address === `${address1}${address2}`
   );
-
-  // const reservationRestaurant = (reservations || []).find((res) => {
-  //   //address에 있는 공백 추가 금진
-  //   return res.name === name && res.address === `${address1}${address2}`;
-  // });
 
   useEffect(() => {
     const savedRestaurant = savedRestaurants.find(
@@ -70,7 +62,7 @@ export const TableCard = ({
 
   useEffect(() => {
     const saveRestaurant = async () => {
-      const headersConfig = getAxiosHeaderConfig();
+      const headersConfig = await getAxiosHeaderConfig();
       if (!headersConfig) return;
 
       try {
@@ -91,7 +83,7 @@ export const TableCard = ({
     };
 
     const deleteRestaurant = async () => {
-      const headersConfig = getAxiosHeaderConfig();
+      const headersConfig = await getAxiosHeaderConfig();
       if (!headersConfig) return;
 
       try {

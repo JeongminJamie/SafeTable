@@ -37,31 +37,22 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user._id, email: user.email },
-      process.env.JWT_SECRET
-      //{ expiresIn: 3600 } // 토큰 만료 시간 1시간
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" } // 액세스 토큰 만료 시간
     );
 
-    // // 액세스 토큰 발급 (1시간 유효)
-    // const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    //   expiresIn: "1h",
-    // });
-
-    // // 리프레시 토큰 발급 (7일 유효)
-    // const refreshToken = jwt.sign(
-    //   { id: user._id },
-    //   process.env.JWT_REFRESH_SECRET,
-    //   { expiresIn: "7d" }
-    // );
-
-    // // 리프레시 토큰을 DB에 저장
-    // user.refreshToken = refreshToken;
-    // await user.save(); // 저장
+    const refreshToken = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" } // 리프레시 토큰 만료 시간
+    );
 
     return res.json({
       success: true,
-      token,
+      accessToken,
+      refreshToken,
       user: {
         id: user._id,
         email: user.email,
@@ -104,50 +95,35 @@ router.get("/verify", verifyToken, async (req, res) => {
   }
 });
 
-// // 리프레시 토큰을 통해 액세스 토큰 재발급
-// router.post("/refresh-token", async (req, res) => {
-//   const { refreshToken } = req.body;
+// 리프레시 토큰을 통한 새로운 액세스 토큰 발급
+router.post("/refresh-token", async (req, res) => {
+  const { refreshToken } = req.body;
 
-//   if (!refreshToken) {
-//     return res
-//       .status(401)
-//       .json({ success: false, message: "No token provided" });
-//   }
+  if (!refreshToken) {
+    return res
+      .status(403)
+      .json({ success: false, message: "No refresh token provided" });
+  }
 
-//   try {
-//     // DB에서 리프레시 토큰을 가진 유저 찾기
-//     const user = await User.findOne({ refreshToken });
-//     if (!user) {
-//       return res
-//         .status(403)
-//         .json({ success: false, message: "Invalid refresh token" });
-//     }
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
 
-//     // 리프레시 토큰 검증
-//     jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
-//       if (err) {
-//         return res
-//           .status(403)
-//           .json({ success: false, message: "Invalid refresh token" });
-//       }
+    const accessToken = jwt.sign(
+      { id: decoded.id, email: decoded.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
 
-//       // 새로운 액세스 토큰 발급 (1시간 유효)
-//       const newAccessToken = jwt.sign(
-//         { id: decoded.id }, // 기존 토큰에서 사용자 ID 추출
-//         process.env.JWT_SECRET,
-//         { expiresIn: "1h" }
-//       );
-
-//       res.json({
-//         success: true,
-//         accessToken: newAccessToken,
-//       });
-//     });
-//   } catch (e) {
-//     console.error(e);
-//     return res.status(500).json({ success: false, message: "Server error" });
-//   }
-// });
+    return res.json({
+      success: true,
+      accessToken,
+    });
+  } catch (err) {
+    return res
+      .status(403)
+      .json({ success: false, message: "Invalid or expired refresh token" });
+  }
+});
 
 /* 비밀번호 바꾸기 */
 router.post("/change-password", verifyToken, async (req, res) => {
