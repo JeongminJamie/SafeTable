@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
 import { getAxiosHeaderConfig } from "../../config";
+import { useNavigate } from "react-router-dom";
 
 const SaveTable = () => {
-  const restaurantUrl = "https://www.safe-restaurant.com";
+  const navigate = useNavigate();
   const [savedRestaurants, setSavedRestaurants] = useState([]); // 배열로 초기화
+  console.log("🚀 ~ SaveTable ~ savedRestaurants:", savedRestaurants);
 
   const handleFetchSavedRestaurants = async () => {
     const headersConfig = await getAxiosHeaderConfig();
@@ -22,8 +24,8 @@ const SaveTable = () => {
     handleFetchSavedRestaurants();
   }, []);
 
-  const handleRedirect = () => {
-    window.location.href = restaurantUrl;
+  const handleRedirect = (seq) => {
+    //navigate(`/reservation/${seq}`);
   };
 
   const handleClick = async (restaurant) => {
@@ -66,7 +68,7 @@ const SaveTable = () => {
                 <div className="flex justify-between items-center">
                   <h1
                     className="text-lg font-semibold text-gray-800"
-                    onClick={handleRedirect}
+                    onClick={() => handleRedirect(restaurant.id)}
                   >
                     {restaurant.name}
                   </h1>
@@ -89,7 +91,7 @@ const SaveTable = () => {
                     {restaurant.telephone}
                   </p>
                   <button
-                    onClick={handleRedirect}
+                    onClick={() => handleRedirect(restaurant.id)}
                     className="bg-white text-blue-500 border border-blue-500 py-1 px-2 rounded hover:bg-blue-500 hover:text-white transition-colors"
                   >
                     예약하기

@@ -63,18 +63,6 @@ export const TableCard = React.memo(
       }));
     }, [savedRestaurants, seq]);
 
-    const handleSaveRestaurant = (e) => {
-      e.preventDefault();
-      const headersConfig = getAxiosHeaderConfig();
-      if (!headersConfig) {
-        setCurrentForm("login");
-        openModal();
-        return;
-      }
-
-      setRestaurant((prev) => ({ ...prev, clicked: !prev.clicked }));
-    };
-
     useEffect(() => {
       const saveRestaurant = async () => {
         const headersConfig = await getAxiosHeaderConfig();
@@ -125,7 +113,25 @@ export const TableCard = React.memo(
       }
     }, [restaurant.clicked]);
 
-    const BookButtonHandler = () => {
+    const handleSaveRestaurant = async (e) => {
+      e.preventDefault();
+      const headersConfig = await getAxiosHeaderConfig();
+      if (!headersConfig) {
+        setCurrentForm("login");
+        openModal();
+        return;
+      }
+
+      setRestaurant((prev) => ({ ...prev, clicked: !prev.clicked }));
+    };
+
+    const BookButtonHandler = async () => {
+      const headersConfig = await getAxiosHeaderConfig();
+      if (!headersConfig) {
+        setCurrentForm("login");
+        openModal();
+        return;
+      }
       navigate(`/reservation/${seq}`);
     };
 
