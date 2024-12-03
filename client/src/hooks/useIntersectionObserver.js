@@ -1,16 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const useIntersectionObserver = ({ onVisibleFn }) => {
   const targetRef = useRef(null);
-  let photoURL = "";
+  const [state, setState] = useState(null);
 
   useEffect(() => {
     if (!onVisibleFn) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => {
+      async ([entry]) => {
         if (entry.isIntersecting) {
-          photoURL = onVisibleFn();
+          const visibleSource = await onVisibleFn();
+          setState(visibleSource);
           observer.disconnect();
         }
       },
@@ -28,7 +29,7 @@ const useIntersectionObserver = ({ onVisibleFn }) => {
     };
   }, [onVisibleFn]);
 
-  return { photoURL, targetRef };
+  return { state, targetRef };
 };
 
 export default useIntersectionObserver;

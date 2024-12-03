@@ -10,8 +10,7 @@ import { getMyReservation } from "../../service/reservationService";
 import { getPhotoWithRestaurantName } from "../../service/googleService";
 
 const SafeMain = ({ isLoading }) => {
-  const { searchedValue, fetchedRestaurants, setFetchedRestaurants } =
-    useRestaurantStore();
+  const { searchedValue, fetchedRestaurants } = useRestaurantStore();
   const [savedRestaurants, setSavedRestaurants] = useState([]);
 
   // 보이는 tableCard의 식당 사진 가져오기

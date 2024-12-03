@@ -1,15 +1,13 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect } from "react";
 import SafeMain from "../components/SafeTable/SafeMain";
 import SearchBox from "../components/SafeTable/SearchBox";
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import useRestaurantStore from "../store/useRestaurantStore";
 import useInfiniteObserver from "../hooks/useInfiniteObserver";
 import {
   fetchEntireRestaurants,
   fetchRestaurantByInput,
 } from "../service/searchService";
-import Loading from "../components/Loading";
-import { attachPhotoToRestaurant } from "../service/googleService";
 
 const SafeTable = () => {
   const { searchedValue, setSearchedValue, setFetchedRestaurants } =
@@ -47,21 +45,6 @@ const SafeTable = () => {
     }
   }, [data]);
 
-  // 식당 데이터와 사진을 합치는 함수 호출 ---> tablecard onvisible로 진행중
-  // const fetchRestaurantsWithPhotos = useCallback(async (restaurantData) => {
-  //   setIsPageLoading(true);
-  //   const restaurantsWithPhotos = await attachPhotoToRestaurant(restaurantData);
-  //   setFetchedRestaurants(restaurantsWithPhotos);
-  //   setIsPageLoading(false);
-  // }, []);
-
-  // restaurantData가 있을 때 fetchedRestaurants에 사진과 함께 식당 정보 업데이트 ---> tablecard onvisible로 진행중
-  // useEffect(() => {
-  //   if (restaurantData) {
-  //     fetchRestaurantsWithPhotos(restaurantData);
-  //   }
-  // }, [restaurantData]);
-
   useEffect(() => {
     setSearchedValue("");
   }, []);
@@ -71,9 +54,6 @@ const SafeTable = () => {
       <SearchBox />
       <SafeMain isLoading={isLoading} />
       <div ref={loadMoreRef}></div>
-      {!isLoading && isFetchingNextPage && (
-        <Loading width="w-32" height="h-32" padding="p-10" />
-      )}
     </>
   );
 };
