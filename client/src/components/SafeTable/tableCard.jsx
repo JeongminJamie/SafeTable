@@ -23,7 +23,6 @@ export const TableCard = React.memo(
     const { state: photoURL, targetRef: cardRef } = useIntersectionObserver({
       onVisibleFn: onVisible,
     });
-
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentForm, setCurrentForm] = useState("login");
     const [token, setToken] = useState(null); //이거 이렇게 두면 안됨. 변경필요
@@ -33,11 +32,11 @@ export const TableCard = React.memo(
     const closeModal = () => setModalOpen(false);
 
     const [restaurant, setRestaurant] = useState({
+      photoURL: photoSource,
       id: seq,
       name,
       address: `${address1} ${address2}`,
       telephone,
-
       clicked: false,
     });
 
@@ -49,6 +48,7 @@ export const TableCard = React.memo(
     useEffect(() => {
       if (photoURL) {
         setPhotoSource(photoURL);
+        setRestaurant((prev) => ({ ...prev, photoURL }));
       }
     }, [photoURL]);
 
@@ -58,10 +58,14 @@ export const TableCard = React.memo(
       );
 
       setRestaurant((prev) => ({
-        ...prev,
+        photoURL: photoSource, // photoURL 추가
+        id: seq,
+        name,
+        address: `${address1} ${address2}`,
+        telephone,
         clicked: savedRestaurant ? savedRestaurant.clicked : false, // 찜 상태
       }));
-    }, [savedRestaurants, seq]);
+    }, [savedRestaurants, seq, photoSource]);
 
     useEffect(() => {
       const saveRestaurant = async () => {
@@ -74,7 +78,7 @@ export const TableCard = React.memo(
             restaurant,
             headersConfig
           );
-
+          console.log(restaurant);
           if (response.data.message) {
             console.log(response.data);
           } else {
@@ -122,7 +126,11 @@ export const TableCard = React.memo(
         return;
       }
 
-      setRestaurant((prev) => ({ ...prev, clicked: !prev.clicked }));
+      setRestaurant((prev) => ({
+        ...prev,
+        clicked: !prev.clicked,
+        photoURL: photoSource,
+      }));
     };
 
     const BookButtonHandler = async () => {

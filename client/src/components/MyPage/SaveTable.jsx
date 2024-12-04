@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { api } from "../../api/api";
 import { getAxiosHeaderConfig } from "../../config";
 import { useNavigate } from "react-router-dom";
+import { getPhotoWithRestaurantName } from "../../service/googleService";
 
 const SaveTable = () => {
   const navigate = useNavigate();
   const [savedRestaurants, setSavedRestaurants] = useState([]); // 배열로 초기화
-  console.log("🚀 ~ SaveTable ~ savedRestaurants:", savedRestaurants);
 
   const handleFetchSavedRestaurants = async () => {
     const headersConfig = await getAxiosHeaderConfig();
@@ -25,7 +25,7 @@ const SaveTable = () => {
   }, []);
 
   const handleRedirect = (seq) => {
-    //navigate(`/reservation/${seq}`);
+    navigate(`/reservation/${seq}`);
   };
 
   const handleClick = async (restaurant) => {
@@ -60,8 +60,8 @@ const SaveTable = () => {
           >
             <div className="flex">
               <img
-                src="사진링크"
-                alt="식당 이미지"
+                src={restaurant.photoURL}
+                alt="구글 식당 이미지"
                 className="w-24 h-24 object-cover rounded-lg bg-gray-200"
               />
               <div className="ml-4 flex-1">
