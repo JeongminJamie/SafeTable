@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { getAxiosHeaderConfig } from "../../config";
 import { AuthModal } from "../Login/AuthModal";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
-import RestaurantSkeleton from "./RestaurantSkeleton";
 
 export const TableCard = React.memo(
   ({

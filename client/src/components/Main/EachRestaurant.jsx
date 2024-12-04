@@ -1,16 +1,37 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { getPhotoWithRestaurantName } from "../../service/googleService";
 
-const EachRestaurant = () => {
+const EachRestaurant = ({ name, address, category }) => {
+  const [photoSource, setPhotoSource] = useState("");
+
+  const getRestaurantPhoto = useCallback(async (name) => {
+    const photoURL = await getPhotoWithRestaurantName(name);
+
+    setPhotoSource(photoURL);
+  }, []);
+
+  useEffect(() => {
+    getRestaurantPhoto(name);
+  }, []);
+
   return (
-    <div className="w-1/4 h-[30rem] p-1 transition-transform transform rounded-lg hover:rounded-2xl hover:translate-y-[-4px] hover:shadow-lg hover:shadow-gray-500/50 cursor-pointer">
-      <img
-        src="/assets/main/korean-food.avif"
-        className="rounded-2xl object-cover w-full h-3/4"
-      ></img>
-      <div className="flex flex-col space-around gap-2 mt-2 p-2">
-        <div className="font-bold text-xl">식당 이름</div>
-        <div>업종</div>
-        <div className="mb-2">주소</div>
+    <div className="w-full h-[26rem] p-1 transition-transform transform rounded-lg hover:rounded-2xl hover:translate-y-[-4px] hover:shadow-lg hover:shadow-gray-500/50 cursor-pointer">
+      {photoSource ? (
+        <img
+          src={photoSource}
+          className="rounded-2xl object-cover w-full h-4/6"
+        />
+      ) : (
+        <div className="w-full h-full bg-slate-200"></div>
+      )}
+      <div className="flex flex-col justify-center space-around gap-3 mt-2 p-2">
+        <div className="font-medium text-xl">{name}</div>
+        <div className="w-12 bg-yellow-400 px-1 rounded">
+          <div className="text-center text-white text-sm font-medium">
+            {category}
+          </div>
+        </div>
+        <div className="mb-2">{address}</div>
       </div>
     </div>
   );
