@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { api } from "../../api/api";
+import {
+  useSendEmail,
+  useSignup,
+  useVerityCode,
+} from "../../hooks/queries/auth";
 
 export const SigninForm = ({ onClose, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
@@ -34,75 +38,69 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
     return () => clearTimeout(debounceTimeout);
   }, [passCheck]);
 
-  const register = async () => {
-    try {
-      const response = await api.post("/register", {
-        user_email: email,
-        user_password: password,
-        user_name: username,
-        user_contact: phoneNumber,
-      });
+  // 유저등록-성공
+  const onSuccessRegister = (data) => {
+    console.log("회원가입 성공:", data);
+    onSwitchToLogin();
+  };
 
-      if (response.data) {
-        onSwitchToLogin();
-      }
-    } catch (e) {
-      console.log(e.response?.data?.msg);
+  // 유저등록-에러
+  const onErrorRegister = (error) => {
+    const errorMessage = error?.msg || "회원가입에 실패했습니다.";
+    console.error("회원가입 실패:", errorMessage);
+  };
+
+  // 유저등록
+  const { mutate: signupMutate } = useSignup(
+    onSuccessRegister,
+    onErrorRegister
+  );
+
+  // 인증코드발송-성공
+  const onSuccessSendCodeToEmail = (data) => {
+    if (data.message === "Verification email sent") {
+      setEmailError("");
+      setEmailOk("이메일로 인증코드를 발송했습니다.");
+      setEmailClick(true);
     }
   };
 
-  const sendemailapi = async (useremail) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(useremail)) {
-      setEmailError("유효한 이메일 주소를 입력해주세요.");
+  // 인증코드발송-에러
+  const onErrorSendCodeToEmail = (error) => {
+    if (
+      error.response?.data?.msg ===
+      "Email already exists, please use a different email"
+    ) {
+      setEmailError("이미 등록된 이메일입니다. 다른 이메일을 기입해주세요.");
       setEmailOk("");
-      return;
-    }
-
-    try {
-      const response = await api.post("/register/send-verification-email", {
-        email: useremail,
-      });
-      if (response.data.message === "Verification email sent") {
-        setEmailError("");
-        setEmailOk("이메일로 인증코드를 발송했습니다.");
-        setEmailClick(true);
-      }
-    } catch (error) {
-      if (
-        error.response?.data?.msg ===
-        "Email already exists, please use a different email"
-      ) {
-        setEmailError("이미 등록된 이메일입니다. 다른 이메일을 기입해주세요.");
-        setEmailOk("");
-      } else {
-        setEmailError("다시 시도해주세요.");
-        setEmailOk("");
-      }
     }
   };
 
-  //인증번호 없을때, 인증번호 시간 앖을때
-  const checkemailapi = async (code) => {
-    try {
-      const response = await api.post("/register/verify-email", {
-        email: email,
-        verificationCode: code,
-      });
-      if (response.data.message === "Email verified successfully") {
-        setIsVerified(true);
-      }
-    } catch (e) {
-      console.error(e);
-      if (
-        e.response?.data?.message === "Invalid or expired verification code"
-      ) {
-        setEmailCodeError("유효한 코드 6자리를 입력해주세요.");
-      } else if (e.response?.data?.message === "User not found") {
-        setEmailCodeError("유효한 코드 6자리를 입력해주세요.");
-      }
+  // 인증코드발송
+  const { mutate: sendEmailMutate } = useSendEmail(
+    onSuccessSendCodeToEmail,
+    onErrorSendCodeToEmail
+  );
+
+  // 인증코드확인 - 성공
+  const onSuccessVerifyCode = (data) => {
+    if (data?.message === "Email verified successfully") {
+      setIsVerified(true);
     }
   };
+
+  // 인증코드확인 - 에러
+  const onErrorVerifyCode = (error) => {
+    if (error?.data?.message) {
+      setEmailCodeError("유효한 코드 6자리를 입력해주세요.");
+    }
+  };
+
+  // 인증코드확인
+  const { mutate: verifyCodeMutate } = useVerityCode(
+    onSuccessVerifyCode,
+    onErrorVerifyCode
+  );
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -110,7 +108,8 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
       setPasswordError("비밀번호가 일치하지 않습니다.");
       return;
     }
-    register();
+
+    signupMutate({ email, password, username, phoneNumber });
   };
 
   return (
@@ -139,7 +138,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
               <button
                 type="button"
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
-                onClick={() => sendemailapi(email)}
+                onClick={() => sendEmailMutate({ email })}
               >
                 이메일 인증
               </button>
@@ -182,7 +181,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
               <button
                 type="button"
                 className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
-                onClick={() => checkemailapi(emailToken)}
+                onClick={() => verifyCodeMutate({ email, emailToken })}
               >
                 인증
               </button>

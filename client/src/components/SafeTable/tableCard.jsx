@@ -24,8 +24,6 @@ export const TableCard = React.memo(
       onVisibleFn: onVisible,
     });
 
-    const reservedTables = 5;
-    const restaurantUrl = "https://www.safe-restaurant.com"; // 실제 URL로 변경 => 이 부분 어떻게 대체할까요?
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentForm, setCurrentForm] = useState("login");
     const [token, setToken] = useState(null); //이거 이렇게 두면 안됨. 변경필요
@@ -47,11 +45,6 @@ export const TableCard = React.memo(
       (res) => res.name === name && res.address === `${address1}${address2}`
     );
 
-    // const reservationRestaurant = (reservations || []).find((res) => {
-    //   //address에 있는 공백 추가 금진
-    //   return res.name === name && res.address === `${address1}${address2}`;
-    // });
-
     // 실제 구글 식당 사진으로 URL 업데이트
     useEffect(() => {
       if (photoURL) {
@@ -70,21 +63,9 @@ export const TableCard = React.memo(
       }));
     }, [savedRestaurants, seq]);
 
-    const handleSaveRestaurant = (e) => {
-      e.preventDefault();
-      const headersConfig = getAxiosHeaderConfig();
-      if (!headersConfig) {
-        setCurrentForm("login");
-        openModal();
-        return;
-      }
-
-      setRestaurant((prev) => ({ ...prev, clicked: !prev.clicked }));
-    };
-
     useEffect(() => {
       const saveRestaurant = async () => {
-        const headersConfig = getAxiosHeaderConfig();
+        const headersConfig = await getAxiosHeaderConfig();
         if (!headersConfig) return;
 
         try {
@@ -105,7 +86,7 @@ export const TableCard = React.memo(
       };
 
       const deleteRestaurant = async () => {
-        const headersConfig = getAxiosHeaderConfig();
+        const headersConfig = await getAxiosHeaderConfig();
         if (!headersConfig) return;
 
         try {
@@ -132,7 +113,25 @@ export const TableCard = React.memo(
       }
     }, [restaurant.clicked]);
 
-    const BookButtonHandler = () => {
+    const handleSaveRestaurant = async (e) => {
+      e.preventDefault();
+      const headersConfig = await getAxiosHeaderConfig();
+      if (!headersConfig) {
+        setCurrentForm("login");
+        openModal();
+        return;
+      }
+
+      setRestaurant((prev) => ({ ...prev, clicked: !prev.clicked }));
+    };
+
+    const BookButtonHandler = async () => {
+      const headersConfig = await getAxiosHeaderConfig();
+      if (!headersConfig) {
+        setCurrentForm("login");
+        openModal();
+        return;
+      }
       navigate(`/reservation/${seq}`);
     };
 

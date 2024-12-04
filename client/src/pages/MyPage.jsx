@@ -5,6 +5,7 @@ import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../store/useUserStore";
 import MyCardInfo from "../components/Card/MyCardInfo";
+import { getAxiosHeaderConfig } from "../config";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -13,19 +14,11 @@ const MyPage = () => {
   const [activeTab, setActiveTab] = useState("aboutMe");
 
   const verifyToken = async () => {
-    const token = sessionStorage.getItem("token");
-
-    if (!token) {
-      console.log("No access token found");
-      return;
-    }
+    const headersConfig = await getAxiosHeaderConfig();
+    if (!headersConfig) return;
 
     try {
-      const response = await api.get("/login/verify", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get("/login/verify", headersConfig);
 
       setUserData({
         userName: response.data.user.name,
@@ -44,7 +37,7 @@ const MyPage = () => {
 
   // To-do: 로그인이 필요한 모든 페이지에 token 확인 하기!!
   useEffect(() => {
-    if (!sessionStorage.getItem("token")) {
+    if (!sessionStorage.getItem("accessToken")) {
       navigate("/");
     }
     verifyToken();

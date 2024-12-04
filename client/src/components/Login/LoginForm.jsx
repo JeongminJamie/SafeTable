@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { api } from "../../api/api";
 import useInput from "../../hooks/useInput";
+import { useSignin } from "../../hooks/queries/auth";
+import { api } from "../../api/api";
 
 export const LoginForm = ({
   onClose,
@@ -8,51 +9,67 @@ export const LoginForm = ({
   setToken,
   onLoginSuccess,
 }) => {
-  const [emailInput] = useInput(""); // email 상태 관리
-  const [passwordInput] = useInput(""); // password 상태 관리
-  const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 관리
+  const [emailInput] = useInput("");
+  const [passwordInput] = useInput("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const connectLogin = async () => {
-    try {
-      const response = await api.post(
-        "/login",
-        {
-          user_email: emailInput.value,
-          user_password: passwordInput.value,
-        },
-        { withCredentials: true }
-      );
+  const onSuccess = (data) => {
+    console.log("로그인 되었습니다.");
+    sessionStorage.setItem("accessToken", data.accessToken);
+    sessionStorage.setItem("refreshToken", data.refreshToken);
+    setToken(data.token);
+    if (onLoginSuccess) {
+      onLoginSuccess(data.accessToken);
+    }
+    setErrorMessage("");
+    onClose();
+  };
 
-      console.log("로그인 되었습니다.");
-      sessionStorage.setItem("token", response.data.token);
-      setToken(response.data.token);
-      if (onLoginSuccess) {
-        onLoginSuccess();
+  const onError = async (error) => {
+    if (error.response?.status === 403) {
+      try {
+        const refreshToken = sessionStorage.getItem("refreshToken");
+        const refreshResponse = await api.post("/login/refresh-token", {
+          refreshToken,
+        });
+
+        const newAccessToken = refreshResponse.data.accessToken;
+        sessionStorage.setItem("accessToken", newAccessToken);
+
+        // 새로운 액세스 토큰으로 다시 요청
+        const retryResponse = await api.get("/login/verify", {
+          headers: {
+            Authorization: `Bearer ${newAccessToken}`,
+          },
+        });
+
+        console.log(retryResponse.data);
+      } catch (refreshError) {
+        if (refreshError.response?.status === 403) {
+          setErrorMessage("세션이 만료되었습니다. 다시 로그인해주세요.");
+          sessionStorage.clear(); // 세션 초기화
+          onClose(); // 모달 닫기
+        } else {
+          console.error("리프레시 토큰 요청 실패:", refreshError);
+          setErrorMessage("일시적인 문제가 발생했습니다. 다시 시도해주세요.");
+        }
       }
-      setErrorMessage("");
-      return true;
-    } catch (e) {
-      const error = e.response?.data?.message || e.message;
-      console.log("로그인 실패:", error);
+    } else {
       setErrorMessage("아이디 또는 비밀번호를 다시 확인해주세요.");
-      return false;
     }
   };
 
-  const handleLogin = async (e) => {
+  const { mutate: signinMutate } = useSignin(onSuccess, onError);
+
+  const handleLoginButtonClick = async (e) => {
     e.preventDefault();
-
-    const success = await connectLogin();
-
-    if (success) {
-      onClose();
-    }
+    signinMutate({ email: emailInput.value, password: passwordInput.value });
   };
 
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">로그인</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLoginButtonClick}>
         <div className="mb-4">
           <label
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -63,7 +80,7 @@ export const LoginForm = ({
           <input
             type="email"
             id="email"
-            {...emailInput} //useInput으로 바인딩
+            {...emailInput}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="이메일을 입력하세요"
             required

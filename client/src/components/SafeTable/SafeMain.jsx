@@ -23,7 +23,7 @@ const SafeMain = ({ isLoading }) => {
   // 유저의 찜 목록을 불러오기
   useEffect(() => {
     const handleFetchSavedRestaurants = async () => {
-      const headersConfig = getAxiosHeaderConfig();
+      const headersConfig = await getAxiosHeaderConfig();
       if (!headersConfig) return;
       try {
         const response = await api.get("/user/saved-tables", headersConfig);

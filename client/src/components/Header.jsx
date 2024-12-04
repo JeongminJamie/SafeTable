@@ -10,6 +10,11 @@ const Header = () => {
   const [currentForm, setCurrentForm] = useState("login");
   const [token, setToken] = useState(null);
 
+  const onLoginSuccess = (newToken) => {
+    setToken(newToken);
+    closeModal();
+  };
+
   useEffect(() => {
     const storedToken = getToken();
     if (storedToken) {
@@ -18,7 +23,8 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
     setToken(null);
     console.log("로그아웃 되었습니다.");
     navigate("/");
@@ -115,6 +121,7 @@ const Header = () => {
         currentForm={currentForm}
         setCurrentForm={setCurrentForm}
         setToken={setToken}
+        onLoginSuccess={onLoginSuccess}
       />
     </>
   );

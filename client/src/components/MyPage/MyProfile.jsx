@@ -43,7 +43,7 @@ export const MyProfile = () => {
   }, [newPassword, passCheck, debouncedCheckPassword]);
 
   const updateProfile = async () => {
-    const headersConfig = getAxiosHeaderConfig();
+    const headersConfig = await getAxiosHeaderConfig();
     if (!headersConfig) return;
 
     try {
@@ -68,10 +68,10 @@ export const MyProfile = () => {
   };
 
   const changePassword = async () => {
-    try {
-      const headersConfig = getAxiosHeaderConfig();
-      if (!headersConfig) return;
+    const headersConfig = getAxiosHeaderConfig();
+    if (!headersConfig) return;
 
+    try {
       const response = await api.post(
         "/login/change-password",
         {

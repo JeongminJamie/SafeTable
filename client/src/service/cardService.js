@@ -1,7 +1,7 @@
 import { getAxiosHeaderConfig } from "../config";
 import { api } from "../api/api";
 
-const headersConfig = getAxiosHeaderConfig();
+const headersConfig = await getAxiosHeaderConfig();
 
 export const getMyCard = async () => {
   if (!headersConfig) return;

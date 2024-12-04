@@ -14,7 +14,7 @@ export const getRestaurantBySEQ = async (seq) => {
 };
 
 export const getMyReservation = async () => {
-  const headersConfig = getAxiosHeaderConfig();
+  const headersConfig = await getAxiosHeaderConfig();
   if (!headersConfig) return;
 
   const response = await api.get("/api/reservation", headersConfig);
@@ -22,7 +22,7 @@ export const getMyReservation = async () => {
 };
 
 export const saveReservation = async (reservationStore) => {
-  const headersConfig = getAxiosHeaderConfig();
+  const headersConfig = await getAxiosHeaderConfig();
   if (!headersConfig) return;
 
   const restaurant = reservationStore.restaurant;
@@ -48,7 +48,7 @@ export const saveReservation = async (reservationStore) => {
 };
 
 export const cancelOrDeleteMyReservation = async (reservationId) => {
-  const headersConfig = getAxiosHeaderConfig();
+  const headersConfig = await getAxiosHeaderConfig();
   if (!headersConfig) return;
 
   const response = await api.delete(
