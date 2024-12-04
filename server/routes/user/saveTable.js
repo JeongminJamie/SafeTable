@@ -23,7 +23,7 @@ router.get("/saved-tables", verifyToken, async (req, res) => {
 
 // 찜식당 저장 API
 router.post("/save-table", verifyToken, async (req, res) => {
-  const { id, name, address, telephone, clicked } = req.body;
+  const { photoURL, id, name, address, telephone, clicked } = req.body;
   const userId = req.userId;
 
   if (!id || !name || !address) {
@@ -35,6 +35,7 @@ router.post("/save-table", verifyToken, async (req, res) => {
 
     if (!restaurant) {
       restaurant = new Restaurant({
+        photoURL,
         id,
         name,
         address,
@@ -67,7 +68,6 @@ router.delete("/delete-table/:id", verifyToken, async (req, res) => {
       return res.status(404).json({ error: "Restaurant not found." });
     }
 
-    // 사용자 문서에서 `savedRestaurants` 목록에서 식당 ID 제거
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
       { $pull: { savedRestaurants: restaurant._id } },
@@ -78,7 +78,6 @@ router.delete("/delete-table/:id", verifyToken, async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
 
-    // 레스토랑 테이블에서도 해당 식당 제거
     await Restaurant.deleteOne({ _id: restaurant._id });
 
     res.status(200).json({ message: "Restaurant removed successfully." });
