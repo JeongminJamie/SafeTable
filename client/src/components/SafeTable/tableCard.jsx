@@ -145,10 +145,10 @@ export const TableCard = React.memo(
     return (
       <>
         <div
-          className="w-80 border border-gray-300 rounded-lg bg-white transition-transform transform hover:scale-105 hover:cursor-pointer shadow-md"
+          className="w-80 border border-amber-100 rounded-lg bg-white transition-transform transform hover:scale-105 hover:cursor-pointer shadow-md"
           ref={cardRef}
         >
-          <div className="relative w-full h-40 bg-gray-200  overflow-hidden mb-4">
+          <div className="relative w-full h-40 bg-gray-200 overflow-hidden mb-4 rounded-t-lg ">
             {/* 사진 업데이트에 따라 이미지 또는 무지 회색 바탕 */}
             {photoSource ? (
               <img
@@ -177,12 +177,12 @@ export const TableCard = React.memo(
           </div>
           <div className="m-3">
             <h1 className="text-lg font-semibold mb-1 text-gray-800">{name}</h1>
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="text-sm text-gray-600 mb-2 h-10">
               {address1} {address2}
             </p>
-            <p className="text-sm text-gray-600 mb-3">{telephone}</p>
+            <p className="text-sm text-gray-600 mb-3 h-5">{telephone}</p>
             <div className="flex justify-between mb-3">
-              <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded hover:bg-gray-300 mr-1">
+              <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded mr-1">
                 {category}
               </button>
               {matchingReservations.length ? (
@@ -201,7 +201,7 @@ export const TableCard = React.memo(
             </div>
 
             <button
-              className="w-full bg-white text-blue-500 border border-blue-500 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-colors"
+              className="w-full bg-white text-amber-500 border border-amber-500 py-2 rounded-lg hover:bg-amber-500 hover:text-white transition-colors"
               onClick={BookButtonHandler}
             >
               예약하기
