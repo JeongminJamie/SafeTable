@@ -129,7 +129,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
               placeholder="이메일을 입력하세요"
               required
               disabled={isVerified}
@@ -137,7 +137,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
             {!isVerified ? (
               <button
                 type="button"
-                className="absolute top-1/2 right-3 transform -translate-y-1/2 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 px-2 py-1.5 border border-amber-500 bg-amber-500 text-white text-sm rounded hover:bg-amber-600 transition duration-200"
                 onClick={() => sendEmailMutate({ email })}
               >
                 이메일 인증
@@ -174,13 +174,13 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 id="verifyEmail"
                 value={emailToken}
                 onChange={(e) => setEmailtoken(e.target.value)}
-                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
                 placeholder="인증 코드를 입력하세요"
                 required
               />
               <button
                 type="button"
-                className="absolute bottom-2 right-3 px-2 py-1.5 border border-blue-500 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition duration-200"
+                className="absolute bottom-2 right-3 px-2 py-1.5 border border-amber-500 bg-amber-500 text-white text-sm rounded hover:bg-amber-600 transition duration-200"
                 onClick={() => verifyCodeMutate({ email, emailToken })}
               >
                 인증
@@ -207,7 +207,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
                 placeholder="비밀번호를 입력하세요"
                 required
               />
@@ -225,7 +225,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 id="passwordCheck"
                 value={passCheck}
                 onChange={(e) => setPassCheck(e.target.value)}
-                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
                 placeholder="비밀번호를 다시 입력하세요"
                 required
               />
@@ -258,7 +258,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 id="name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
                 placeholder="이름을 입력하세요"
                 required
               />
@@ -276,7 +276,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
                 id="phone"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
                 placeholder="연락처를 입력하세요"
                 required
               />
@@ -285,7 +285,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="px-20 py-2 border border-blue-500 bg-white text-blue-500 rounded hover:bg-blue-500 hover:text-white"
+                className="px-20 py-2 border border-amber-500 bg-white text-amber-500 rounded hover:bg-amber-500 hover:text-white"
               >
                 회원가입
               </button>
@@ -298,7 +298,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
         <span className="text-gray-500">이미 계정이 있으신가요? </span>
         <button
           onClick={onSwitchToLogin}
-          className="text-blue-500 hover:underline"
+          className="text-amber-500 hover:underline"
         >
           로그인
         </button>

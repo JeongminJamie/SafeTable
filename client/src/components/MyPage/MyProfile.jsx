@@ -246,6 +246,7 @@ export const MyProfile = () => {
         onClick={() => {
           openModal();
         }}
+        className="flex justify-end"
       >
         <p className="text-blue-500 underline hover:text-blue-700">
           비밀번호 바꾸기
