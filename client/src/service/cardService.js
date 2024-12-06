@@ -1,9 +1,8 @@
 import { getAxiosHeaderConfig } from "../config";
 import { api } from "../api/api";
 
-const headersConfig = await getAxiosHeaderConfig();
-
 export const getMyCard = async () => {
+  const headersConfig = await getAxiosHeaderConfig();
   if (!headersConfig) return;
 
   const response = await api.get(`/api/card`, headersConfig);
@@ -12,6 +11,7 @@ export const getMyCard = async () => {
 };
 
 export const saveCard = async (newCardInfo) => {
+  const headersConfig = await getAxiosHeaderConfig();
   if (!headersConfig) return;
 
   const response = await api.post("/api/card", newCardInfo, headersConfig);
@@ -20,6 +20,7 @@ export const saveCard = async (newCardInfo) => {
 };
 
 export const deleteCard = async (cardId) => {
+  const headersConfig = await getAxiosHeaderConfig();
   if (!headersConfig) return;
 
   const response = await api.delete(`/api/card/${cardId}`, headersConfig);
