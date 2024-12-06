@@ -10,6 +10,7 @@ const RestaurantsSection = () => {
     queryKey: ["getFoutRestaurantInfo"],
     queryFn: getFourRestaurantsInfo,
     staleTime: 60 * 1000,
+    suspense: true,
   });
 
   useEffect(() => {
