@@ -92,7 +92,7 @@ const SaveTable = () => {
                   </p>
                   <button
                     onClick={() => handleRedirect(restaurant.id)}
-                    className="bg-white text-blue-500 border border-blue-500 py-1 px-2 rounded hover:bg-blue-500 hover:text-white transition-colors"
+                    className="bg-white text-amber-500 border border-amber-500 py-1 px-2 rounded hover:bg-amber-500 hover:text-white transition-colors"
                   >
                     예약하기
                   </button>
