@@ -30,6 +30,7 @@ const DepositCheck = ({ setIsReservationChecked }) => {
   }, [userCard, isLoading]);
 
   console.log("userCard 데이터 확인", userCard);
+  console.log("lastCardNumber", lastCardNumber);
 
   // 예약 정보 저장 요청
   const { mutate: saveReservationRequest, isLoading: saveLoading } =
