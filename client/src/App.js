@@ -22,7 +22,12 @@ function App() {
       {location.pathname !== "/" && <Header />}
       <Suspense
         fallback={
-          <Loading width="w-32" height="h-32" padding="p-10 mt-24 mb-24" />
+          <Loading
+            entireHeight="min-h-screen"
+            width="w-32"
+            height="h-32"
+            padding="p-10 mt-24 mb-24"
+          />
         }
       >
         <Routes>

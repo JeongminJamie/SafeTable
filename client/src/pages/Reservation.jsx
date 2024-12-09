@@ -10,11 +10,12 @@ import { toast } from "react-toastify";
 import ReservationAlertToast from "../components/Reservation/ReservationAlertToast";
 import PaymentModal from "../components/Payment/PaymentModal";
 import OverTime from "../components/Reservation/OverTime";
+import useResetReservation from "../hooks/useResetReservation";
 
 const Reservation = () => {
   const { seq } = useParams();
-  const { date, timeSlot, setRestaurant, resetReservation } =
-    useReservationStore();
+
+  const { date, timeSlot, setRestaurant } = useReservationStore();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   const { data: restaurant } = useQuery({
@@ -56,11 +57,6 @@ const Reservation = () => {
       return true;
     }
   };
-
-  // 과거 예약 상태 초기화
-  useEffect(() => {
-    resetReservation();
-  }, []);
 
   return (
     <div className="w-4/6 m-auto flex flex-col items-center text-center gap-10 mt-10 mb-20">

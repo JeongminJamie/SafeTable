@@ -21,14 +21,13 @@ const MyCardInfo = () => {
     refetchOnWindowFocus: false,
   });
 
-  // 데이터를 가져왔을 때, []라면 cardStore 리셋 아니면 card 저장 
+  // 데이터를 가져왔을 때, []라면 cardStore 리셋 아니면 card 저장
   useEffect(() => {
     if (!isLoading) {
       if (myCard.length === 0) {
         reset();
       } else {
         setCard(myCard[0]);
-        console.log("myCard 로그 확인", myCard);
       }
     }
   }, [myCard, isLoading, setCard, reset]);
