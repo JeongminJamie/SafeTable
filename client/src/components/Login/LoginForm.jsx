@@ -36,7 +36,6 @@ export const LoginForm = ({
         const newAccessToken = refreshResponse.data.accessToken;
         sessionStorage.setItem("accessToken", newAccessToken);
 
-        // 새로운 액세스 토큰으로 다시 요청
         const retryResponse = await api.get("/login/verify", {
           headers: {
             Authorization: `Bearer ${newAccessToken}`,
@@ -47,8 +46,8 @@ export const LoginForm = ({
       } catch (refreshError) {
         if (refreshError.response?.status === 403) {
           setErrorMessage("세션이 만료되었습니다. 다시 로그인해주세요.");
-          sessionStorage.clear(); // 세션 초기화
-          onClose(); // 모달 닫기
+          sessionStorage.clear();
+          onClose();
         } else {
           console.error("리프레시 토큰 요청 실패:", refreshError);
           setErrorMessage("일시적인 문제가 발생했습니다. 다시 시도해주세요.");
