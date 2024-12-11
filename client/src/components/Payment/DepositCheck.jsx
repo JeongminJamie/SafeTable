@@ -27,7 +27,7 @@ const DepositCheck = ({ setIsReservationChecked }) => {
     if (!isLoading && userCard.length !== 0) {
       setLastCardNumber(userCard[0].card_number.slice(-4));
     }
-  }, [userCard, isLoading]);
+  }, [userCard, isLoading, setLastCardNumber]);
 
   // 예약 정보 저장 요청
   const { mutate: saveReservationRequest, isLoading: saveLoading } =

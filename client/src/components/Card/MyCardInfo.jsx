@@ -43,7 +43,7 @@ const MyCardInfo = () => {
       return showedCardNumber + maskedCardNumber;
     }
     return "";
-  }, [myCard]);
+  }, [myCard, isLoading]);
 
   // 성공적으로 저장한 카드는 있지만, 서버에서 가져온 데이터에 정보가 없을 때
   useEffect(() => {
@@ -70,7 +70,7 @@ const MyCardInfo = () => {
     if (myCard?.length !== 0) {
       deleteMyCard(myCard[0]._id);
     }
-  }, [myCard]);
+  }, [myCard, deleteMyCard]);
 
   const deleteButtonHandler = useCallback(() => {
     setIsDeleteModalOpen(true);

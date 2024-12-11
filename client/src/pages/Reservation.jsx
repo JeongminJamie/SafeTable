@@ -35,7 +35,7 @@ const Reservation = () => {
       };
       setRestaurant(neccesaryRestaurantInfo);
     }
-  }, [restaurant]);
+  }, [restaurant, setRestaurant]);
 
   const clickConfirmButtonHandler = () => {
     if (!timeSlot) {

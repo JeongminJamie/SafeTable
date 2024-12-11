@@ -9,7 +9,6 @@ import {
   formatTimeToKoean,
   parseStringToDate,
 } from "../../utils/dateAndTime";
-import Loading from "../Loading";
 import CancelReservationModal from "./CancelReservationModal";
 
 export const Reservations = () => {
