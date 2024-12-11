@@ -1,9 +1,6 @@
 import React, { useMemo } from "react";
 import useReservationStore from "../../store/useReservationStore";
-import {
-  formatDateToKorean,
-  formatTimeToKoean,
-} from "../../utils/dateAndTime";
+import { formatDateToKorean, formatTimeToKoean } from "../../utils/dateAndTime";
 
 const ReservationCheck = ({
   setIsPaymentModalOpen,

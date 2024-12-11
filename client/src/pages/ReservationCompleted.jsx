@@ -1,10 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useReservationStore from "../store/useReservationStore";
 import CompletedDetails from "../components/Reservation/CompletedDetails";
+import useResetReservation from "../hooks/useResetReservation";
 
 const ReservationCompleted = () => {
   const navigate = useNavigate();
+
+  const handleHomeClick = () => {
+    navigate("/safetable");
+  };
+
+  // 페이지 떠날 때 현 예약 상태 초기화
+  useResetReservation();
 
   return (
     <div className="h-screen flex justify-center items-center">
@@ -21,10 +28,10 @@ const ReservationCompleted = () => {
         </p>
         <CompletedDetails />
         <div
-          onClick={() => navigate("/")}
+          onClick={handleHomeClick}
           className="w-32 h-12 rounded-full bg-amber-200 flex justify-center items-center font-medium transition-transform duration-200 hover:scale-105 hover:cursor-pointer"
         >
-          홈으로 가기
+          식당 더보기
         </div>
       </div>
     </div>

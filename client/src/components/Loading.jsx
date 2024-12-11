@@ -1,12 +1,14 @@
 import React from "react";
 
-const Loading = ({ width, height, padding }) => {
+const Loading = ({ entireHeight, width, height, padding }) => {
   return (
-    <img
-      src="/assets/loading-animation.gif"
-      alt="loading"
-      className={`m-auto ${width} ${height} ${padding}`}
-    />
+    <div className={`flex justify-center items-center ${entireHeight}`}>
+      <img
+        src="/assets/loading-animation.gif"
+        alt="loading"
+        className={`m-auto ${width} ${height} ${padding}`}
+      />
+    </div>
   );
 };
 

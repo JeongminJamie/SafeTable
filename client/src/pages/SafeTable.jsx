@@ -28,6 +28,7 @@ const SafeTable = () => {
       },
       staleTime: 120 * 1000,
       refetchOnWindowFocus: false,
+      suspense: false,
     });
 
   // 무한 스크롤링을 위한 observer 커스텀 훅 호출
