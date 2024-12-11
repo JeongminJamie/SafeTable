@@ -4,9 +4,7 @@ import UnAuthorized from "./UnAuthorized";
 import Forbidden from "./Forbidden";
 import InternalServerError from "./\bInternalServerError";
 
-const ErrorFallback = ({ error }) => {
-  const status = error?.status;
-
+const ErrorFallback = ({ status }) => {
   switch (status) {
     case 401:
       return <UnAuthorized status={status} />;
@@ -18,13 +16,13 @@ const ErrorFallback = ({ error }) => {
       return <InternalServerError status={status} />;
     default:
       return (
-        <div className="flex flex-col justify-content align-center">
+        <div className="flex flex-col items-center gap-5">
           <img
             src="/assets/error/internalerror.png"
-            className="w-10 h-10"
+            className="w-20 h-20"
             alt="error"
           />
-          <p>알 수 없는 오류가 발생했습니다.</p>
+          <p className="text-lg">알 수 없는 오류가 발생했습니다.</p>
         </div>
       );
   }
