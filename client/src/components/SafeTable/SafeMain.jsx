@@ -38,7 +38,7 @@ const SafeMain = ({ isLoading }) => {
   const { data: reservations = [], isLoading: isReservationsLoading } =
     useQuery({
       queryKey: ["getMyReservations"],
-      queryFn: getMyReservation,
+      queryFn: () => getMyReservation(),
       refetchOnWindowFocus: false,
     });
 

@@ -21,7 +21,7 @@ export const Reservations = () => {
   // 내 예약 조회 & 내 예약 날짜/시간 포맷 & 과거와 현재 예약 구분
   const { data: reservations = [], refetch } = useQuery({
     queryKey: ["getMyReservations"],
-    queryFn: getMyReservation,
+    queryFn: () => getMyReservation(),
     refetchOnWindowFocus: false,
   });
 

@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import ReservationAlertToast from "../components/Reservation/ReservationAlertToast";
 import PaymentModal from "../components/Payment/PaymentModal";
 import OverTime from "../components/Reservation/OverTime";
-import useResetReservation from "../hooks/useResetReservation";
 
 const Reservation = () => {
   const { seq } = useParams();

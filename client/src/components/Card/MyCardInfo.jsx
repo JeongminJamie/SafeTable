@@ -17,7 +17,7 @@ const MyCardInfo = () => {
     refetch,
   } = useQuery({
     queryKey: ["getMyCard"],
-    queryFn: getMyCard,
+    queryFn: () => getMyCard(),
     refetchOnWindowFocus: false,
   });
 
