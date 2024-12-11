@@ -87,7 +87,7 @@ export const PasswordChange = ({
             </button>
             <button
               onClick={handleConfirmPasswordChange}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              className="px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600 transition"
               disabled={!isPasswordValid || passwordError}
             >
               비밀번호 변경
@@ -108,7 +108,7 @@ export const PasswordChange = ({
             </button>
             <button
               onClick={handleFinalPasswordChange}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+              className="px-4 py-2 bg-amber-500 text-white rounded hover:bg-amber-600 transition"
             >
               확인
             </button>

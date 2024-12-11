@@ -40,7 +40,7 @@ export const ProfileInfo = ({
           <div className="flex justify-center mt-4">
             <button
               onClick={() => setIsEditing(true)}
-              className="w-1/5 h-10 bg-amber-200 m-auto px-2 py-1"
+              className="w-36 h-10 rounded bg-amber-200 m-auto px-2 py-1 hover:bg-amber-500"
             >
               수정
             </button>
@@ -58,7 +58,7 @@ export const ProfileInfo = ({
               name="userName"
               value={localUserData.userName}
               onChange={handleChange}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
               placeholder="Enter your name"
             />
           </div>
@@ -72,7 +72,7 @@ export const ProfileInfo = ({
               name="userContact"
               value={localUserData.userContact}
               onChange={handleChange}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
               placeholder="Enter your contact"
             />
           </div>
@@ -86,14 +86,14 @@ export const ProfileInfo = ({
               name="userLocation"
               value={localUserData.userLocation}
               onChange={handleChange}
-              className="border p-2 rounded w-full"
+              className="border p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
               placeholder="Enter your location"
             />
           </div>
           <div className="flex justify-center mt-4">
             <button
               type="submit"
-              className="w-1/5 h-10 bg-amber-200 m-auto px-2 py-1"
+              className="w-36 h-10 rounded bg-amber-400 m-auto px-2 py-1 hover:bg-amber-500"
             >
               저장
             </button>
