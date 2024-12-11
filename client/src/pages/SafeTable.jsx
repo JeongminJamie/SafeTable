@@ -44,11 +44,11 @@ const SafeTable = () => {
       const allFetchedRestaurants = data?.pages.flatMap((page) => page.data);
       setFetchedRestaurants(allFetchedRestaurants);
     }
-  }, [data]);
+  }, [data, setFetchedRestaurants]);
 
   useEffect(() => {
     setSearchedValue("");
-  }, []);
+  }, [setSearchedValue]);
 
   return (
     <>
