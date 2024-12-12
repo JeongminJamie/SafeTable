@@ -2,7 +2,7 @@ import React from "react";
 import NotFound from "./NotFound";
 import UnAuthorized from "./UnAuthorized";
 import Forbidden from "./Forbidden";
-import InternalServerError from "./\bInternalServerError";
+import InternalServerError from "./InternalServerError";
 
 const ErrorFallback = ({ status }) => {
   switch (status) {
