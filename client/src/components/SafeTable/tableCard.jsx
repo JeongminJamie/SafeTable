@@ -12,7 +12,6 @@ export const TableCard = React.memo(
     address2,
     telephone,
     category,
-    website,
     seq,
     savedRestaurants,
     reservations,

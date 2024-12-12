@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useReservationStore from "../store/useReservationStore";
 import { getRestaurantBySEQ } from "../service/reservationService";
 
@@ -13,6 +13,7 @@ import OverTime from "../components/Reservation/OverTime";
 
 const Reservation = () => {
   const { seq } = useParams();
+  const navigate = useNavigate();
 
   const { date, timeSlot, setRestaurant } = useReservationStore();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
@@ -23,6 +24,12 @@ const Reservation = () => {
     enabled: !!seq,
     staleTime: 120 * 1000,
   });
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("accessToken")) {
+      navigate("/");
+    }
+  }, []);
 
   useEffect(() => {
     if (restaurant) {

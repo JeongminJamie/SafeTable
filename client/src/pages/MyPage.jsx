@@ -1,41 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { AboutMe } from "../components/MyPage/AboutMe";
 import { Reservations } from "../components/MyPage/Reservations";
-import { api } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../store/useUserStore";
 import MyCardInfo from "../components/Card/MyCardInfo";
-import { getAxiosHeaderConfig } from "../config";
+import { useVerifyToken } from "../hooks/queries/auth";
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const { userData, setUserData } = useUserStore();
+  const { userData } = useUserStore();
+  const { verifyToken } = useVerifyToken();
 
   const [activeTab, setActiveTab] = useState("aboutMe");
 
-  const verifyToken = async () => {
-    const headersConfig = await getAxiosHeaderConfig();
-    if (!headersConfig) return;
-
-    try {
-      const response = await api.get("/login/verify", headersConfig);
-
-      setUserData({
-        userName: response.data.user.name,
-        userEmail: response.data.user.email,
-        userContact: response.data.user.contact,
-        userLocation: response.data.user.location,
-      });
-    } catch (error) {
-      if (error.response) {
-        console.log("Failed to verify token:", error.response.data.message);
-      } else {
-        console.error("Error verifying token:", error.message);
-      }
-    }
-  };
-
-  // To-do: 로그인이 필요한 모든 페이지에 token 확인 하기!!
   useEffect(() => {
     if (!sessionStorage.getItem("accessToken")) {
       navigate("/");
