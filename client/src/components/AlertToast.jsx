@@ -1,8 +1,8 @@
 import React from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ReservationAlertToast = () => {
+const AlertToast = () => {
   return (
     <>
       <ToastContainer
@@ -19,4 +19,4 @@ const ReservationAlertToast = () => {
   );
 };
 
-export default ReservationAlertToast;
+export default AlertToast;
