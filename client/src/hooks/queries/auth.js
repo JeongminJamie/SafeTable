@@ -4,7 +4,7 @@ import {
   signin,
   signup,
   verifyCode,
-} from "../../service/auth";
+} from "../../service/authService";
 import { api } from "../../api/api";
 import { getAxiosHeaderConfig } from "../../config";
 import useUserStore from "../../store/useUserStore";
