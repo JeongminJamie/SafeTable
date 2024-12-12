@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 import ScrollTop from "./components/ScrollTop";
 import Loading from "./components/Loading";
 import { useQueryErrorResetBoundary } from "@tanstack/react-query";
-import ErrorPage from "./pages/\bErrorPage";
+import ErrorPage from "./pages/ErrorPage";
 
 const Main = lazy(() => import("./pages/Main"));
 const SafeTable = lazy(() => import("./pages/SafeTable"));
