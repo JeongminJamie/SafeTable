@@ -7,6 +7,8 @@ import AddCard from "../Card/AddCard";
 import Loading from "../Loading";
 import { getMyCard } from "../../service/cardService";
 import { saveReservation } from "../../service/reservationService";
+import { toast } from "react-toastify";
+import AlertToast from "../AlertToast";
 
 const DepositCheck = ({ setIsReservationChecked }) => {
   const navigate = useNavigate();
@@ -38,6 +40,7 @@ const DepositCheck = ({ setIsReservationChecked }) => {
       },
       onError: (error) => {
         console.log("예약 저장 중 에러 발생", error);
+        toast.error("예약에 실패했습니다. 다시 시도해주세요!");
       },
     });
 
@@ -94,6 +97,7 @@ const DepositCheck = ({ setIsReservationChecked }) => {
               )}
             </button>
           </div>
+          <AlertToast />
         </div>
       )}
     </>

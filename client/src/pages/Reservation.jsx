@@ -7,7 +7,7 @@ import { getRestaurantBySEQ } from "../service/reservationService";
 import BookingDetails from "../components/Reservation/BookingDetails";
 import TimeSlot from "../components/Reservation/TimeSlot";
 import { toast } from "react-toastify";
-import ReservationAlertToast from "../components/Reservation/ReservationAlertToast";
+import AlertToast from "../components/AlertToast";
 import PaymentModal from "../components/Payment/PaymentModal";
 import OverTime from "../components/Reservation/OverTime";
 
@@ -84,7 +84,7 @@ const Reservation = () => {
         >
           확인
         </button>
-        <ReservationAlertToast />
+        <AlertToast />
         <PaymentModal
           isPaymentModalOpen={isPaymentModalOpen}
           setIsPaymentModalOpen={setIsPaymentModalOpen}
