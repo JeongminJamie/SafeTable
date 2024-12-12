@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CompletedDetails from "../components/Reservation/CompletedDetails";
 import useResetReservation from "../hooks/useResetReservation";
 
 const ReservationCompleted = () => {
   const navigate = useNavigate();
+  const { restaurant } = useResetReservation();
+
+  // 로그인을 하지 않았거나, 현재 예약한 정보가 없을 때 홈으로 보내기
+  useEffect(() => {
+    const token = sessionStorage.getItem("accessToken");
+
+    if (!token || Object.keys(restaurant).length === 0) {
+      navigate("/");
+    }
+  
+  }, []);
 
   const handleHomeClick = () => {
     navigate("/safetable");
