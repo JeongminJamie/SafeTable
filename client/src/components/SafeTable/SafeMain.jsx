@@ -35,12 +35,11 @@ const SafeMain = ({ isLoading }) => {
     handleFetchSavedRestaurants();
   }, []);
 
-  const { data: reservations = [], isLoading: isReservationsLoading } =
-    useQuery({
-      queryKey: ["getMyReservations"],
-      queryFn: getMyReservation,
-      refetchOnWindowFocus: false,
-    });
+  const { data: reservations = [] } = useQuery({
+    queryKey: ["getMyReservations"],
+    queryFn: () => getMyReservation(),
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <div className="px-10 mt-10">

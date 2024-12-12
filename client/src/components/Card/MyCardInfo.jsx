@@ -17,18 +17,17 @@ const MyCardInfo = () => {
     refetch,
   } = useQuery({
     queryKey: ["getMyCard"],
-    queryFn: getMyCard,
+    queryFn: () => getMyCard(),
     refetchOnWindowFocus: false,
   });
 
-  // 데이터를 가져왔을 때, []라면 cardStore 리셋 아니면 card 저장 
+  // 데이터를 가져왔을 때, []라면 cardStore 리셋 아니면 card 저장
   useEffect(() => {
     if (!isLoading) {
       if (myCard.length === 0) {
         reset();
       } else {
         setCard(myCard[0]);
-        console.log("myCard 로그 확인", myCard);
       }
     }
   }, [myCard, isLoading, setCard, reset]);
@@ -44,7 +43,7 @@ const MyCardInfo = () => {
       return showedCardNumber + maskedCardNumber;
     }
     return "";
-  }, [myCard]);
+  }, [myCard, isLoading]);
 
   // 성공적으로 저장한 카드는 있지만, 서버에서 가져온 데이터에 정보가 없을 때
   useEffect(() => {
@@ -71,7 +70,7 @@ const MyCardInfo = () => {
     if (myCard?.length !== 0) {
       deleteMyCard(myCard[0]._id);
     }
-  }, [myCard]);
+  }, [myCard, deleteMyCard]);
 
   const deleteButtonHandler = useCallback(() => {
     setIsDeleteModalOpen(true);

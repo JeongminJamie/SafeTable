@@ -17,7 +17,7 @@ const DepositCheck = ({ setIsReservationChecked }) => {
   // 해당 사용자의 카드 뒷자리 번호 패치
   const { data: userCard, isLoading } = useQuery({
     queryKey: ["getUserCard"],
-    queryFn: getMyCard,
+    queryFn: () => getMyCard(),
     staleTime: 60 * 1000,
     enabled: !lastCardNumber,
     refetchOnWindowFocus: false,
@@ -27,7 +27,7 @@ const DepositCheck = ({ setIsReservationChecked }) => {
     if (!isLoading && userCard.length !== 0) {
       setLastCardNumber(userCard[0].card_number.slice(-4));
     }
-  }, [userCard, isLoading]);
+  }, [userCard, isLoading, setLastCardNumber]);
 
   // 예약 정보 저장 요청
   const { mutate: saveReservationRequest, isLoading: saveLoading } =

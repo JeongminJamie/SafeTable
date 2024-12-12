@@ -1,9 +1,6 @@
 import React, { useMemo } from "react";
 import useReservationStore from "../../store/useReservationStore";
-import {
-  formatDateToKorean,
-  formatTimeToKoean,
-} from "../../utils/dateAndTime";
+import { formatDateToKorean, formatTimeToKoean } from "../../utils/dateAndTime";
 
 const ReservationCheck = ({
   setIsPaymentModalOpen,
@@ -27,13 +24,17 @@ const ReservationCheck = ({
         <div className="flex items-start justify-center gap-7">
           <div className="flex flex-col justify-between h-auto space-y-4">
             <div className="flex items-center">
-              <img src="/assets/person.png" className="w-8 h-8" />
+              <img src="/assets/person.png" className="w-8 h-8" alt="person" />
             </div>
             <div className="flex items-center">
-              <img src="/assets/reservation/calendar.png" className="w-8 h-8" />
+              <img
+                src="/assets/reservation/calendar.png"
+                className="w-8 h-8"
+                alt="calendar"
+              />
             </div>
             <div className="flex items-center">
-              <img src="/assets/reservation/clock.png" className="w-8 h-8" />
+              <img src="/assets/reservation/clock.png" className="w-8 h-8" alt="clock" />
             </div>
           </div>
           <div className="flex flex-col justify-between h-auto space-y-4">

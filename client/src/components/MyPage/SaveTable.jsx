@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
 import { getAxiosHeaderConfig } from "../../config";
 import { useNavigate } from "react-router-dom";
-import { getPhotoWithRestaurantName } from "../../service/googleService";
 
 const SaveTable = () => {
   const navigate = useNavigate();
