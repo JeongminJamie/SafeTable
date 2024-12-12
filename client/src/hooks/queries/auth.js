@@ -4,7 +4,7 @@ import {
   signin,
   signup,
   verifyCode,
-} from "../../service/auth";
+} from "../../service/authService";
 
 export const useSignin = (onSuccess, onError) =>
   useMutation({ mutationFn: signin, onSuccess, onError });

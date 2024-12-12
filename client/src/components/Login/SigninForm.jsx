@@ -5,7 +5,7 @@ import {
   useVerityCode,
 } from "../../hooks/queries/auth";
 
-export const SigninForm = ({ onClose, onSwitchToLogin }) => {
+export const SigninForm = ({ onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
   const [emailToken, setEmailtoken] = useState("");
   const [emailClick, setEmailClick] = useState(false);
@@ -33,7 +33,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
       } else {
         setPasswordError("");
       }
-    }, 1000); // 1초 후
+    }, 1000);
 
     return () => clearTimeout(debounceTimeout);
   }, [passCheck]);
@@ -192,7 +192,7 @@ export const SigninForm = ({ onClose, onSwitchToLogin }) => {
           </div>
         )}
 
-        {/* 인증 완료 후에~ */}
+        {/* 인증 완료 후에 */}
         {isVerified && (
           <>
             <div className="mb-4">

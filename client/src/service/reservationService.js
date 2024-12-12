@@ -14,11 +14,16 @@ export const getRestaurantBySEQ = async (seq) => {
 };
 
 export const getMyReservation = async () => {
-  const headersConfig = await getAxiosHeaderConfig();
-  if (!headersConfig) return;
+  try {
+    const headersConfig = await getAxiosHeaderConfig();
+    if (!headersConfig) return [];
 
-  const response = await api.get("/api/reservation", headersConfig);
-  return response.data.reservations;
+    const response = await api.get("/api/reservation", headersConfig);
+    return response.data?.reservations || [];
+  } catch (error) {
+    console.error("Error fetching reservations:", error);
+    return [];
+  }
 };
 
 export const saveReservation = async (reservationStore) => {
