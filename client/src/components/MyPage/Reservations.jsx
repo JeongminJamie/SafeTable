@@ -10,6 +10,8 @@ import {
   parseStringToDate,
 } from "../../utils/dateAndTime";
 import CancelReservationModal from "./CancelReservationModal";
+import { toast } from "react-toastify";
+import AlertToast from "../AlertToast";
 
 export const Reservations = () => {
   const [currentReservations, setCurrentReservations] = useState([]);
@@ -66,6 +68,7 @@ export const Reservations = () => {
     },
     onError: (error) => {
       console.error(error.message);
+      toast.error("예약 삭제에 실패했습니다. 다시 시도해주세요!");
     },
   });
 
@@ -197,6 +200,7 @@ export const Reservations = () => {
             </p>
           )}
         </ul>
+        <AlertToast />
       </div>
     </>
   );

@@ -7,6 +7,8 @@ import IncorrectCardModal from "./IncorrectCardModal";
 import { luhnCheck } from "../../utils/algorithm/luhnCheck";
 import { saveCard } from "../../service/cardService";
 import useCardStore from "../../store/useCardStore";
+import { toast } from "react-toastify";
+import AlertToast from "../AlertToast";
 
 const AddCard = () => {
   const [nameLength, setNameLength] = useState(0);
@@ -36,16 +38,16 @@ const AddCard = () => {
     setNameLength(lengthOfName);
   };
 
-  // 카드 번호 저장 요청 함수 : useMutation
+  // 카드 번호 저장 요청 함수
   const { mutate: saveNewCard } = useMutation({
     mutationFn: saveCard,
     onSuccess: (newCard) => {
-      console.log("카드 번호 저장 성공", newCard.card_number);
       setCard(newCard);
       setLastCardNumber(newCard.card_number.slice(-4));
     },
     onError: (error) => {
       console.error("카드 번호 저장 실패", error);
+      toast.error("카드 저장에 실패했습니다. 다시 시도해주세요!");
     },
   });
 
@@ -212,6 +214,7 @@ const AddCard = () => {
             등록
           </button>
         </form>
+        <AlertToast />
       </div>
     </>
   );

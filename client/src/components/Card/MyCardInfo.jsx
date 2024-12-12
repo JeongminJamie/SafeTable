@@ -5,6 +5,8 @@ import { deleteCard, getMyCard } from "../../service/cardService";
 import NoCard from "./NoCard";
 import DeleteCardModal from "./DeleteCardModal";
 import Loading from "../Loading";
+import { toast } from "react-toastify";
+import AlertToast from "../AlertToast";
 
 const MyCardInfo = () => {
   const { card, setCard, reset } = useCardStore();
@@ -59,10 +61,10 @@ const MyCardInfo = () => {
       setIsDeleteModalOpen(false);
       reset();
       refetch();
-      console.log(data.message);
     },
     onError: (error) => {
       console.log(error);
+      toast.error("카드 삭제에 실패했습니다. 다시 시도해주세요!");
     },
   });
 
@@ -109,6 +111,7 @@ const MyCardInfo = () => {
               삭제
             </button>
           </div>
+          <AlertToast />
         </div>
       )}
     </>
