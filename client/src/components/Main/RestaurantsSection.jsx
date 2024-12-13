@@ -6,7 +6,7 @@ import { getFourRestaurantsInfo } from "../../service/mainPageService";
 const RestaurantsSection = () => {
   const [restaurantsInfo, setRestaurantsInfo] = useState([]);
 
-  const { data: restaurants } = useQuery({
+  const { data: restaurants, refetch } = useQuery({
     queryKey: ["getFourRestaurantInfo"],
     queryFn: () => getFourRestaurantsInfo(),
     staleTime: 60 * 1000,
@@ -29,6 +29,7 @@ const RestaurantsSection = () => {
               name={eachInfo.RELAX_RSTRNT_NM}
               address={eachInfo.RELAX_ADD1 + eachInfo.RELAX_ADD2}
               category={eachInfo.RELAX_GUBUN_DETAIL}
+              refetch={refetch}
             />
           ))}
       </div>

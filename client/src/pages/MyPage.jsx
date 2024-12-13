@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { AboutMe } from "../components/MyPage/AboutMe";
 import { Reservations } from "../components/MyPage/Reservations";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useUserStore from "../store/useUserStore";
 import MyCardInfo from "../components/Card/MyCardInfo";
 import { useVerifyToken } from "../hooks/queries/auth";
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { userData } = useUserStore();
-  const { verifyToken } = useVerifyToken();
+  const verifyToken = useVerifyToken();
 
   const [activeTab, setActiveTab] = useState("aboutMe");
 
@@ -18,6 +19,12 @@ const MyPage = () => {
       navigate("/");
     }
     verifyToken();
+
+    // 예약 완료 페이지에서 왔다면 예약 탭 활성화
+    const previousPage = location.state?.from;
+    if (previousPage === "/reservation-completed") {
+      setActiveTab("Reservations");
+    }
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { getPhotoWithRestaurantName } from "../../service/googleService";
 
-const EachRestaurant = ({ name, address, category }) => {
+const EachRestaurant = ({ name, address, category, refetch }) => {
   const [photoSource, setPhotoSource] = useState("");
 
   const getRestaurantPhoto = useCallback(async (name) => {
@@ -13,6 +13,15 @@ const EachRestaurant = ({ name, address, category }) => {
   useEffect(() => {
     getRestaurantPhoto(name);
   }, []);
+
+  // 무조군 사진이 있는 식당들로만 패치 
+  useEffect(() => {
+    const noImageUrl = "https://ducatiperformance.hu/storage/media/noimg.png";
+
+    if (photoSource === noImageUrl) {
+      refetch();
+    }
+  }, [photoSource]);
 
   return (
     <div className="w-full h-[26rem] p-1 transition-transform transform rounded-lg hover:rounded-2xl hover:translate-y-[-4px] hover:shadow-lg hover:shadow-gray-500/50 cursor-pointer">
