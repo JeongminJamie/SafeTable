@@ -161,15 +161,12 @@ export const TableCard = React.memo(
             {/* 식당 저장 버튼 */}
             <button
               onClick={handleSaveRestaurant}
-              className={`absolute top-2 right-2 text-white font-semibold py-1 px-2 rounded-lg transition-colors shadow-lg flex items-center ${
-                restaurant.clicked
-                  ? "bg-amber-500"
-                  : "bg-amber-200 hover:bg-amber-500"
-              }`}
+              className={`absolute top-2 right-2 text-white font-semibold py-1 px-2 rounded-lg transition-colors shadow-lg flex items-center`}
             >
               <img
-                src={`./assets/${restaurant.clicked ? "save" : "unsave"}.svg`}
-                className="w-6 h-6"
+                src={`./assets/safeTable/${
+                  restaurant.clicked ? "filled-heart" : "empty-heart"
+                }.svg`}
                 alt={restaurant.clicked ? "찜" : "찜 취소"}
               />
             </button>
