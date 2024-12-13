@@ -93,7 +93,7 @@ const MyCardInfo = () => {
       ) : !card.cardCompany && myCard?.length === 0 ? (
         <NoCard />
       ) : (
-        <div className="py-12 flex h-full justify-center items-center">
+        <div className="py-5 flex h-full justify-center items-center">
           <div className="w-full h-3/6 border flex rounded-md justify-between items-center px-5 py-3 my-16 shadow-md">
             <img
               src="/assets/card/card2.png"
@@ -105,7 +105,7 @@ const MyCardInfo = () => {
               <p>{maskedCardNumber}</p>
             </section>
             <button
-              className="border border-gray-300 rounded-md p-2 w-16 text-sm"
+              className="border border-red-500 bg-red-500 text-white rounded-md p-2 w-16 text-sm hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-md transition-all"
               onClick={deleteButtonHandler}
             >
               삭제
