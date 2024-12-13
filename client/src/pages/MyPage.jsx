@@ -9,7 +9,7 @@ import { useVerifyToken } from "../hooks/queries/auth";
 const MyPage = () => {
   const navigate = useNavigate();
   const { userData } = useUserStore();
-  const { verifyToken } = useVerifyToken();
+  const verifyToken = useVerifyToken();
 
   const [activeTab, setActiveTab] = useState("aboutMe");
 
