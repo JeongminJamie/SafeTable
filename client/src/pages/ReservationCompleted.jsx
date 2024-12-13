@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CompletedDetails from "../components/Reservation/CompletedDetails";
 import useResetReservation from "../hooks/useResetReservation";
 import useReservationStore from "../store/useReservationStore";
 
 const ReservationCompleted = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { restaurant } = useReservationStore();
 
   // 로그인을 하지 않았거나, 현재 예약한 정보가 없을 때 홈으로 보내기
@@ -17,8 +18,10 @@ const ReservationCompleted = () => {
     }
   }, []);
 
-  const handleHomeClick = () => {
-    navigate("/safetable");
+  const handleMyBookingClick = () => {
+    const currentPathname = location.pathname;
+
+    navigate("/mypage", { state: { from: currentPathname } });
   };
 
   // 페이지 떠날 때 현 예약 상태 초기화
@@ -39,10 +42,10 @@ const ReservationCompleted = () => {
         </p>
         <CompletedDetails />
         <div
-          onClick={handleHomeClick}
+          onClick={handleMyBookingClick}
           className="w-32 h-12 rounded-full bg-amber-200 flex justify-center items-center font-medium transition-transform duration-200 hover:scale-105 hover:cursor-pointer"
         >
-          식당 더보기
+          내 예약 확인
         </div>
       </div>
     </div>
