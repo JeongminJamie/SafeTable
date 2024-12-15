@@ -12,7 +12,7 @@ const EachRestaurant = ({ name, address, category, refetch }) => {
 
   useEffect(() => {
     getRestaurantPhoto(name);
-  }, []);
+  }, [getRestaurantPhoto, name]);
 
   // 무조군 사진이 있는 식당들로만 패치
   useEffect(() => {
@@ -21,7 +21,7 @@ const EachRestaurant = ({ name, address, category, refetch }) => {
     if (photoSource === noImageUrl) {
       refetch();
     }
-  }, [photoSource]);
+  }, [photoSource, refetch]);
 
   return (
     <div className="w-full h-[26rem] p-1 transition-transform transform rounded-lg hover:rounded-2xl hover:translate-y-[-4px] hover:shadow-lg hover:shadow-gray-500/50 cursor-pointer">
@@ -29,6 +29,7 @@ const EachRestaurant = ({ name, address, category, refetch }) => {
         <img
           src={photoSource}
           className="rounded-2xl object-cover w-full h-4/6"
+          alt="restaurant"
         />
       ) : (
         <div className="w-full h-full bg-slate-200"></div>
@@ -49,5 +50,3 @@ const EachRestaurant = ({ name, address, category, refetch }) => {
 export default EachRestaurant;
 
 // className="w-full bg-white text-amber-500 border border-amber-500 py-2 rounded-lg hover:bg-amber-500 hover:text-white transition-colors"
-
-

@@ -63,7 +63,16 @@ export const TableCard = React.memo(
         telephone,
         clicked: savedRestaurant ? savedRestaurant.clicked : false, // 찜 상태
       }));
-    }, [savedRestaurants, seq, photoSource]);
+    }, [
+      savedRestaurants,
+      seq,
+      photoSource,
+      address1,
+      address2,
+      name,
+      telephone,
+      restaurant,
+    ]);
 
     useEffect(() => {
       const saveRestaurant = async () => {
@@ -113,7 +122,7 @@ export const TableCard = React.memo(
         const wasSaved = savedRestaurants.some((res) => res.id === String(seq));
         if (wasSaved) deleteRestaurant();
       }
-    }, [restaurant.clicked]);
+    }, [restaurant.clicked, restaurant, savedRestaurants, seq]);
 
     const handleSaveRestaurant = async (e) => {
       e.preventDefault();
