@@ -178,7 +178,7 @@ export const TableCard = React.memo(
             </p>
             <p className="text-sm text-gray-600 mb-3 h-5">{telephone}</p>
             <div className="flex justify-between mb-3">
-              <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded mr-1">
+              <button className="w-1/5 py-1 mr-1 bg-yellow-400 rounded-lg text-sm text-white font-medium">
                 {category}
               </button>
               {matchingReservations.length ? (
@@ -197,7 +197,7 @@ export const TableCard = React.memo(
             </div>
 
             <button
-              className="w-full bg-white text-amber-500 border border-amber-500 py-2 rounded-lg hover:bg-amber-500 hover:text-white transition-colors"
+              className="w-full bg-gray-100 py-2 rounded-lg hover:bg-gray-200 text-gray-700"
               onClick={BookButtonHandler}
             >
               예약하기

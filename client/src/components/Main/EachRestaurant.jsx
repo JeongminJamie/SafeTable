@@ -14,7 +14,7 @@ const EachRestaurant = ({ name, address, category, refetch }) => {
     getRestaurantPhoto(name);
   }, []);
 
-  // 무조군 사진이 있는 식당들로만 패치 
+  // 무조군 사진이 있는 식당들로만 패치
   useEffect(() => {
     const noImageUrl = "https://ducatiperformance.hu/storage/media/noimg.png";
 
@@ -47,3 +47,7 @@ const EachRestaurant = ({ name, address, category, refetch }) => {
 };
 
 export default EachRestaurant;
+
+// className="w-full bg-white text-amber-500 border border-amber-500 py-2 rounded-lg hover:bg-amber-500 hover:text-white transition-colors"
+
+
