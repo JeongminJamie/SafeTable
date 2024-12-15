@@ -113,24 +113,24 @@ export const SigninForm = ({ onSwitchToLogin }) => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">회원가입</h2>
-      <form onSubmit={handleSignup}>
-        <div className="mb-4 ">
-          <label
+    <div className="flex flex-col gap-10">
+      <h2 className="text-2xl font-bold text-center">이메일 인증</h2>
+      <form onSubmit={handleSignup} className="flex flex-col gap-5">
+        <div>
+          {/* <label
             className="block text-sm font-medium text-gray-700 mb-1"
             htmlFor="email"
           >
             이메일
-          </label>
+          </label> */}
           <div className="flex items-center relative">
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-              placeholder="이메일을 입력하세요"
+              className="w-full px-4 py-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
+              placeholder="이메일"
               required
               disabled={isVerified}
             />
@@ -140,7 +140,7 @@ export const SigninForm = ({ onSwitchToLogin }) => {
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 px-2 py-1.5 border border-amber-500 bg-amber-500 text-white text-sm rounded hover:bg-amber-600 transition duration-200"
                 onClick={() => sendEmailMutate({ email })}
               >
-                이메일 인증
+                코드 전송
               </button>
             ) : (
               <span className="absolute top-1/2 right-3 transform -translate-y-1/2 text-green-500 text-2xl">
@@ -162,12 +162,12 @@ export const SigninForm = ({ onSwitchToLogin }) => {
         {/* 인증이 완료 전 */}
         {!isVerified && emailClick && (
           <div className="mb-4 ">
-            <label
+            {/* <label
               className="block text-sm font-medium text-gray-700 mb-1"
               htmlFor="verify-email"
             >
               인증코드
-            </label>
+            </label> */}
             <div className="flex items-center relative">
               <input
                 type="text"
@@ -180,7 +180,7 @@ export const SigninForm = ({ onSwitchToLogin }) => {
               />
               <button
                 type="button"
-                className="absolute bottom-2 right-3 px-2 py-1.5 border border-amber-500 bg-amber-500 text-white text-sm rounded hover:bg-amber-600 transition duration-200"
+                className="absolute bottom-2 right-3 px-4 py-1.5 border border-amber-500 bg-amber-500 text-white text-sm rounded hover:bg-amber-600 transition duration-200"
                 onClick={() => verifyCodeMutate({ email, emailToken })}
               >
                 인증
@@ -294,11 +294,11 @@ export const SigninForm = ({ onSwitchToLogin }) => {
         )}
       </form>
 
-      <div className="mt-4 text-center">
+      <div className="text-center flex justify-center gap-3">
         <span className="text-gray-500">이미 계정이 있으신가요? </span>
         <button
           onClick={onSwitchToLogin}
-          className="text-amber-500 hover:underline"
+          className="font-medium text-amber-500 hover:underline"
         >
           로그인
         </button>
