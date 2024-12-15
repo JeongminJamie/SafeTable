@@ -74,7 +74,7 @@ export const LoginForm = ({
             type="email"
             id="email"
             {...emailInput}
-            className="w-full px-3 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-3 border border-gray-300 focus:outline-none"
             placeholder="이메일"
             required
           />
@@ -84,7 +84,7 @@ export const LoginForm = ({
             type="password"
             id="password"
             {...passwordInput}
-            className="w-full px-3 py-3 border border-t-0 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-3 border border-t-0 border-gray-300 focus:outline-none"
             placeholder="비밀번호"
             required
           />

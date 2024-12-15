@@ -114,22 +114,18 @@ export const SigninForm = ({ onSwitchToLogin }) => {
 
   return (
     <div className="flex flex-col gap-10">
-      <h2 className="text-2xl font-bold text-center">이메일 인증</h2>
+      <h2 className="text-2xl font-bold text-center">
+        {isVerified ? "회원 가입" : "이메일 인증"}
+      </h2>
       <form onSubmit={handleSignup} className="flex flex-col gap-5">
         <div>
-          {/* <label
-            className="block text-sm font-medium text-gray-700 mb-1"
-            htmlFor="email"
-          >
-            이메일
-          </label> */}
           <div className="flex items-center relative">
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
+              className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
               placeholder="이메일"
               required
               disabled={isVerified}
@@ -162,12 +158,6 @@ export const SigninForm = ({ onSwitchToLogin }) => {
         {/* 인증이 완료 전 */}
         {!isVerified && emailClick && (
           <div className="mb-4 ">
-            {/* <label
-              className="block text-sm font-medium text-gray-700 mb-1"
-              htmlFor="verify-email"
-            >
-              인증코드
-            </label> */}
             <div className="flex items-center relative">
               <input
                 type="text"
@@ -196,41 +186,35 @@ export const SigninForm = ({ onSwitchToLogin }) => {
         {isVerified && (
           <>
             <div className="mb-4">
-              <label
+              {/* <label
                 className="block text-sm font-medium text-gray-700 mb-1"
                 htmlFor="password"
               >
                 비밀번호
-              </label>
+              </label> */}
               <input
                 type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-                placeholder="비밀번호를 입력하세요"
+                placeholder="비밀번호"
                 required
               />
             </div>
 
             <div className="mb-4 relative">
-              <label
-                className="block text-sm font-medium text-gray-700 mb-1"
-                htmlFor="passwordCheck"
-              >
-                비밀번호 확인
-              </label>
               <input
                 type="password"
                 id="passwordCheck"
                 value={passCheck}
                 onChange={(e) => setPassCheck(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-                placeholder="비밀번호를 다시 입력하세요"
+                placeholder="비밀번호 확인"
                 required
               />
               <p
-                className={`text-sm ${
+                className={`text-sm px-1 ${
                   passCheck === ""
                     ? "invisible"
                     : passwordError
@@ -238,46 +222,30 @@ export const SigninForm = ({ onSwitchToLogin }) => {
                     : "text-green-500"
                 } absolute bottom-3.5 right-3`}
               >
-                {passCheck === ""
-                  ? ""
-                  : passwordError
-                  ? "비밀번호 불일치"
-                  : "비밀번호 일치"}
+                {passCheck === "" ? "" : passwordError ? "불일치" : "일치"}
               </p>
             </div>
 
             <div className="mb-4">
-              <label
-                className="block text-sm font-medium text-gray-700 mb-1"
-                htmlFor="name"
-              >
-                이름
-              </label>
               <input
                 type="text"
                 id="name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-                placeholder="이름을 입력하세요"
+                placeholder="이름"
                 required
               />
             </div>
 
             <div className="mb-4">
-              <label
-                className="block text-sm font-medium text-gray-700 mb-1"
-                htmlFor="phone"
-              >
-                연락처
-              </label>
               <input
                 type="tel"
                 id="phone"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-full px-3 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
-                placeholder="연락처를 입력하세요"
+                placeholder="연락처"
                 required
               />
             </div>
