@@ -11,7 +11,7 @@ export const LoginModal = ({ isOpen, onClose, children }) => {
             onClick={onClose}
             className="text-sm text-red-500 hover:text-red-700 font-semibold"
           >
-            닫기
+            <img src="/assets/thin-exit.svg" alt="exit" className="w-7 h-7" />
           </button>
         </div>
         {children}
