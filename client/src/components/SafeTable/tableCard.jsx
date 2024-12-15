@@ -63,7 +63,16 @@ export const TableCard = React.memo(
         telephone,
         clicked: savedRestaurant ? savedRestaurant.clicked : false, // 찜 상태
       }));
-    }, [savedRestaurants, seq, photoSource]);
+    }, [
+      savedRestaurants,
+      seq,
+      photoSource,
+      address1,
+      address2,
+      name,
+      telephone,
+      restaurant,
+    ]);
 
     useEffect(() => {
       const saveRestaurant = async () => {
@@ -113,7 +122,7 @@ export const TableCard = React.memo(
         const wasSaved = savedRestaurants.some((res) => res.id === String(seq));
         if (wasSaved) deleteRestaurant();
       }
-    }, [restaurant.clicked]);
+    }, [restaurant.clicked, restaurant, savedRestaurants, seq]);
 
     const handleSaveRestaurant = async (e) => {
       e.preventDefault();
@@ -161,15 +170,12 @@ export const TableCard = React.memo(
             {/* 식당 저장 버튼 */}
             <button
               onClick={handleSaveRestaurant}
-              className={`absolute top-2 right-2 text-white font-semibold py-1 px-2 rounded-lg transition-colors shadow-lg flex items-center ${
-                restaurant.clicked
-                  ? "bg-amber-500"
-                  : "bg-amber-200 hover:bg-amber-500"
-              }`}
+              className={`absolute top-2 right-2 text-white font-semibold py-1 px-2 rounded-lg transition-colors shadow-lg flex items-center`}
             >
               <img
-                src={`./assets/${restaurant.clicked ? "save" : "unsave"}.svg`}
-                className="w-6 h-6"
+                src={`./assets/safeTable/${
+                  restaurant.clicked ? "filled-heart" : "empty-heart"
+                }.svg`}
                 alt={restaurant.clicked ? "찜" : "찜 취소"}
               />
             </button>
@@ -181,7 +187,7 @@ export const TableCard = React.memo(
             </p>
             <p className="text-sm text-gray-600 mb-3 h-5">{telephone}</p>
             <div className="flex justify-between mb-3">
-              <button className="flex-1 bg-gray-200 text-gray-700 py-1 rounded mr-1">
+              <button className="w-1/5 py-1 mr-1 bg-yellow-400 rounded-lg text-sm text-white font-medium">
                 {category}
               </button>
               {matchingReservations.length ? (
@@ -200,7 +206,7 @@ export const TableCard = React.memo(
             </div>
 
             <button
-              className="w-full bg-white text-amber-500 border border-amber-500 py-2 rounded-lg hover:bg-amber-500 hover:text-white transition-colors"
+              className="w-full bg-gray-100 py-2 rounded-lg hover:bg-gray-200 text-gray-700"
               onClick={BookButtonHandler}
             >
               예약하기
