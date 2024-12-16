@@ -101,37 +101,49 @@ export const Reservations = () => {
             currentReservations.map((reservation) => (
               <li
                 key={reservation._id}
-                className="mb-4 border p-4 rounded shadow flex justify-between items-center"
+                className="mb-4 border p-4 rounded shadow flex items-center justify-between"
               >
-                <div>
-                  <p>
-                    <strong>Restaurant:</strong> {reservation.name}
-                  </p>
-                  <p>
-                    <strong>Location:</strong> {reservation.address}
-                  </p>
-                  <div className="flex gap-5">
-                    <p className="flex items-center">
-                      <img
-                        src="./assets/person.svg"
-                        className="w-4 h-4 mr-1"
-                        alt="Person Icon"
-                      />
-                      {reservation.party_size}
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <img
-                        src="./assets/date.svg"
-                        className="w-4 h-4"
-                        alt="Date Icon"
-                      />
-                      {formattedDate(reservation)} /{" "}
-                      {formattedTime(reservation)}
-                    </p>
+                <div className=" flex gap-5">
+                  <div>
+                    <img
+                      src=""
+                      alt="구글 식당 이미지"
+                      className="w-24 h-24 object-cover rounded-lg bg-gray-200"
+                    />
+                  </div>
+                  <div>
+                    <div>
+                      <p>
+                        <strong>Restaurant:</strong> {reservation.name}
+                      </p>
+                      <p>
+                        <strong>Location:</strong> {reservation.address}
+                      </p>
+                      <div className="flex gap-5">
+                        <p className="flex items-center">
+                          <img
+                            src="./assets/person.svg"
+                            className="w-4 h-4 mr-1"
+                            alt="Person Icon"
+                          />
+                          {reservation.party_size}
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <img
+                            src="./assets/date.svg"
+                            className="w-4 h-4"
+                            alt="Date Icon"
+                          />
+                          {formattedDate(reservation)} /{" "}
+                          {formattedTime(reservation)}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
                 <button
-                  className="mt-2 p-2 bg-red-500 text-white rounded"
+                  className="mt-2 py-2 px-4 bg-red-500 text-sm text-white rounded-md hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-md transition-all"
                   onClick={() => handleCancelButton(reservation)}
                 >
                   예약 취소
@@ -159,38 +171,49 @@ export const Reservations = () => {
                 <img
                   src="/assets/exit.png"
                   alt="delete"
-                  className="absolute w-5 h-5 top-4 end-6 hover:cursor-pointer"
+                  className="absolute w-5 h-5 top-4 end-6 hover:cursor-pointer hover:scale-110 active:scale-95 transition-transform duration-200"
                   onClick={() => handleDelete(reservation._id)}
                 />
-                <div>
-                  <p>
-                    <strong>Restaurant:</strong> {reservation.name}
-                  </p>
-                  <p>
-                    <strong>Location:</strong> {reservation.address}
-                  </p>
-                  <div className="flex gap-5">
-                    <p className="flex items-center">
-                      <img
-                        src="./assets/person.svg"
-                        className="w-4 h-4 mr-1"
-                        alt="Person Icon"
-                      />
-                      {reservation.party_size}
+
+                <div className="flex gap-5">
+                  <div>
+                    <img
+                      src=""
+                      alt="구글 식당 이미지"
+                      className="w-24 h-24 object-cover rounded-lg bg-gray-200"
+                    />
+                  </div>
+
+                  <div>
+                    <p>
+                      <strong>Restaurant:</strong> {reservation.name}
                     </p>
-                    <p className="flex items-center gap-2">
-                      <img
-                        src="./assets/date.svg"
-                        className="w-4 h-4"
-                        alt="Date Icon"
-                      />
-                      {formattedDate(reservation)} /{" "}
-                      {formattedTime(reservation)}
+                    <p>
+                      <strong>Location:</strong> {reservation.address}
+                    </p>
+                    <div className="flex gap-5">
+                      <p className="flex items-center">
+                        <img
+                          src="./assets/person.svg"
+                          className="w-4 h-4 mr-1"
+                          alt="Person Icon"
+                        />
+                        {reservation.party_size}
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <img
+                          src="./assets/date.svg"
+                          className="w-4 h-4"
+                          alt="Date Icon"
+                        />
+                        {formattedDate(reservation)} /{" "}
+                        {formattedTime(reservation)}
+                      </p>
+                    </div>
+                    <p>
+                      <strong className="text-green-500">예약완료</strong>
                     </p>
                   </div>
-                  <p>
-                    <strong className="text-green-500">예약완료</strong>
-                  </p>
                 </div>
               </li>
             ))

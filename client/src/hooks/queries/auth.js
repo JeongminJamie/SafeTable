@@ -61,5 +61,5 @@ export const useVerifyToken = () => {
     }
   };
 
-  return { verifyToken };
+  return verifyToken;
 };
