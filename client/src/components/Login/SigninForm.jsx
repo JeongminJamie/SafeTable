@@ -62,6 +62,12 @@ export const SigninForm = ({ onSwitchToLogin }) => {
       setEmailError("");
       setEmailOk("이메일로 인증코드를 발송했습니다.");
       setEmailClick(true);
+    } else if (
+      data.message ===
+      "A verification code was already sent. Please check your email."
+    ) {
+      setEmailOk("이메일로 인증코드를 발송했습니다.");
+      setEmailClick(true);
     }
   };
 
