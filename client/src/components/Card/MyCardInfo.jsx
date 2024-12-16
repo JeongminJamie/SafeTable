@@ -93,25 +93,28 @@ const MyCardInfo = () => {
       ) : !card.cardCompany && myCard?.length === 0 ? (
         <NoCard />
       ) : (
-        <div className="py-5 flex h-full justify-center items-center">
-          <div className="w-full h-3/6 border flex rounded-md justify-between items-center px-5 py-3 my-16 shadow-md">
-            <img
-              src="/assets/card/card2.png"
-              alt="card"
-              className="w-20 h-5/6"
-            />
-            <section className="flex flex-col">
-              <p className="text-lg">{myCard[0]?.card_company}</p>
-              <p>{maskedCardNumber}</p>
-            </section>
-            <button
-              className="border border-red-500 bg-red-500 text-white rounded-md p-2 w-16 text-sm hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-md transition-all"
-              onClick={deleteButtonHandler}
-            >
-              삭제
-            </button>
+        <div className="w-screnn h-full">
+          <p className="font-semibold text-xl">내 카드</p>
+          <div className="flex justify-center items-center">
+            <div className="w-full h-3/6 border flex rounded-md justify-between items-center px-5 my-16 shadow-md">
+              <img
+                src="/assets/card/card2.png"
+                alt="card"
+                className="w-20 h-5/6"
+              />
+              <section className="flex flex-col">
+                <p className="text-lg">{myCard[0]?.card_company}</p>
+                <p>{maskedCardNumber}</p>
+              </section>
+              <button
+                className="bg-amber-500 text-white rounded-md p-2 w-16 text-sm hover:bg-amber-600 active:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-md transition-all"
+                onClick={deleteButtonHandler}
+              >
+                삭제
+              </button>
+            </div>
+            <AlertToast />
           </div>
-          <AlertToast />
         </div>
       )}
     </>

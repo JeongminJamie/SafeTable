@@ -30,7 +30,7 @@ const MyPage = () => {
   return (
     <div className="mx-28 my-10">
       {/* 프로필 */}
-      <div className="ml-28 mb-8 flex items-center gap-4">
+      <div className="ml-28 mb-8 flex items-center gap-5">
         <img
           src="./assets/user.png"
           alt="Profile"

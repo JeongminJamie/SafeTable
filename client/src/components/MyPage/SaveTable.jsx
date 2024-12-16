@@ -73,10 +73,9 @@ const SaveTable = () => {
                   </h1>
                   <button onClick={() => handleClick(restaurant)}>
                     <img
-                      src={`./assets/${
-                        restaurant.clicked ? "save" : "unsave"
+                      src={`./assets/safeTable/${
+                        restaurant.clicked ? "filled-heart" : "empty-heart"
                       }.svg`}
-                      className="w-8 h-8"
                       alt={restaurant.clicked ? "찜" : "찜 취소"}
                     />
                   </button>
@@ -91,7 +90,7 @@ const SaveTable = () => {
                   </p>
                   <button
                     onClick={() => handleRedirect(restaurant.id)}
-                    className="bg-white text-amber-500 border border-amber-500 py-1 px-2 rounded hover:bg-amber-500 hover:text-white transition-colors"
+                    className="bg-white text-amber-500 border border-amber-500 py-1 px-3 rounded hover:bg-amber-500 hover:text-white transition-colors"
                   >
                     예약하기
                   </button>

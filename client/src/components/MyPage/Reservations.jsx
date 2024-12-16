@@ -113,12 +113,15 @@ export const Reservations = () => {
                   </div>
                   <div>
                     <div>
-                      <p>
-                        <strong>Restaurant:</strong> {reservation.name}
-                      </p>
-                      <p>
-                        <strong>Location:</strong> {reservation.address}
-                      </p>
+                      <div className="mb-5">
+                        <p>
+                          <strong>Restaurant:</strong> {reservation.name}
+                        </p>
+                        <p>
+                          <strong>Location:</strong> {reservation.address}
+                        </p>
+                      </div>
+
                       <div className="flex gap-5">
                         <p className="flex items-center">
                           <img
@@ -143,7 +146,7 @@ export const Reservations = () => {
                 </div>
 
                 <button
-                  className="mt-2 py-2 px-4 bg-red-500 text-sm text-white rounded-md hover:bg-red-600 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-md transition-all"
+                  className="mt-2 py-2 px-5 bg-amber-500 text-sm text-slate-100 rounded-md hover:bg-amber-600 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-md transition-all"
                   onClick={() => handleCancelButton(reservation)}
                 >
                   예약 취소
@@ -151,7 +154,7 @@ export const Reservations = () => {
               </li>
             ))
           ) : (
-            <p className="text-center font-bold my-10">
+            <p className="text-center font-medium m-10">
               현재 예약된 식당이 없습니다.
             </p>
           )}
@@ -185,12 +188,15 @@ export const Reservations = () => {
                   </div>
 
                   <div>
-                    <p>
-                      <strong>Restaurant:</strong> {reservation.name}
-                    </p>
-                    <p>
-                      <strong>Location:</strong> {reservation.address}
-                    </p>
+                    <div className="mb-5">
+                      <p>
+                        <strong>Restaurant:</strong> {reservation.name}
+                      </p>
+                      <p>
+                        <strong>Location:</strong> {reservation.address}
+                      </p>
+                    </div>
+
                     <div className="flex gap-5">
                       <p className="flex items-center">
                         <img
@@ -218,8 +224,8 @@ export const Reservations = () => {
               </li>
             ))
           ) : (
-            <p className="text-center font-bold">
-              과거 예약된 식당이 없습니다.
+            <p className="text-center font-medium m-10">
+              과거 예약 내역이 없습니다.
             </p>
           )}
         </ul>
