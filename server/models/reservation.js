@@ -24,7 +24,6 @@ const ReservationSchema = new mongoose.Schema(
     },
     telephone: {
       type: String,
-      required: true,
     },
     party_size: {
       type: String,

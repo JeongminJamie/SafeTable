@@ -16,11 +16,11 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
   const isFormValid = isTermsChecked && isPrivacyChecked && isAgeChecked;
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">약관 동의</h2>
+    <div className="flex flex-col gap-7">
+      <h2 className="text-2xl font-bold text-center">약관 동의</h2>
 
-      <div>
-        <div className="mb-4">
+      <div className="flex flex-col gap-6">
+        <div>
           <label>
             <input
               type="checkbox"
@@ -28,13 +28,13 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
               checked={isAllChecked}
               onChange={handleAllChecked}
             />
-            <span className="font-bold">
+            <span className="font-medium">
               이용약관, 개인정보 수집 및 이용에 모두 동의합니다.
             </span>
           </label>
         </div>
 
-        <div className="mt-5 mb-2">
+        <div>
           <label>
             <input
               type="checkbox"
@@ -43,7 +43,9 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
               onChange={(e) => setIsTermsChecked(e.target.checked)}
               required
             />
-            <span className="font-bold">이용약관 동의 (필수)</span>
+            <span className="font-medium">
+              이용약관 동의 <span className="text-rose-500">(필수)</span>
+            </span>
           </label>
           <div
             className="mt-3 p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-600 leading-relaxed"
@@ -69,7 +71,7 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
           </div>
         </div>
 
-        <div className="mt-5 mb-2">
+        <div>
           <label>
             <input
               type="checkbox"
@@ -78,7 +80,10 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
               onChange={(e) => setIsPrivacyChecked(e.target.checked)}
               required
             />
-            <span className="font-bold">개인정보 수집 및 이용 동의 (필수)</span>
+            <span className="font-medium">
+              개인정보 수집 및 이용 동의{" "}
+              <span className="text-rose-500">(필수)</span>
+            </span>
           </label>
           <div
             className="mt-3 p-3 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-600 leading-relaxed"
@@ -108,7 +113,7 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
           </div>
         </div>
 
-        <div className="mb-8 mt-4">
+        <div>
           <label>
             <input
               type="checkbox"
@@ -117,15 +122,17 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
               onChange={(e) => setIsAgeChecked(e.target.checked)}
               required
             />
-            <span className="font-bold">만 14세 이상입니다. (필수)</span>
+            <span className="font-medium">
+              만 14세 이상입니다. <span className="text-rose-500">(필수)</span>
+            </span>
           </label>
         </div>
       </div>
 
-      <div className="flex justify-around">
+      <div className="w-full flex gap-2">
         <button
           onClick={onClose}
-          className="px-20 py-4 border border-gray-300 rounded ml-2"
+          className="w-1/2 px-20 py-4 border border-gray-300 rounded ml-2"
         >
           취소
         </button>
@@ -135,14 +142,14 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
               onAgree();
             }
           }}
-          className={`px-20 py-4 ${
+          className={`w-1/2 px-20 py-4 ${
             isFormValid
-              ? "bg-amber-500 text-white"
+              ? "border border-amber-600 text-amber-600"
               : "bg-gray-300 text-gray-600"
-          } rounded hover:${isFormValid ? "bg-amber-600" : ""}`}
+          } rounded`}
           disabled={!isFormValid}
         >
-          동의
+          가입하기
         </button>
       </div>
     </div>
