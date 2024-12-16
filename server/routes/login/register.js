@@ -85,7 +85,6 @@ router.post("/", async (req, res) => {
 router.post("/send-verification-email", async (req, res) => {
   const { email } = req.body;
 
-  // 중복 이메일 확인
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     return res.status(400).json({
@@ -94,8 +93,8 @@ router.post("/send-verification-email", async (req, res) => {
     });
   }
 
-  const expirationTime = new Date(Date.now() + 10 * 60 * 1000);
-  const verificationToken = Math.floor(100000 + Math.random() * 900000);
+  const expirationTime = new Date(Date.now() + 10 * 60 * 1000); // 10분
+  const newVerificationToken = Math.floor(100000 + Math.random() * 900000);
 
   try {
     let user = await Email.findOne({ email });
@@ -103,17 +102,24 @@ router.post("/send-verification-email", async (req, res) => {
     if (!user) {
       user = new Email({
         email: email,
-        verificationCode: verificationToken,
+        verificationCode: newVerificationToken,
         verificationCodeExpires: expirationTime,
         isVerified: false,
       });
     } else {
-      user.verificationCode = verificationToken;
+      if (user.verificationCodeExpires > new Date()) {
+        return res.status(200).json({
+          message:
+            "A verification code was already sent. Please check your email.",
+        });
+      }
+
+      user.verificationCode = newVerificationToken;
       user.verificationCodeExpires = expirationTime;
     }
 
     await user.save();
-    await sendVerificationEmail(email, verificationToken);
+    await sendVerificationEmail(email, user.verificationCode);
 
     res.status(200).json({ message: "Verification email sent" });
   } catch (error) {
@@ -142,8 +148,6 @@ router.post("/verify-email", async (req, res) => {
     }
 
     user.isVerified = true;
-    // user.verificationCode = null; // 인증 완료 후 코드 삭제
-    // user.verificationCodeExpires = null;
 
     await user.save();
 
