@@ -109,7 +109,7 @@ export const MyProfile = () => {
         }}
         className="flex justify-end"
       >
-        <p className="text-blue-500 underline hover:text-blue-700">
+        <p className="text-blue-500 underline hover:text-blue-700 hover:cursor-pointer mt-3">
           비밀번호 바꾸기
         </p>
       </div>

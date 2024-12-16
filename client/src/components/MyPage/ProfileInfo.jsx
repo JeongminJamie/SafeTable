@@ -11,36 +11,36 @@ export const ProfileInfo = ({
   return (
     <div>
       {!isEditing ? (
-        <div>
-          <div className="mb-4">
+        <div className="flex flex-col gap-7">
+          <div>
             <label htmlFor="Name" className="block mb-1">
-              Your Name
+              이름
             </label>
             <p className="border p-2 rounded bg-gray-100">
               {userData.userName}
             </p>
           </div>
-          <div className="mb-4">
+          <div>
             <label htmlFor="contact" className="block mb-1">
-              Contact
+              전화번호
             </label>
             <p className="border p-2 rounded bg-gray-100">
               {userData.userContact}
             </p>
           </div>
 
-          <div className="mb-4">
+          <div>
             <label htmlFor="location" className="block mb-1">
-              Location
+              지역
             </label>
             <p className="border p-2 rounded bg-gray-100">
-              {userData.userLocation || "not location"}
+              {userData.userLocation || "No Location"}
             </p>
           </div>
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center">
             <button
               onClick={() => setIsEditing(true)}
-              className="w-36 h-10 rounded bg-amber-200 m-auto px-2 py-1 hover:bg-amber-500"
+              className="w-36 h-10 rounded text-slate-100 bg-amber-400 m-auto px-2 py-1 hover:bg-amber-500"
             >
               수정
             </button>
@@ -50,7 +50,7 @@ export const ProfileInfo = ({
         <form onSubmit={handleSave}>
           <div className="mb-4">
             <label htmlFor="Name" className="block mb-1">
-              Your Name
+              이름
             </label>
             <input
               type="text"
@@ -64,7 +64,7 @@ export const ProfileInfo = ({
           </div>
           <div className="mb-4">
             <label htmlFor="contact" className="block mb-1">
-              Contact
+              전화번호
             </label>
             <input
               type="text"
@@ -78,7 +78,7 @@ export const ProfileInfo = ({
           </div>
           <div className="mb-4">
             <label htmlFor="location" className="block mb-1">
-              Location
+              지역
             </label>
             <input
               type="text"
@@ -93,7 +93,7 @@ export const ProfileInfo = ({
           <div className="flex justify-center mt-4">
             <button
               type="submit"
-              className="w-36 h-10 rounded bg-amber-400 m-auto px-2 py-1 hover:bg-amber-500"
+              className="w-36 h-10 rounded text-white bg-amber-400 m-auto px-2 py-1 hover:bg-amber-500"
             >
               저장
             </button>

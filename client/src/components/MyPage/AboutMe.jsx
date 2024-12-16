@@ -5,7 +5,7 @@ import { MyProfile } from "./MyProfile";
 export const AboutMe = () => {
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">About Me</h2>
+      <h2 className="text-xl font-semibold mb-4">내 정보</h2>
       <MyProfile />
       {/* 구분선 */}
       <div className="border-b border-gray-300 my-10 " />
