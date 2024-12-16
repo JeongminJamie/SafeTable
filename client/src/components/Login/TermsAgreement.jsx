@@ -132,7 +132,7 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
       <div className="w-full flex gap-2">
         <button
           onClick={onClose}
-          className="w-1/2 px-20 py-4 border border-gray-300 rounded ml-2"
+          className="w-1/2 py-4 border border-gray-300 rounded ml-2"
         >
           취소
         </button>
@@ -142,7 +142,7 @@ export const TermsAgreement = ({ onAgree, onClose }) => {
               onAgree();
             }
           }}
-          className={`w-1/2 px-20 py-4 ${
+          className={`w-1/2 py-4 ${
             isFormValid
               ? "border border-amber-600 text-amber-600"
               : "bg-gray-300 text-gray-600"
