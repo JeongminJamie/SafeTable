@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getAxiosHeaderConfig } from "../../config";
 import { AuthModal } from "../Login/AuthModal";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+import useReservationStore from "../../store/useReservationStore";
 
 export const TableCard = React.memo(
   ({
@@ -21,6 +22,8 @@ export const TableCard = React.memo(
     const { state: photoURL, targetRef: cardRef } = useIntersectionObserver({
       onVisibleFn: onVisible,
     });
+    const { setRestaurant: setReservationRestaurant } = useReservationStore();
+
     const [isModalOpen, setModalOpen] = useState(false);
     const [currentForm, setCurrentForm] = useState("login");
     const [token, setToken] = useState(null); //이거 이렇게 두면 안됨. 변경필요
@@ -63,16 +66,7 @@ export const TableCard = React.memo(
         telephone,
         clicked: savedRestaurant ? savedRestaurant.clicked : false, // 찜 상태
       }));
-    }, [
-      savedRestaurants,
-      seq,
-      photoSource,
-      address1,
-      address2,
-      name,
-      telephone,
-      restaurant,
-    ]);
+    }, [setRestaurant]);
 
     useEffect(() => {
       const saveRestaurant = async () => {
@@ -147,6 +141,18 @@ export const TableCard = React.memo(
         openModal();
         return;
       }
+
+      // 예약 현황 식당 상태 추가 및 예약 페이지로 이동
+      const neccesaryRestaurantInfo = {
+        seq,
+        name,
+        address: address1 + address2,
+        category,
+        telephone,
+        photo_url: photoURL,
+      };
+
+      setReservationRestaurant(neccesaryRestaurantInfo);
       navigate(`/reservation/${seq}`);
     };
 

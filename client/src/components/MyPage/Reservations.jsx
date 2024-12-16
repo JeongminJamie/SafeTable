@@ -95,7 +95,7 @@ export const Reservations = () => {
       )}
       <div>
         {/* 현재 예약 */}
-        <h2 className="text-xl font-semibold mb-4">Current Reservations</h2>
+        <h2 className="text-xl font-semibold mb-4">현재 예약된 식당</h2>
         <ul>
           {currentReservations.length > 0 ? (
             currentReservations.map((reservation) => (
@@ -106,7 +106,7 @@ export const Reservations = () => {
                 <div className=" flex gap-5">
                   <div>
                     <img
-                      src=""
+                      src={reservation.photo_url}
                       alt="구글 식당 이미지"
                       className="w-24 h-24 object-cover rounded-lg bg-gray-200"
                     />
@@ -160,7 +160,7 @@ export const Reservations = () => {
         <div className="border-b border-gray-300 mt-14"></div>
 
         {/* 과거 예약 */}
-        <h2 className="text-xl font-semibold mb-6 mt-8">Past Reservations</h2>
+        <h2 className="text-xl font-semibold mb-6 mt-8">지난 예약 내역</h2>
         <ul>
           {pastReservations.length > 0 ? (
             pastReservations.map((reservation) => (
@@ -178,7 +178,7 @@ export const Reservations = () => {
                 <div className="flex gap-5">
                   <div>
                     <img
-                      src=""
+                      src={reservation.photo_url}
                       alt="구글 식당 이미지"
                       className="w-24 h-24 object-cover rounded-lg bg-gray-200"
                     />

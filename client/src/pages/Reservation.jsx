@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useReservationStore from "../store/useReservationStore";
-import { getRestaurantBySEQ } from "../service/reservationService";
 
 import BookingDetails from "../components/Reservation/BookingDetails";
 import TimeSlot from "../components/Reservation/TimeSlot";
@@ -12,37 +10,16 @@ import PaymentModal from "../components/Payment/PaymentModal";
 import OverTime from "../components/Reservation/OverTime";
 
 const Reservation = () => {
-  const { seq } = useParams();
   const navigate = useNavigate();
 
-  const { date, timeSlot, setRestaurant } = useReservationStore();
+  const { date, timeSlot } = useReservationStore();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-
-  const { data: restaurant } = useQuery({
-    queryKey: ["restaurantBySEQ", seq],
-    queryFn: () => getRestaurantBySEQ(seq),
-    enabled: !!seq,
-    staleTime: 120 * 1000,
-  });
 
   useEffect(() => {
     if (!sessionStorage.getItem("accessToken")) {
       navigate("/");
     }
   }, []);
-
-  useEffect(() => {
-    if (restaurant) {
-      const neccesaryRestaurantInfo = {
-        seq: restaurant.RELAX_SEQ,
-        name: restaurant.RELAX_RSTRNT_NM,
-        address: restaurant.RELAX_ADD1 + restaurant.RELAX_ADD2,
-        category: restaurant.RELAX_GUBUN_DETAIL,
-        telephone: restaurant.RELAX_RSTRNT_TEL,
-      };
-      setRestaurant(neccesaryRestaurantInfo);
-    }
-  }, [restaurant, setRestaurant]);
 
   const clickConfirmButtonHandler = () => {
     if (!timeSlot) {

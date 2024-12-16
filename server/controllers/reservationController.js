@@ -15,6 +15,7 @@ export const getMyReservation = async (req, res) => {
         party_size: 1,
         date: 1,
         address: 1,
+        photo_url: 1,
         time: 1,
       }
     ).sort({ date: 1 });
@@ -36,8 +37,17 @@ export const saveReservation = async (req, res) => {
     const userId = req.userId;
     const userEmail = req.userEmail;
 
-    const { seq, name, category, address, telephone, party_size, date, time } =
-      req.body;
+    const {
+      seq,
+      name,
+      category,
+      address,
+      telephone,
+      photo_url,
+      party_size,
+      date,
+      time,
+    } = req.body;
 
     // 클라이언트와의 타임존이 9시간(한국) 차이가 나기 때문에 더해주기
     const reserveDate = new Date(date);
@@ -50,6 +60,7 @@ export const saveReservation = async (req, res) => {
       category,
       address,
       telephone,
+      photo_url,
       party_size,
       date: reserveDate,
       time,
