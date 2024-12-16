@@ -38,6 +38,7 @@ export const saveReservation = async (reservationStore) => {
     category: restaurant.category,
     address: restaurant.address,
     telephone: restaurant.telephone,
+    photo_url: restaurant.photo_url,
     party_size: reservationStore.partySize,
     date: reservationStore.date,
     time: reservationStore.timeSlot,

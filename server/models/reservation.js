@@ -25,6 +25,9 @@ const ReservationSchema = new mongoose.Schema(
     telephone: {
       type: String,
     },
+    photo_url: {
+      type: String,
+    },
     party_size: {
       type: String,
       required: true,
