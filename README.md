@@ -6,6 +6,7 @@
 
 ## 🛠️ 주요 기능 (Features)
 
+(영상 용량으로 인해 이미지 깨짐 현상이 있습니다)
 ![safetable](https://github.com/user-attachments/assets/55c5d559-63d2-48ae-adec-702a646818e7)
 
 - **사용 스택**
@@ -20,8 +21,8 @@
 
   - 시군구 **Open API**를 활용한 지역 검색 기능 (Debouncing 적용)
   - 검색한 지역의 안심식당 조회:
-    - **농림축산부 Open API**와 **Google Place API**를 결합
-    - Skeleton UI, Throttling, 무한 스크롤링 구현
+    - **농림축산부 Open API**와 **Google Places API**를 결합
+    - Skeleton UI, Lazy Loading, 무한 스크롤링 구현
 
 - **식당 관리**
 
