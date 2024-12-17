@@ -11,7 +11,7 @@
 
 - **사용 스택**
 
-  - React.js TailwindCSS Zustand React Query Node.js Express MongoDB
+  - React.js, TailwindCSS, Zustand, React Query, Node.js, Express, MongoDB
 
 - **회원 관리**
   - 회원 가입 및 로그인/로그아웃 기능 제공
