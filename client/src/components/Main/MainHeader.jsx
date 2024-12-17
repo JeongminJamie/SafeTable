@@ -33,7 +33,11 @@ const MainHeader = () => {
   return (
     <>
       <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-10 w-10/12 px-3 py-3 bg-white flex flex-row justify-between items-center rounded-full text-center font-medium opacity-85 text-lg">
-        <div className="w-2/12 font-bold">안심테이블</div>
+        <img
+          src="/assets/logo.png"
+          className="w-24 h-14 p-1 hover:cursor-pointer"
+          onClick={() => navigate("/")}
+        />
         <div className="flex flex-row justify-around w-3/12 font-semibold">
           <div
             className="hover:cursor-pointer hover:text-xl"
