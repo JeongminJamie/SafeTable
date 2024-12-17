@@ -1,13 +1,54 @@
+/* Tailwind CSS 설정 추가 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+img {
+  max-width: none;
+  height: auto;
+}
+
+.react-datepicker__header {
+  background-color: white !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #d97706 !important;
+}
+
+.react-datepicker__header {
+  font-size: 1.02rem;
+}
+
+.react-datepicker__day,
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__month-text,
+.react-datepicker__year-text {
+  font-size: 1.01rem;
+}
+
+.react-datepicker__day--outside-month {
+  color: gray !important;
+}
+
+.MuiAutocomplete-hasPopupIcon.css-ka7ti6-MuiAutocomplete-root
+  .MuiAutocomplete-inputRoot,
+.MuiAutocomplete-hasClearIcon.css-ka7ti6-MuiAutocomplete-root
+  .MuiAutocomplete-inputRoot {
+  padding-right: 0px;
 }
