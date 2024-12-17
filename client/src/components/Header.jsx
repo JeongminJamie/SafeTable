@@ -62,7 +62,11 @@ const Header = () => {
             소개
           </NavLink>
         </div>
-        <div className="w-1/6 text-center">안심테이블</div>
+        <img
+          src="/assets/logo.png"
+          className="w-24 h-14 hover:cursor-pointer"
+          onClick={() => navigate("/")}
+        />
         <div className="flex flex-row items-center gap-7">
           {!token ? (
             <>
