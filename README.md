@@ -52,7 +52,8 @@
 - Intersection Observer API를 이용한 안심식당 **Lazy Loading** (두 개의 API 결합으로 인한 매우 긴 초기 로딩 속도 개선 15000ms → 514ms)
 - **Lazy/Suspense, Error Boundary** 적용
 - **http-proxy-middleware** 라이브러리 사용으로 프록시 서버 설정 및 CORS 에러 해결
-- **nodemailer**을 이용한 예약 확정 이메일 발송 
+- **nodemailer**을 이용한 예약 확정 이메일 발송
+  
 
 ## 📦 설치 방법 (Installation)
 
